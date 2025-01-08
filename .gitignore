@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # This gitignore has been specially created by the WPILib team.
 # If you remove items from this file, intellisense might break.
 
@@ -36,6 +37,8 @@
 *.app
 
 ### Java ###
+=======
+>>>>>>> origin/main
 # Compiled class file
 *.class
 
@@ -59,6 +62,7 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+<<<<<<< HEAD
 
 ### Linux ###
 *~
@@ -185,3 +189,6 @@ compile_commands.json
 
 # Eclipse generated file for annotation processors
 .factorypath
+=======
+replay_pid*
+>>>>>>> origin/main
