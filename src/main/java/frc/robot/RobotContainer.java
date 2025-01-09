@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
@@ -32,8 +31,7 @@ public class RobotContainer
 {
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  //final         CommandXboxController driverXbox = new CommandXboxController(0);
-  final         CommandPS5Controller driverPS5 = new CommandPS5Controller(0);
+  final         CommandXboxController driverXbox = new CommandXboxController(0);
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve"));
@@ -44,7 +42,7 @@ public class RobotContainer
   // right stick controls the rotational velocity 
   // buttons are quick rotation positions to different ways to face
   // WARNING: default buttons are on the same buttons as the ones defined in configureBindings
-  /*AbsoluteDriveAdv closedAbsoluteDriveAdv = new AbsoluteDriveAdv(drivebase,
+  AbsoluteDriveAdv closedAbsoluteDriveAdv = new AbsoluteDriveAdv(drivebase,
                                                                  () -> -MathUtil.applyDeadband(driverXbox.getLeftY(),
                                                                                                OperatorConstants.LEFT_Y_DEADBAND),
                                                                  () -> -MathUtil.applyDeadband(driverXbox.getLeftX(),
@@ -55,49 +53,26 @@ public class RobotContainer
                                                                  driverXbox.getHID()::getAButtonPressed,
                                                                  driverXbox.getHID()::getXButtonPressed,
                                                                  driverXbox.getHID()::getBButtonPressed);
-  */
-
-  AbsoluteDriveAdv closedAbsoluteDriveAdv = new AbsoluteDriveAdv(drivebase, 
-                                                                () -> MathUtil.applyDeadband(driverPS5.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-                                                                () -> MathUtil.applyDeadband(driverPS5.getLeftX(), OperatorConstants.DEADBAND),
-                                                                () -> MathUtil.applyDeadband(driverPS5.getRightX(), OperatorConstants.RIGHT_X_DEADBAND),
-                                                                driverPS5.getHID()::getTriangleButtonPressed,
-                                                                driverPS5.getHID()::getCrossButtonPressed,
-                                                                driverPS5.getHID()::getSquareButtonPressed,
-                                                                driverPS5.getHID()::getCircleButtonPressed);
 
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
    */
-  /*
-   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
+  SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
                                                                 () -> driverXbox.getLeftY() * -1,
                                                                 () -> driverXbox.getLeftX() * -1)
                                                             .withControllerRotationAxis(driverXbox::getRightX)
                                                             .deadband(OperatorConstants.DEADBAND)
                                                             .scaleTranslation(0.8)
                                                             .allianceRelativeControl(true);
-  */
 
-  SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
-                                                               () -> driverPS5.getLeftY() * -1,
-                                                               () -> driverPS5.getLeftX() * -1)
-                                                               .withControllerRotationAxis(driverPS5::getRightX)
-                                                               .deadband(OperatorConstants.DEADBAND)
-                                                               .scaleTranslation(0.8)
-                                                               .allianceRelativeControl(true);
   /**
    * Clone's the angular velocity input stream and converts it to a fieldRelative input stream.
    */
-  /**
   SwerveInputStream driveDirectAngle = driveAngularVelocity.copy().withControllerHeadingAxis(driverXbox::getRightX,
                                                                                              driverXbox::getRightY)
                                                            .headingWhile(true);
 
-  */
-  SwerveInputStream driveDirectAngle = driveAngularVelocity.copy().withControllerHeadingAxis(driverPS5::getRightX,
-                                                                                             driverPS5::getRightY)
-                                                           .headingWhile(true);
+
   // Applies deadbands and inverts controls because joysticks
   // are back-right positive while robot
   // controls are front-left positive
@@ -115,26 +90,26 @@ public class RobotContainer
   Command driveSetpointGen = drivebase.driveWithSetpointGeneratorFieldRelative(driveDirectAngle);
 
   SwerveInputStream driveAngularVelocitySim = SwerveInputStream.of(drivebase.getSwerveDrive(),
-                                                                   () -> -driverPS5.getLeftY(),
-                                                                   () -> -driverPS5.getLeftX())
-                                                               .withControllerRotationAxis(() -> driverPS5.getRawAxis(2))
+                                                                   () -> -driverXbox.getLeftY(),
+                                                                   () -> -driverXbox.getLeftX())
+                                                               .withControllerRotationAxis(() -> driverXbox.getRightX())
                                                                .deadband(OperatorConstants.DEADBAND)
                                                                .scaleTranslation(0.8)
                                                                .allianceRelativeControl(true);
   // Derive the heading axis with math!
   SwerveInputStream driveDirectAngleSim     = driveAngularVelocitySim.copy()
                                                                      .withControllerHeadingAxis(() -> Math.sin(
-                                                                      driverPS5.getRawAxis(
+                                                                                                    driverXbox.getRawAxis(
                                                                                                         2) * Math.PI) * (Math.PI * 2),
                                                                                                 () -> Math.cos(
-                                                                                                  driverPS5.getRawAxis(
+                                                                                                    driverXbox.getRawAxis(
                                                                                                         2) * Math.PI) *
                                                                                                       (Math.PI * 2))
                                                                      .headingWhile(true);
 
-  Command driveFieldOrientedDirectAngleSim = drivebase.driveFieldOriented(driveDirectAngleSim);
+  Command driveFieldOrientedDirectAngleSim = drivebase.driveFieldOriented(driveAngularVelocitySim);
 
-  Command driveSetpointGenSim = drivebase.driveWithSetpointGeneratorFieldRelative(driveDirectAngleSim);
+  Command driveSetpointGenSim = drivebase.driveWithSetpointGeneratorFieldRelative(driveAngularVelocitySim);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -163,32 +138,33 @@ public class RobotContainer
 
     if (Robot.isSimulation())
     {
-      driverPS5.options().onTrue(Commands.runOnce(() -> drivebase.resetOdometry(new Pose2d(3, 3, new Rotation2d()))));
+      driverXbox.start().onTrue(Commands.runOnce(() -> drivebase.resetOdometry(new Pose2d(3, 3, new Rotation2d()))));
+      
     }
     if (DriverStation.isTest())
     {
       drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity); // Overrides drive command above!
 
-      driverPS5.circle().whileTrue(drivebase.sysIdDriveMotorCommand());
-      driverPS5.square().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-      driverPS5.triangle().whileTrue(drivebase.driveToDistanceCommand(1.0, 0.2));
-      driverPS5.options().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-      driverPS5.create().whileTrue(drivebase.centerModulesCommand());
-      driverPS5.L1().onTrue(Commands.none());
-      driverPS5.R1().onTrue(Commands.none());
+      driverXbox.b().whileTrue(drivebase.sysIdDriveMotorCommand());
+      driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+      driverXbox.y().whileTrue(drivebase.driveToDistanceCommand(1.0, 0.2));
+      driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
+      driverXbox.back().whileTrue(drivebase.centerModulesCommand());
+      driverXbox.leftBumper().onTrue(Commands.none());
+      driverXbox.rightBumper().onTrue(Commands.none());
     } else
     {
-      driverPS5.cross().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-      driverPS5.square().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
-      driverPS5.circle().whileTrue(
+      driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
+      driverXbox.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
+      driverXbox.b().whileTrue(
           drivebase.driveToPose(
               new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
                               );
-      driverPS5.triangle().whileTrue(drivebase.aimAtSpeaker(2));
-      driverPS5.options().whileTrue(Commands.none());
-      driverPS5.create().whileTrue(Commands.none());
-      driverPS5.L1().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-      driverPS5.R1().onTrue(Commands.none());
+      driverXbox.y().whileTrue(drivebase.aimAtSpeaker(2));
+      driverXbox.start().whileTrue(Commands.none());
+      driverXbox.back().whileTrue(Commands.none());
+      driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+      driverXbox.rightBumper().onTrue(Commands.none());
     }
 
   }
