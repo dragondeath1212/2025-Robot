@@ -11,7 +11,6 @@ public class ArmSubsystem {
    /*Creates a position, current cycle position, pre-incline up, and power reading. */ 
     @SuppressWarnings("unused")
     private double position;
-    @SuppressWarnings("unused")
     private int currCyclePos;
     @SuppressWarnings("unused")
     private boolean preIncUp;
