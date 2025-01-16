@@ -1,8 +1,9 @@
 package frc.robot.subsystems.arm;
 
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANPIDController;
 
 /*Begins the class declaration. */
 
@@ -31,24 +32,19 @@ public class ArmSubsystem {
     private final double ARM_I = 0;
     private final double ARM_D = 0;
 
-    private static ArmSubsystem instance;
-/*Calls the class to create a new instance if there isn't already one. */
-    public static ArmSubsystem getInstance() {
-        if (instance == null) {
-            instance = new ArmSubsystem();
-        }
-        return instance;
-    }
-public ArmSubsystem() {
-//        RobotControlWithSRX.getInstance().getTalons().get(RobotMotorType.ARM_SUBSYSTEM).changeControlMode(TalonControlMode.PercentVbus);
-    ((TalonSRX) ((TalonsType) ((RobotControlWithSRX) RobotControlWithSRX.getInstance()).getTalons()).get(RobotMotorType.ARM_SUBSYSTEM)).set(TalonSRXControlMode.Position, 0);
-    ((TalonSRX) ((TalonsType) ((RobotControlWithSRX) RobotControlWithSRX.getInstance()).getTalons()).get(RobotMotorType.ARM_SUBSYSTEM)).configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 10);
-    ((TalonSRX) ((TalonsType) ((RobotControlWithSRX) RobotControlWithSRX.getInstance()).getTalons()).get(RobotMotorType.ARM_SUBSYSTEM)).config_kP(0, ARM_P, 10);
-    ((TalonSRX) ((TalonsType) ((RobotControlWithSRX) RobotControlWithSRX.getInstance()).getTalons()).get(RobotMotorType.ARM_SUBSYSTEM)).config_kI(0, ARM_I, 10);
-    ((TalonSRX) ((TalonsType) ((RobotControlWithSRX) RobotControlWithSRX.getInstance()).getTalons()).get(RobotMotorType.ARM_SUBSYSTEM)).config_kD(0, ARM_D, 10);
-    ((TalonSRX) ((TalonsType) ((RobotControlWithSRX) RobotControlWithSRX.getInstance()).getTalons()).get(RobotMotorType.ARM_SUBSYSTEM)).setSensorPhase(false);
-    position = 0;
-    power = 0;
-}
+    private CANSparkMax armMotor;
+    private CANPIDController pidController;
+    private CANEncoder encoder;
 
+    public ArmSubsystem() {
+        armMotor = new CANSparkMax(currCyclePos, null); // Update with the correct CAN ID
+        pidController = armMotor.getPIDController();
+        pidController.setReference(0, ControlType.kPosition);
+        encoder = armMotor.getEncoder();
+
+        armMotor.getPIDController().setP(ARM_P);
+        armMotor.getPIDController().setI(ARM_I);
+        armMotor.getPIDController().setD(ARM_D);
+        encoder.setPosition(0);
+    }
 }
