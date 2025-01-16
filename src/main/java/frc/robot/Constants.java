@@ -44,6 +44,7 @@ public static final boolean LOWER_INTAKE_BAR_INVERT = false;
 public static final boolean UPPER_INTAKE_BAR_INVERT = false;
 public static final double UPPER_INTAKE_BAR_SPEED = 0;
 public static final double LOWER_INTAKE_BAR_SPEED = 0;
+
 public static final String NEO_CURRENT_LIMIT = null;
 
 //  public static final class AutonConstants
