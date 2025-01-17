@@ -1,5 +1,7 @@
 package frc.robot.subsystems.arm;
 
+import com.revrobotics.spark.SparkBase.ControlType;
+
 public class SparkMaxPIDController {
 
     public void setP(double aRM_P) {
@@ -12,6 +14,10 @@ public class SparkMaxPIDController {
 
     public void setI(double aRM_I) {
         throw new UnsupportedOperationException("Unimplemented method 'setI'");
+    }
+
+    public void setReference(int i, ControlType kposition) {
+        throw new UnsupportedOperationException("Unimplemented method 'setReference'");
     }
 
 }

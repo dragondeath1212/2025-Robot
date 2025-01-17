@@ -1,8 +1,8 @@
 package frc.robot.subsystems.arm;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.ControlType;
-import com.revrobotics.CANEncoder;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.ControlType;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANPIDController;
 
 /*Begins the class declaration. */
@@ -11,6 +11,7 @@ public class ArmSubsystem {
    /*Creates a position, current cycle position, pre-incline up, and power reading. */ 
     @SuppressWarnings("unused")
     private double position;
+    @SuppressWarnings("unused")
     private int currCyclePos;
     @SuppressWarnings("unused")
     private boolean preIncUp;
@@ -32,11 +33,11 @@ public class ArmSubsystem {
     private final double ARM_D = 0;
 
     private CANSparkMax armMotor;
-    private CANPIDController pidController;
+    private SparkMaxPIDController pidController;
     private CANEncoder encoder;
 
     public ArmSubsystem() {
-        armMotor = new CANSparkMax(currCyclePos, null); // Update with the correct CAN ID
+        armMotor = new CANSparkMax(); // Update with the correct CAN ID
         pidController = armMotor.getPIDController();
         pidController.setReference(0, ControlType.kPosition);
         encoder = armMotor.getEncoder();
