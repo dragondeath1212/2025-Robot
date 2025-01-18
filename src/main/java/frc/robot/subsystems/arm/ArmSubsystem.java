@@ -1,9 +1,8 @@
 package frc.robot.subsystems.arm;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.ControlType;
-import com.revrobotics.CANEncoder;
-import com.revrobotics.CANPIDController;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 /*Begins the class declaration. */
 
@@ -11,6 +10,7 @@ public class ArmSubsystem {
    /*Creates a position, current cycle position, pre-incline up, and power reading. */ 
     @SuppressWarnings("unused")
     private double position;
+    @SuppressWarnings("unused")
     private int currCyclePos;
     @SuppressWarnings("unused")
     private boolean preIncUp;
@@ -31,19 +31,21 @@ public class ArmSubsystem {
     private final double ARM_I = 0;
     private final double ARM_D = 0;
 
-    private CANSparkMax armMotor;
-    private CANPIDController pidController;
-    private CANEncoder encoder;
+    private TalonFX armMotor;
+    private TalonFXConfiguration armConfig;
 
+    @SuppressWarnings("removal")
     public ArmSubsystem() {
-        armMotor = new CANSparkMax(currCyclePos, null); // Update with the correct CAN ID
-        pidController = armMotor.getPIDController();
-        pidController.setReference(0, ControlType.kPosition);
-        encoder = armMotor.getEncoder();
+        armMotor = new TalonFX(1); // Update with the correct CAN ID
+        armConfig = new TalonFXConfiguration();
 
-        armMotor.getPIDController().setP(ARM_P);
-        armMotor.getPIDController().setI(ARM_I);
-        armMotor.getPIDController().setD(ARM_D);
-        encoder.setPosition(0);
+        armConfig.Slot0.kP = ARM_P;
+        armConfig.Slot0.kI = ARM_I;
+        armConfig.Slot0.kD = ARM_D;
+
+        armMotor.getConfigurator().apply(armConfig);
+        armMotor.setInverted(true); // Assuming CounterClockwise_Positive means true
+        armMotor.setNeutralMode(NeutralModeValue.Brake);
+        armMotor.set(0); // Replace 0 with the desired position setpoint
     }
 }
