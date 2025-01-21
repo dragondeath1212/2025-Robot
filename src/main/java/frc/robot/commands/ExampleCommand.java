@@ -24,7 +24,7 @@ public class ExampleCommand extends Command {
       }
     
       private void addRequirements(ExampleSubsystem subsystem) {
-        // TODO Auto-generated method stub
+        
         throw new UnsupportedOperationException("Unimplemented method 'addRequirements'");
       }
     
