@@ -13,10 +13,10 @@
 | back_left_steer | CANSparkMax | 10-29 | 15 |
 | back_right_drive | CANSparkMax | 10-29 | 16 |
 | back_right_steer | CANSparkMax | 10-29 | 17 |
-| front_left_encoder | DutyCycleEncoder | 40-59 | 40 |
-| front_right_encoder | DutyCycleEncoder | 40-59 | 41 |
-| back_left_encoder | DutyCycleEncoder | 40-59 | 42 |
-| back_right_encoder | DutyCycleEncoder | 40-59 | 43 |
+| front_left_encoder | CANCoder | 40-59 | 40 |
+| front_right_encoder | CANCoder | 40-59 | 41 |
+| back_left_encoder | CANCoder | 40-59 | 42 |
+| back_right_encoder | CANCoder | 40-59 | 43 |
 
 
 ### Analog Input ID Configuration ###
