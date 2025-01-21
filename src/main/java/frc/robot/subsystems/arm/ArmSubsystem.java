@@ -40,8 +40,8 @@ public class ArmSubsystem {
         armConfig = new TalonFXConfiguration();
 
         armConfig.Slot0.kP = ARM_P;
-        armConfig.Slot1.kI = ARM_I;
-        armConfig.Slot2.kD = ARM_D;
+        armConfig.Slot0.kI = ARM_I;
+        armConfig.Slot0.kD = ARM_D;
 
         armMotor.getConfigurator().apply(armConfig);
         armMotor.setInverted(true); // Assuming CounterClockwise_Positive means true
