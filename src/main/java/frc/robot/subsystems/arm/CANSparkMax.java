@@ -1,5 +1,7 @@
 package frc.robot.subsystems.arm;
 
+import com.revrobotics.CANEncoder;
+
 public class CANSparkMax {
 
     public SparkMaxPIDController getPIDController() {
