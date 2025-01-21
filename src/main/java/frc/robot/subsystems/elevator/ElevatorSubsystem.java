@@ -3,6 +3,7 @@ package frc.robot.subsystems.elevator;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 
@@ -20,7 +21,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         // dividing by 60 to convert meters per minute to meters per second
         // elevatorEncoder.setVelocityConversionFactor(Double.parseDouble(ElevatorConstants.METERS_PER_REVOLUTION));
     }
-
+CANSparkMax spark= new CANSparkMax(0, null);
     public double getEncoderPosition() {
         return elevatorEncoder.getPosition();
     }
@@ -51,4 +52,5 @@ public class ElevatorSubsystem extends SubsystemBase {
         // This method will be called once per scheduler run
         periodicUpdate();
     }
+
 }
