@@ -44,8 +44,8 @@ public class ArmSubsystem {
         armConfig.Slot0.kD = ARM_D;
 
         armMotor.getConfigurator().apply(armConfig);
-        armMotor.setInverted(true); // Assuming CounterClockwise_Positive means true
+        armMotor.setInverted(true); 
         armMotor.setNeutralMode(NeutralModeValue.Brake);
-        armMotor.set(0); // Replace 0 with the desired position setpoint
+        armMotor.set(0);
     }
 }
