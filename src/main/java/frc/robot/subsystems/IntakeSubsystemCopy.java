@@ -5,7 +5,6 @@ package frc.robot.subsystems;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -20,13 +19,46 @@ public class IntakeSubsystemCopy extends SubsystemBase {
         final private DoubleSolenoid m_leftDoubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 0);
         @SuppressWarnings("unused")
         final private DoubleSolenoid m_rightDoubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 0);
+      boolean IsIntakeClosed = false;
+
+
+        void closeIntake(){
+            if (IsIntakeClosed == false){
+            m_leftDoubleSolenoid.set(Value.kForward);
+            m_rightDoubleSolenoid.set(Value.kForward);
+             IsIntakeClosed = true;
+            }
+        }
+
+        void openIntake(){
+            if (IsIntakeClosed == true){
+                
+                
+            m_leftDoubleSolenoid.set(Value.kReverse);
+            m_rightDoubleSolenoid.set(Value.kReverse);
+            IsIntakeClosed = false;
+            }
+            }
+        void startIntake()  {
+            m_leftIntakeMotor.set(1);
+            m_rightIntakeMotor.set(1);
+            
+
+        }
+        void stopIntake(){
+            m_leftIntakeMotor.set(0);
+            m_rightIntakeMotor.set(0);
+        }
+        @SuppressWarnings("deprecation")
         public IntakeSubsystemCopy(){
+           
             m_rightIntakeMotor.setInverted(false);
             m_leftIntakeMotor.setInverted(false);
 
 
             m_leftDoubleSolenoid.set(Value.kOff);
             m_rightDoubleSolenoid.set(Value.kOff);
+
 
 
 
