@@ -1,9 +1,6 @@
 package frc.robot.subsystems.arm;
 
-import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
-import com.ctre.phoenix6.hardware.CANcoder;
-import com.revrobotics.CANPIDController;
 
 /*Begins the class declaration. */
 
