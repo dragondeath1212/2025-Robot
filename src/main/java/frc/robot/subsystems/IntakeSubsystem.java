@@ -30,7 +30,7 @@ public IntakeSubsystem() {
     m_lowerIntakeBar = new SparkMax(Constants.LOWER_INTAKE_BAR_MOTOR_ID, MotorType.kBrushless);
     m_upperIntakeBar = new SparkMax(Constants.UPPER_INTAKE_BAR_MOTOR_ID, MotorType.kBrushless);
 
-    // Reverse some of the motors if needed
+    // Reverse some of the motors if neededC
     m_lowerIntakeBar.setInverted(Constants.LOWER_INTAKE_BAR_INVERT);
     m_upperIntakeBar.setInverted(Constants.UPPER_INTAKE_BAR_INVERT);
 
