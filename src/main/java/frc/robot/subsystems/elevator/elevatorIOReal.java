@@ -6,7 +6,7 @@ import frc.robot.Constants;
 
 public class elevatorIOReal implements ElevatorIO {
 
-    public static CANSparkMax elevatorMotorController;
+    public static SparkMax elevatorMotorController;
     public static RelativeEncoder elevatorEncoder;
 
     public elevatorIOReal()

@@ -2,7 +2,7 @@ package frc.robot.subsystems.elevator;
 
 import com.revrobotics.RelativeEncoder;
 
-public class CANSparkMax {
+public class SparkMax {
 
     public RelativeEncoder getEncoder() {
         throw new UnsupportedOperationException("Unimplemented method 'getEncoder'");
