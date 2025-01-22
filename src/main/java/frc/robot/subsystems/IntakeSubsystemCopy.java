@@ -19,5 +19,12 @@ public class IntakeSubsystemCopy extends SubsystemBase {
         final private DoubleSolenoid m_leftDoubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 0);
         @SuppressWarnings("unused")
         final private DoubleSolenoid m_rightDoubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 0);
+        public IntakeSubsystemCopy(){
+            m_rightIntakeMotor.setInverted(false);
+            m_leftIntakeMotor.setInverted(false);
 
+
+
+
+        }
 }
