@@ -51,4 +51,18 @@ public class ElevatorSubsystem extends SubsystemBase {
         // This method will be called once per scheduler run
         periodicUpdate();
     }
+    public void raiseElevator() {
+    elevatorMotorController.set(0.5);
+    elevatorEncoder.getPosition();
+    if (elevatorEncoder.getPosition() >= 0.75) {
+        elevatorMotorController.set(0.0);
+    }
+}
+    public void lowerElevator() {
+    elevatorMotorController.set(-0.5);
+    elevatorEncoder.getPosition();
+    if (elevatorEncoder.getPosition() <= 0.0) {
+        elevatorMotorController.set(0.0);
+    }
+}
 }
