@@ -23,7 +23,7 @@ public class IntakeSubsystemCopy extends SubsystemBase {
       public void extendIntake(){
             m_extenderDoubleSolenoid.set(Value.kForward);
       }
-      void returnIntake(){
+      public void returnIntake(){
         m_extenderDoubleSolenoid.set(Value.kReverse);
   }
 

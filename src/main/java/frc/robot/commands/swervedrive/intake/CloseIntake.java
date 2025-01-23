@@ -14,6 +14,16 @@ private final IntakeSubsystemCopy intakeSubsystem;
 public CloseIntake(IntakeSubsystemCopy intakeSubsystem) {
 	this.intakeSubsystem = intakeSubsystem;
 }
+public void initialize() {
+	intakeSubsystem.closeIntake();
 
+}
 
+public void execute() {
+	
+}
+
+public void end() {
+
+}
 }
