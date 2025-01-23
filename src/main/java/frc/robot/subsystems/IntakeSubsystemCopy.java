@@ -20,7 +20,7 @@ public class IntakeSubsystemCopy extends SubsystemBase {
         final private DoubleSolenoid m_extenderDoubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0,0);
       boolean IsIntakeClosed = false;
 
-      void extendIntake(){
+      public void extendIntake(){
             m_extenderDoubleSolenoid.set(Value.kForward);
       }
       void returnIntake(){
@@ -28,7 +28,7 @@ public class IntakeSubsystemCopy extends SubsystemBase {
   }
 
 
-        void closeIntake(){
+       public void closeIntake(){
             if (IsIntakeClosed == false){
             m_leftDoubleSolenoid.set(Value.kForward);
             m_rightDoubleSolenoid.set(Value.kForward);
@@ -36,7 +36,7 @@ public class IntakeSubsystemCopy extends SubsystemBase {
             }
         }
 
-        void openIntake(){
+        public void openIntake(){
             if (IsIntakeClosed == true){
                 
                 
@@ -45,13 +45,13 @@ public class IntakeSubsystemCopy extends SubsystemBase {
             IsIntakeClosed = false;
             }
             }
-        void startIntake()  {
+        public void startIntake()  {
             m_leftIntakeMotor.set(1);
             m_rightIntakeMotor.set(1);
             
 
         }
-        void stopIntake(){
+        public void stopIntake(){
             m_leftIntakeMotor.set(0);
             m_rightIntakeMotor.set(0);
         }
