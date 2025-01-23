@@ -1,5 +1,6 @@
 package frc.robot.subsystems.elevator;
 
+import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
 
 public class SparkMax {
@@ -15,6 +16,10 @@ public class SparkMax {
     private boolean brakeMode;
     @SuppressWarnings("unused")
     private double rampRate;
+    private double speed;
+    private double position;
+    private double current;
+    private double temperature;
 
     public SparkMax(int channel) {
         this.channel = channel;
@@ -41,23 +46,35 @@ public class SparkMax {
     }
 
     public RelativeEncoder getEncoder() {
-        
-        throw new UnsupportedOperationException("Unimplemented method 'getEncoder'");
+        return new RelativeEncoder() {
+            @Override
+            public double getPosition() {
+                return position;
+            }
+
+            @Override
+            public double getVelocity() {
+                return speed;
+            }
+
+            @Override
+            public REVLibError setPosition(double position) {
+                SparkMax.this.position = position;
+                                return null;
+            }
+        };
     }
 
     public void set(double speed) {
-        
-        throw new UnsupportedOperationException("Unimplemented method 'set'");
+        this.speed = speed;
     }
 
     public double getOutputCurrent() {
-        
-        throw new UnsupportedOperationException("Unimplemented method 'getOutputCurrent'");
+        return current;
     }
 
     public double getMotorTemperature() {
-        
-        throw new UnsupportedOperationException("Unimplemented method 'getMotorTemperature'");
+        return temperature;
     }
 
     // Add other necessary methods and properties as needed
