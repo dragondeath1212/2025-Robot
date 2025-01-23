@@ -1,6 +1,7 @@
 package frc.robot.subsystems.elevator;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -51,18 +52,20 @@ public class ElevatorSubsystem extends SubsystemBase {
         // This method will be called once per scheduler run
         periodicUpdate();
     }
-    public void raiseElevator() {
+    public Command raiseElevator() {
     elevatorMotorController.set(0.5);
     elevatorEncoder.getPosition();
     if (elevatorEncoder.getPosition() >= 0.75) {
         elevatorMotorController.set(0.0);
     }
+        return null;
 }
-    public void lowerElevator() {
+    public Command lowerElevator() {
     elevatorMotorController.set(-0.5);
     elevatorEncoder.getPosition();
     if (elevatorEncoder.getPosition() <= 0.0) {
         elevatorMotorController.set(0.0);
     }
+        return null;
 }
 }

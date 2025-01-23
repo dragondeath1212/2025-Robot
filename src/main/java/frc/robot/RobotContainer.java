@@ -17,16 +17,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
-import java.security.spec.ECFieldF2m;
-
 import swervelib.SwerveInputStream;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 
@@ -124,7 +120,6 @@ public class RobotContainer
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
-  @SuppressWarnings("unused")
   private final ElevatorSubsystem elevator;
 
   
@@ -158,10 +153,10 @@ public class RobotContainer
     drivebase.setDefaultCommand(!RobotBase.isSimulation() ?
     driveFieldOrientedDirectAngle :
     driveFieldOrientedDirectAngleSim);
-     drivebase.setDefaultCommand(!RobotBase.isSimulation() ?
+    drivebase.setDefaultCommand(!RobotBase.isSimulation() ?
                                 driveFieldOrientedDirectAngle :
                                 driveFieldOrientedDirectAngleSim);
-
+    
     if (Robot.isSimulation())
     {
       driverXbox.start().onTrue(Commands.runOnce(() -> drivebase.resetOdometry(new Pose2d(3, 3, new Rotation2d()))));
@@ -190,9 +185,9 @@ public class RobotContainer
       driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-      driverXbox.rightBumper().onTrue(SubsystemBase.elevator.ElevatorSubsystem::raiseElevator);
+      driverXbox.rightBumper().toggleOnTrue(elevator.raiseElevator());
       driverXbox.leftTrigger().whileTrue(drivebase.centerModulesCommand());
-      driverXbox.rightTrigger().whileTrue(SubsystemBase.elevator.ElevatorSubsystem::lowerElevator);
+      driverXbox.rightTrigger().whileFalse(elevator.lowerElevator());
     }
 
   }
