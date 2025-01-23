@@ -1,24 +1,25 @@
 package frc.robot.subsystems.elevator;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import com.revrobotics.SparkMax;
 import com.revrobotics.RelativeEncoder;
 
+@SuppressWarnings("unused")
 public class ElevatorSubsystem extends SubsystemBase {
     public static frc.robot.subsystems.elevator.SparkMax elevatorMotorController;
     public static RelativeEncoder elevatorEncoder;
     public ElevatorSubsystem() {
+    
          elevatorMotorController = MotorUtil.createSparkMAX(ElevatorConstants.ELEVATOR_MOTOR_ID, MotorType.kBrushless, 
-            Constants.NEO_CURRENT_LIMIT, false, true, 0.1);
-        
+            Constants.NEO_CURRENT_LIMIT, false, true, 0.1); 
         elevatorEncoder = elevatorMotorController.getEncoder();
         // elevatorEncoder.setPositionConversionFactor(Double.parseDouble(ElevatorConstants.METERS_PER_REVOLUTION));
         // dividing by 60 to convert meters per minute to meters per second
         // elevatorEncoder.setVelocityConversionFactor(Double.parseDouble(ElevatorConstants.METERS_PER_REVOLUTION));
     }
-public SparkMax spark= new SparkMax (1);
     public double getEncoderPosition() {
         return elevatorEncoder.getPosition();
     }
@@ -49,18 +50,20 @@ public SparkMax spark= new SparkMax (1);
         // This method will be called once per scheduler run
         periodicUpdate();
     }
-    public void raiseElevator(){
+    public Command raiseElevator(){
     elevatorMotorController.set(0.5);
     elevatorEncoder.getPosition();
     if( elevatorEncoder.getPosition()>=0.75){
         elevatorMotorController.set(0.0);
     }
+        return null;
 }
-        public void lowerElevator(){
+        public Command lowerElevator(){
         elevatorMotorController.set(-0.5);
         elevatorEncoder.getPosition();
         if (elevatorEncoder.getPosition()<=0.0){
             elevatorMotorController.set(0.0);
         }
+                return null;
     }
 }
