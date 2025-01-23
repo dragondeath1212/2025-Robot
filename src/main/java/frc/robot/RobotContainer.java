@@ -158,9 +158,9 @@ public class RobotContainer
     drivebase.setDefaultCommand(!RobotBase.isSimulation() ?
     driveFieldOrientedDirectAngle :
     driveFieldOrientedDirectAngleSim);
-    drivebase.setDefaultCommand(!RobotBase.isSimulation() ?
-    driveFieldOrientedDirectAngle :
-    driveFieldOrientedDirectAngleSim);
+     drivebase.setDefaultCommand(!RobotBase.isSimulation() ?
+                                driveFieldOrientedDirectAngle :
+                                driveFieldOrientedDirectAngleSim);
 
     if (Robot.isSimulation())
     {
