@@ -25,6 +25,8 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
+import java.security.spec.ECFieldF2m;
+
 import swervelib.SwerveInputStream;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 
@@ -122,18 +124,27 @@ public class RobotContainer
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
+  @SuppressWarnings("unused")
+  private final ElevatorSubsystem elevator;
+
+  
   public RobotContainer()
   {
+ 
+    
+    elevator = new ElevatorSubsystem();
+    
     // Configure the trigger bindings
     configureBindings();
+    
     DriverStation.silenceJoystickConnectionWarning(true);
     NamedCommands.registerCommand("test", Commands.print("I EXIST"));
-
+    
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
-
+    
   }
-
+  
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary predicate, or via the
@@ -145,8 +156,11 @@ public class RobotContainer
   {
     // (Condition) ? Return-On-True : Return-on-False
     drivebase.setDefaultCommand(!RobotBase.isSimulation() ?
-                                driveFieldOrientedDirectAngle :
-                                driveFieldOrientedDirectAngleSim);
+    driveFieldOrientedDirectAngle :
+    driveFieldOrientedDirectAngleSim);
+    drivebase.setDefaultCommand(!RobotBase.isSimulation() ?
+    driveFieldOrientedDirectAngle :
+    driveFieldOrientedDirectAngleSim);
 
     if (Robot.isSimulation())
     {
@@ -156,7 +170,7 @@ public class RobotContainer
     if (DriverStation.isTest())
     {
       drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity); // Overrides drive command above!
-
+      
       driverXbox.b().whileTrue(drivebase.sysIdDriveMotorCommand());
       driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
       driverXbox.y().whileTrue(drivebase.driveToDistanceCommand(1.0, 0.2));
