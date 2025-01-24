@@ -185,9 +185,9 @@ public class RobotContainer
       driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-      driverXbox.rightBumper().onTrue(elevator.raiseElevator());
+      driverXbox.rightBumper().toggleOnFalse(elevator.raiseElevator());
       driverXbox.leftTrigger().whileTrue(drivebase.centerModulesCommand());
-      driverXbox.rightTrigger().toggleOnFalse(elevator.lowerElevator());
+      driverXbox.rightTrigger().onFalse(elevator.lowerElevator());
     }
 
   }
