@@ -4,24 +4,22 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMax;
 import com.revrobotics.RelativeEncoder;
 
+@SuppressWarnings("unused")
 public class ElevatorSubsystem extends SubsystemBase {
-
-    public static frc.robot.subsystems.elevator.CANSparkMax elevatorMotorController;
+    public static frc.robot.subsystems.elevator.SparkMax elevatorMotorController;
     public static RelativeEncoder elevatorEncoder;
-
     public ElevatorSubsystem() {
-        elevatorMotorController = MotorUtil.createSparkMAX(ElevatorConstants.ELEVATOR_MOTOR_ID, MotorType.kBrushless, 
-            Constants.NEO_CURRENT_LIMIT, false);
-        
+    
+         elevatorMotorController = MotorUtil.createSparkMAX(ElevatorConstants.ELEVATOR_MOTOR_ID, MotorType.kBrushless, 
+            0, false, true, 0.1); 
         elevatorEncoder = elevatorMotorController.getEncoder();
         // elevatorEncoder.setPositionConversionFactor(Double.parseDouble(ElevatorConstants.METERS_PER_REVOLUTION));
         // dividing by 60 to convert meters per minute to meters per second
         // elevatorEncoder.setVelocityConversionFactor(Double.parseDouble(ElevatorConstants.METERS_PER_REVOLUTION));
     }
-
     public double getEncoderPosition() {
         return elevatorEncoder.getPosition();
     }
@@ -52,20 +50,18 @@ public class ElevatorSubsystem extends SubsystemBase {
         // This method will be called once per scheduler run
         periodicUpdate();
     }
-    public Command raiseElevator() {
+    public void raiseElevator(){
     elevatorMotorController.set(0.5);
     elevatorEncoder.getPosition();
-    if (elevatorEncoder.getPosition() >= 0.75) {
+    if( elevatorEncoder.getPosition()>=0.75){
         elevatorMotorController.set(0.0);
     }
-        return null;
 }
-    public Command lowerElevator() {
-    elevatorMotorController.set(-0.5);
-    elevatorEncoder.getPosition();
-    if (elevatorEncoder.getPosition() <= 0.0) {
-        elevatorMotorController.set(0.0);
+        public void lowerElevator(){
+        elevatorMotorController.set(-0.5);
+        elevatorEncoder.getPosition();
+        if (elevatorEncoder.getPosition()<=0.0){
+            elevatorMotorController.set(0.0);
+        }
     }
-        return null;
-}
 }
