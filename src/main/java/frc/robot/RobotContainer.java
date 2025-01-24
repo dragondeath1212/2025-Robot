@@ -177,7 +177,7 @@ public class RobotContainer
       driverXbox.y().whileTrue(drivebase.aimAtSpeaker(2));
       driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());
-      driverXbox.leftTrigger().toggleOnTrue((new ActivateIntake(IntakeSubsystemCopy))); 
+      driverXbox.leftTrigger().onTrue((new ActivateIntake(IntakeSubsystemCopy))); 
       driverXbox.rightTrigger().onTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
       
     }
