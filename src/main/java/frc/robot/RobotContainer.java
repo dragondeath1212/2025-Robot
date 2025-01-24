@@ -20,7 +20,11 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.intake.ActivateIntake;
+import frc.robot.commands.intake.CloseIntake;
+import frc.robot.commands.intake.DeactivateIntake;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
+import frc.robot.subsystems.IntakeSubsystemCopy;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 import swervelib.SwerveInputStream;
@@ -32,7 +36,7 @@ import swervelib.SwerveInputStream;
  */
 public class RobotContainer
 {
-
+  IntakeSubsystemCopy IntakeSubsystemCopy = new IntakeSubsystemCopy();
   // Replace with CommandPS4Controller or CommandJoystick if needed
   final         CommandXboxController driverXbox = new CommandXboxController(0);
   // The robot's subsystems and commands are defined here...
@@ -159,7 +163,8 @@ public class RobotContainer
       driverXbox.y().whileTrue(drivebase.driveToDistanceCommand(1.0, 0.2));
       driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
       driverXbox.back().whileTrue(drivebase.centerModulesCommand());
-      driverXbox.leftBumper().onTrue(Commands.none());
+      driverXbox.leftBumper().onTrue(new CloseIntake(IntakeSubsystemCopy)
+      .andThen(new DeactivateIntake(IntakeSubsystemCopy)));
       driverXbox.rightBumper().onTrue(Commands.none());
     } else
     {
@@ -172,8 +177,9 @@ public class RobotContainer
       driverXbox.y().whileTrue(drivebase.aimAtSpeaker(2));
       driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());
-      driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-      driverXbox.rightBumper().onTrue(Commands.none());
+      driverXbox.leftTrigger().whileTrue((new ActivateIntake(IntakeSubsystemCopy))); 
+      driverXbox.rightTrigger().onTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+      
     }
 
   }
