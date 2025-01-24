@@ -13,11 +13,11 @@ public class IntakeSubsystemCopy extends SubsystemBase {
     
     
         final private SparkMax m_rightIntakeMotor = new SparkMax(0, SparkMax.MotorType.kBrushless); 
-        final private SparkMax m_leftIntakeMotor = new SparkMax(0, SparkMax.MotorType.kBrushless);
+        final private SparkMax m_leftIntakeMotor = new SparkMax(1, SparkMax.MotorType.kBrushless);
     
-        final private DoubleSolenoid m_leftDoubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 0);
-        final private DoubleSolenoid m_rightDoubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 0);
-        final private DoubleSolenoid m_extenderDoubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0,0);
+        final private DoubleSolenoid m_leftDoubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 3);
+        final private DoubleSolenoid m_rightDoubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 1, 4);
+        final private DoubleSolenoid m_extenderDoubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 2,5);
       boolean IsIntakeClosed = false;
 
       public void extendIntake(){
