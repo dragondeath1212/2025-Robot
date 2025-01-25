@@ -62,9 +62,6 @@ public class IntakeSubsystem extends SubsystemBase {
             m_leftIntakeMotor.setInverted(false);
 
 
-            m_leftDoubleSolenoid.set(Value.kOff);
-            m_rightDoubleSolenoid.set(Value.kOff);
-
 
 
 
