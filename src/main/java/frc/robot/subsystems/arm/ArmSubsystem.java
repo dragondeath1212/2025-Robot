@@ -33,7 +33,7 @@ public class ArmSubsystem {
 
     private TalonFX armMotor;
     private TalonFXConfiguration armConfig;
-
+/*Sets the arm motor to the correct CAN ID. */
     @SuppressWarnings("removal")
     public ArmSubsystem() {
         armMotor = new TalonFX(1); // Update with the correct CAN ID
