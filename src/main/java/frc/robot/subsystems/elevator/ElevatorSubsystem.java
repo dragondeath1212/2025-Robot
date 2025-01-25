@@ -14,7 +14,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     public ElevatorSubsystem() {
     
          elevatorMotorController = MotorUtil.createSparkMAX(ElevatorConstants.ELEVATOR_MOTOR_ID, MotorType.kBrushless, 
-            0, false, true, 0.1); 
+            1, false, true, 0.1); 
         elevatorEncoder = elevatorMotorController.getEncoder();
         // elevatorEncoder.setPositionConversionFactor(Double.parseDouble(ElevatorConstants.METERS_PER_REVOLUTION));
         // dividing by 60 to convert meters per minute to meters per second
