@@ -6,5 +6,6 @@ public final class ElevatorConstants {
 
     public static final int ELEVATOR_MOTOR_ID = 1; // Replace 1 with the actual motor ID
     public static final String METERS_PER_REVOLUTION = null;
+    public static ElevatorConstants kBrushless;
 
 }
