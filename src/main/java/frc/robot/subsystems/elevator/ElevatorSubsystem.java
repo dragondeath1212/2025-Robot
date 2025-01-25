@@ -13,7 +13,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     public static RelativeEncoder elevatorEncoder;
     public ElevatorSubsystem() {
     
-         elevatorMotorController = MotorUtil.createSparkMAX(ElevatorConstants.ELEVATOR_MOTOR_ID, MotorType.kBrushless, 
+         elevatorMotorController = MotorUtil.createSparkMAX(ElevatorConstants.ELEVATOR_MOTOR_ID, ElevatorConstants.kBrushless, 
             1, false, true, 0.1); 
         elevatorEncoder = elevatorMotorController.getEncoder();
         // elevatorEncoder.setPositionConversionFactor(Double.parseDouble(ElevatorConstants.METERS_PER_REVOLUTION));

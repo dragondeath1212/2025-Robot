@@ -2,10 +2,10 @@ package frc.robot.subsystems.elevator;
 
 public class MotorUtil {
 
-    public static SparkMax createSparkMAX(int elevatorMotorId, MotorType motorType, int currentLimit, boolean inverted,
+    public static SparkMax createSparkMAX(int elevatorMotorId, ElevatorConstants motorType, int currentLimit, boolean inverted,
             boolean brakeMode, double rampRate) {
         SparkMax sparkMax = new SparkMax(elevatorMotorId);
-        sparkMax.setMotorType(motorType);
+        sparkMax.ElevatorConstants(motorType);
         sparkMax.setCurrentLimit(currentLimit);
         sparkMax.setInverted(inverted);
         sparkMax.setBrakeMode(brakeMode);
@@ -13,7 +13,7 @@ public class MotorUtil {
         return sparkMax;
     }
 
-    public static SparkMax createSparkMAX(int elevatorMotorId, MotorType kbrushless, String neoCurrentLimit,
+    public static SparkMax createSparkMAX(int elevatorMotorId, ElevatorConstants kbrushless, String neoCurrentLimit,
             boolean inverted, boolean brakeMode, double rampRate) {
         
         throw new UnsupportedOperationException("Unimplemented method 'createSparkMAX'");

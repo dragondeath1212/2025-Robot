@@ -8,7 +8,7 @@ public class SparkMax {
         @SuppressWarnings("unused")
         private int channel;
         @SuppressWarnings("unused")
-        private MotorType motorType;
+        private ElevatorConstants motorType;
         @SuppressWarnings("unused")
         private int currentLimit;
         @SuppressWarnings("unused")
@@ -26,7 +26,7 @@ public class SparkMax {
             this.channel = channel;
         }
     
-        public void setMotorType(MotorType motorType) {
+        public void setMotorType(ElevatorConstants motorType) {
             this.motorType = motorType;
         }
     
@@ -76,6 +76,11 @@ public class SparkMax {
 
     public double getMotorTemperature() {
         return temperature;
+    }
+
+    public void ElevatorConstants(ElevatorConstants motorType2) {
+        
+        throw new UnsupportedOperationException("Unimplemented method 'ElevatorConstants'");
     }
 
     // Add other necessary methods and properties as needed
