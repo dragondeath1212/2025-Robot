@@ -44,12 +44,6 @@ public class ElevatorSubsystem extends SubsystemBase {
         // Only code in here that relates to a physical subsystem
         SmartDashboard.putNumber("elevator/Real motor temp (C)", elevatorMotorController.getMotorTemperature());
     }
-
-    @Override
-    public void periodic() {
-        // This method will be called once per scheduler run
-        periodicUpdate();
-    }
     public void raiseElevator(){
     elevatorMotorController.set(1.0);
     elevatorEncoder.getPosition();
@@ -63,5 +57,11 @@ public class ElevatorSubsystem extends SubsystemBase {
         if (elevatorEncoder.getPosition()<=0.0){
             elevatorMotorController.set(0.0);
         }
+    }
+
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+        periodicUpdate();
     }
 }
