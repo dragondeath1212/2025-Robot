@@ -24,7 +24,7 @@ import frc.robot.commands.intake.ActivateIntake;
 import frc.robot.commands.intake.CloseIntake;
 import frc.robot.commands.intake.DeactivateIntake;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
-import frc.robot.subsystems.IntakeSubsystemCopy;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 import swervelib.SwerveInputStream;
@@ -36,7 +36,7 @@ import swervelib.SwerveInputStream;
  */
 public class RobotContainer
 {
-  IntakeSubsystemCopy IntakeSubsystemCopy = new IntakeSubsystemCopy();
+  IntakeSubsystem IntakeSubsystemCopy = new IntakeSubsystem();
   // Replace with CommandPS4Controller or CommandJoystick if needed
   final         CommandXboxController driverXbox = new CommandXboxController(0);
   // The robot's subsystems and commands are defined here...

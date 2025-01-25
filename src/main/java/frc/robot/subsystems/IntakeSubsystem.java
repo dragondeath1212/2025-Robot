@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class IntakeSubsystemCopy extends SubsystemBase {
+public class IntakeSubsystem extends SubsystemBase {
 
     
     
@@ -56,7 +56,7 @@ public class IntakeSubsystemCopy extends SubsystemBase {
             m_rightIntakeMotor.set(0);
         }
         @SuppressWarnings("deprecation")
-        public IntakeSubsystemCopy(){
+        public IntakeSubsystem(){
            
             m_rightIntakeMotor.setInverted(false);
             m_leftIntakeMotor.setInverted(false);
