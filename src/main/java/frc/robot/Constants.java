@@ -63,4 +63,29 @@ public static final String NEO_CURRENT_LIMIT = null;
     public static final double RIGHT_X_DEADBAND = 0.1;
     public static final double TURN_CONSTANT    = 6;
   }
+
+  public static final class ArmConstants
+  {
+    public static final double ARM_S1_ANGLES[] = {30.0, 30.0};
+    public static final double ARM_S2_ANGLES[] = {30.0, 30.0};
+    public static final double ARM_S3_ANGLES[] = {30.0, 30.0};
+    public static final double ARM_S4_ANGLES[] = {30.0, 30.0};
+    public static final double ARM_S5_ANGLES[] = {-150.0, 0.0};
+
+    public static final double SHOULDER_P = 1.0;
+    public static final double SHOULDER_I = 0;
+    public static final double SHOULDER_D = 0;
+    public static final double SHOULDER_IZ = 10.0;
+
+    public static final double WRIST_P = 1.0;
+    public static final double WRIST_I = 0;
+    public static final double WRIST_D = 0;
+    public static final double WRIST_IZ = 10.0;
+
+    public static final double CONVERSION_FACTOR = 1024.0 / 360.0;
+    public static final double SHOOTER_COLLISION_ANGLE = 100;
+    public static final double ARM_P = 1.0;
+    public static final double ARM_I = 0;
+    public static final double ARM_D = 0;
+  }
 }

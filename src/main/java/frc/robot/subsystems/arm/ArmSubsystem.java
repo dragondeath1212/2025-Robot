@@ -1,51 +1,47 @@
 package frc.robot.subsystems.arm;
 
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.signals.NeutralModeValue;
 
-/*Begins the class declaration. */
+import static edu.wpi.first.units.Units.*;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
+
+import com.ctre.phoenix6.hardware.CANdi;
+import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import frc.robot.subsystems.arm.ArmState;
 
 public class ArmSubsystem {
-   /*Creates a position, current cycle position, pre-incline up, and power reading. */ 
-    @SuppressWarnings("unused")
-    private double position;
-    @SuppressWarnings("unused")
-    private int currCyclePos;
-    @SuppressWarnings("unused")
-    private boolean preIncUp;
-    @SuppressWarnings("unused")
-    private double power;
-/*States position */
-    @SuppressWarnings("unused")
-    private double[] positions = { 0, 1441 }; // in degree// First value is reset Pos
-    /*Moves the arm up and down. */
-    public static final double POWER_DOWN = 0.3;
-    public static final double POWER_UP = -0.4;
-    @SuppressWarnings("unused")
-    private final double CONVERSION_FACTOR = 1024.0 / 360.0;
-    @SuppressWarnings("unused")
-    private static final double SHOOTER_COLLISION_ANGLE = 100;
-/*Declares P, I, and, D. */
-    private final double ARM_P = 1.0;
-    private final double ARM_I = 0;
-    private final double ARM_D = 0;
 
-    private TalonFX armMotor;
-    private TalonFXConfiguration armConfig;
-/*Sets the arm motor to the correct CAN ID. */
-    @SuppressWarnings("removal")
-    public ArmSubsystem() {
-        armMotor = new TalonFX(1); // Update with the correct CAN ID
-        armConfig = new TalonFXConfiguration();
 
-        armConfig.Slot0.kP = ARM_P;
-        armConfig.Slot0.kI = ARM_I;
-        armConfig.Slot0.kD = ARM_D;
+    private final SparkFlex m_shoulderMotor;
+    private final SparkFlex m_wristMotor;
+    private final CANdi m_armCANdi;
+    private ArmState m_shoulderState = new ArmState(
+        Angle.ofBaseUnits(0.0, Degree), 
+        AngularVelocity.ofBaseUnits(0.0, DegreesPerSecond));
+    private ArmState m_wristState = new ArmState(
+        Angle.ofBaseUnits(0.0, Degree), 
+        AngularVelocity.ofBaseUnits(0.0, DegreesPerSecond));
+    
 
-        armMotor.getConfigurator().apply(armConfig);
-        armMotor.setInverted(true); 
-        armMotor.setNeutralMode(NeutralModeValue.Brake);
-        armMotor.set(0);
+public ArmSubsystem() {
+
+    m_shoulderMotor = new SparkFlex(18, MotorType.kBrushless);
+    m_wristMotor = new SparkFlex(19, MotorType.kBrushless);
+    m_armCANdi = new CANdi(33);
+    }
+
+public ArmState getShoulderState() {
+    Angle shoulderAngle = m_armCANdi.getPWM1Position().getValue();
+    AngularVelocity shoulderVelocity = m_armCANdi.getPWM1Velocity().getValue();
+    m_shoulderState.setArmState(shoulderAngle, shoulderVelocity); 
+    return m_shoulderState;
+    }
+
+public ArmState getWristState() {
+    Angle wristAngle = m_armCANdi.getPWM2Position().getValue();
+    AngularVelocity wristVelocity = m_armCANdi.getPWM2Velocity().getValue();
+    m_wristState.setArmState(wristAngle, wristVelocity); 
+    return m_wristState;
     }
 }
