@@ -28,7 +28,7 @@ public ArmSubsystem() {
 
     m_shoulderMotor = new SparkFlex(18, MotorType.kBrushless);
     m_wristMotor = new SparkFlex(19, MotorType.kBrushless);
-    m_armCANdi = new CANdi(33);
+    m_armCANdi = new CANdi(34);
     }
 
 public ArmState getShoulderState() {
