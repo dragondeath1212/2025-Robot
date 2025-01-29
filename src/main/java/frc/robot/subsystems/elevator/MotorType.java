@@ -5,5 +5,5 @@ public class MotorType {
         kBrushless,
         kBrushed
     }
-    public static ElevatorConstants kBrushless;
+    public static com.revrobotics.spark.SparkLowLevel.MotorType kBrushless;
 }
