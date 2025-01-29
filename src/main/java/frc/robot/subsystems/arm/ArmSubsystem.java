@@ -6,6 +6,7 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 
 import com.ctre.phoenix6.hardware.CANdi;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import frc.robot.subsystems.arm.ArmState;
@@ -14,7 +15,7 @@ public class ArmSubsystem {
 
 
     private final SparkFlex m_shoulderMotor;
-    private final SparkFlex m_wristMotor;
+    private final SparkMax m_wristMotor;
     private final CANdi m_armCANdi;
     private ArmState m_shoulderState = new ArmState(
         Angle.ofBaseUnits(0.0, Degree), 
@@ -27,7 +28,7 @@ public class ArmSubsystem {
 public ArmSubsystem() {
 
     m_shoulderMotor = new SparkFlex(18, MotorType.kBrushless);
-    m_wristMotor = new SparkFlex(19, MotorType.kBrushless);
+    m_wristMotor = new SparkMax(19, MotorType.kBrushless);
     m_armCANdi = new CANdi(34);
     }
 
