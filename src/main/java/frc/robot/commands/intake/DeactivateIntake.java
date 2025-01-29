@@ -19,7 +19,7 @@ this.intakeSubsystem = intakeSubsystem;
 
 public void initialize() {
     intakeSubsystem.stopIntake();
-    intakeSubsystem.closeIntake();
+   
     intakeSubsystem.returnIntake();
 }
 public void execute() {

@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.fasterxml.jackson.databind.introspect.WithMember;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.MathUtil;
@@ -36,7 +37,7 @@ import swervelib.SwerveInputStream;
  */
 public class RobotContainer
 {
-  IntakeSubsystem IntakeSubsystemCopy = new IntakeSubsystem();
+  IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
   // Replace with CommandPS4Controller or CommandJoystick if needed
   final         CommandXboxController driverXbox = new CommandXboxController(0);
   // The robot's subsystems and commands are defined here...
@@ -163,8 +164,8 @@ public class RobotContainer
       driverXbox.y().whileTrue(drivebase.driveToDistanceCommand(1.0, 0.2));
       driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
       driverXbox.back().whileTrue(drivebase.centerModulesCommand());
-      driverXbox.leftBumper().onTrue(new CloseIntake(IntakeSubsystemCopy)
-      .andThen(new DeactivateIntake(IntakeSubsystemCopy)));
+      driverXbox.leftBumper().onTrue(new CloseIntake(m_intakeSubsystem)
+      .andThen(new DeactivateIntake(m_intakeSubsystem)));
       driverXbox.rightBumper().onTrue(Commands.none());
     } else
     {
@@ -177,7 +178,7 @@ public class RobotContainer
       driverXbox.y().whileTrue(drivebase.aimAtSpeaker(2));
       driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());
-      driverXbox.leftTrigger().onTrue((new ActivateIntake(IntakeSubsystemCopy))); 
+      driverXbox.axisGreaterThan(2,0.9).onTrue(new ActivateIntake(m_intakeSubsystem)); 
       driverXbox.rightTrigger().onTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
       
     }
