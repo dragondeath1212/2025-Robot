@@ -8,7 +8,7 @@ import frc.robot.Constants;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.RelativeEncoder;
 
-@SuppressWarnings("unused")
+
 public class ElevatorSubsystem extends SubsystemBase {
     private final SparkMax m_elevatorMotorController;
 
