@@ -1,87 +1,23 @@
 package frc.robot.subsystems.elevator;
 
-import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
 
 public class SparkMax {
-    public static final REVLibError REVLibError = null;
-        @SuppressWarnings("unused")
-        private int channel;
-        @SuppressWarnings("unused")
-        private ElevatorConstants motorType;
-        @SuppressWarnings("unused")
-        private int currentLimit;
-        @SuppressWarnings("unused")
-        private boolean inverted;
-        @SuppressWarnings("unused")
-        private boolean brakeMode;
-        @SuppressWarnings("unused")
-        private double rampRate;
-        private double speed;
-        private double position;
-        private double current;
-        private double temperature;
-    
-        public SparkMax(int channel) {
-            this.channel = channel;
-        }
-    
-        public void setMotorType(ElevatorConstants motorType) {
-            this.motorType = motorType;
-        }
-    
-        public void setCurrentLimit(int currentLimit) {
-            this.currentLimit = currentLimit;
-        }
-    
-        public void setInverted(boolean inverted) {
-            this.inverted = inverted;
-        }
-    
-        public void setBrakeMode(boolean brakeMode) {
-            this.brakeMode = brakeMode;
-        }
-    
-        public void setRampRate(double rampRate) {
-            this.rampRate = rampRate;
-        }
-    
-        public RelativeEncoder getEncoder() {
-            return new RelativeEncoder() {
-                @Override
-                public double getPosition() {
-                    return position;
-                }
-    
-                @Override
-                public double getVelocity() {
-                    return speed;
-                }
-    
-                @Override
-                public REVLibError setPosition(double position) {
-                    SparkMax.this.position = position;
-                                    return (REVLibError);
-            }
-        };
+
+    public RelativeEncoder getEncoder() {
+        throw new UnsupportedOperationException("Unimplemented method 'getEncoder'");
     }
 
     public void set(double speed) {
-        this.speed = speed;
+        throw new UnsupportedOperationException("Unimplemented method 'set'");
     }
 
     public double getOutputCurrent() {
-        return current;
+        throw new UnsupportedOperationException("Unimplemented method 'getOutputCurrent'");
     }
 
     public double getMotorTemperature() {
-        return temperature;
+        throw new UnsupportedOperationException("Unimplemented method 'getMotorTemperature'");
     }
 
-    public void ElevatorConstants(ElevatorConstants motorType2) {
-        
-        throw new UnsupportedOperationException("Unimplemented method 'ElevatorConstants'");
-    }
-
-    // Add other necessary methods and properties as needed
 }
