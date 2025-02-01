@@ -11,12 +11,13 @@ import com.revrobotics.RelativeEncoder;
 @SuppressWarnings("unused")
 public class ElevatorSubsystem extends SubsystemBase {
     private final SparkMax m_elevatorMotorController;
-   DutyCycleEncoder elevatorEncodor = new DutyCycleEncoder(0);
+
+   DutyCycleEncoder elevatorEncodor = new DutyCycleEncoder(4);
     public static frc.robot.subsystems.elevator.SparkMax elevatorMotorController;
     public static RelativeEncoder elevatorEncoder;
     public ElevatorSubsystem() {
     
-          m_elevatorMotorController = new SparkMax(22, MotorType.kBrushless); 
+          m_elevatorMotorController = new SparkMax(22, SparkMax.MotorType.kBrushless); 
         elevatorEncoder = elevatorMotorController.getEncoder();
         // elevatorEncoder.setPositionConversionFactor(Double.parseDouble(ElevatorConstants.METERS_PER_REVOLUTION));
         // dividing by 60 to convert meters per minute to meters per second
@@ -43,10 +44,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void periodicUpdate() {
-        // Only code in here that relates to a physical subsystem
-        SmartDashboard.putNumber("elevator/Real motor temp (C)", elevatorMotorController.getMotorTemperature());
+        SmartDashboard.putNumber("Elevator Position", getEncoderPosition());
+        SmartDashboard.putNumber("Elevator Speed", getEncoderSpeed());
+        SmartDashboard.putNumber("Elevator Current", getElevatorCurrent());
     }
-
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
