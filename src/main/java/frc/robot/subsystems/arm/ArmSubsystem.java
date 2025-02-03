@@ -9,12 +9,14 @@ import com.ctre.phoenix6.hardware.CANdi;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import frc.robot.subsystems.arm.ArmState;
+
 
 public class ArmSubsystem {
 
 
+    @SuppressWarnings("unused")
     private final SparkFlex m_shoulderMotor;
+    @SuppressWarnings("unused")
     private final SparkMax m_wristMotor;
     private final CANdi m_armCANdi;
     private ArmState m_shoulderState = new ArmState(
