@@ -14,9 +14,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 public class ArmSubsystem {
 
 
-    @SuppressWarnings("unused")
     private final SparkFlex m_shoulderMotor;
-    @SuppressWarnings("unused")
     private final SparkMax m_wristMotor;
     private final CANdi m_armCANdi;
     private ArmState m_shoulderState = new ArmState(
