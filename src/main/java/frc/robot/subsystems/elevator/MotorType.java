@@ -1,6 +1,9 @@
 package frc.robot.subsystems.elevator;
 
-public enum MotorType {
-    kBrushless,
-    kBrushed
+public class MotorType {
+    public enum Type {
+        kBrushless,
+        kBrushed
+    }
+    public static com.revrobotics.spark.SparkLowLevel.MotorType kBrushless;
 }

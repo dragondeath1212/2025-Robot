@@ -1,20 +1,22 @@
 package frc.robot.subsystems.elevator;
 
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import com.revrobotics.SparkMax;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.RelativeEncoder;
 
-@SuppressWarnings("unused")
+
 public class ElevatorSubsystem extends SubsystemBase {
+    private final SparkMax m_elevatorMotorController;
+   DutyCycleEncoder elevatorEncodor = new DutyCycleEncoder(30);
     public static frc.robot.subsystems.elevator.SparkMax elevatorMotorController;
     public static RelativeEncoder elevatorEncoder;
     public ElevatorSubsystem() {
     
-         elevatorMotorController = MotorUtil.createSparkMAX(ElevatorConstants.ELEVATOR_MOTOR_ID, MotorType.kBrushless, 
-            0, false, true, 0.1); 
+          m_elevatorMotorController = new SparkMax(22, MotorType.kBrushless); 
         elevatorEncoder = elevatorMotorController.getEncoder();
         // elevatorEncoder.setPositionConversionFactor(Double.parseDouble(ElevatorConstants.METERS_PER_REVOLUTION));
         // dividing by 60 to convert meters per minute to meters per second
@@ -44,24 +46,22 @@ public class ElevatorSubsystem extends SubsystemBase {
         // Only code in here that relates to a physical subsystem
         SmartDashboard.putNumber("elevator/Real motor temp (C)", elevatorMotorController.getMotorTemperature());
     }
-    public void raiseElevator(){
-    elevatorMotorController.set(1.0);
-    elevatorEncoder.getPosition();
-    if( elevatorEncoder.getPosition()>=0.75){
-        elevatorMotorController.set(0.0);
-    }
-}
-        public void lowerElevator(){
-        elevatorMotorController.set(-1.0);
-        elevatorEncoder.getPosition();
-        if (elevatorEncoder.getPosition()<=0.0){
-            elevatorMotorController.set(0.0);
-        }
-    }
 
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
         periodicUpdate();
+    }
+    public void raiseElevator(){
+    elevatorMotorController.set(1.0);
+    if (elevatorEncoder.getPosition() >= 0.75) {
+        elevatorMotorController.set(0.0);
+    }
+}
+        public void lowerElevator(){
+        elevatorMotorController.set(-1.0);
+        if (elevatorEncoder.getPosition()<=0.0){
+            elevatorMotorController.set(0.0);
+        }
     }
 }
