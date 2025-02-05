@@ -6,9 +6,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 
 
+@SuppressWarnings("unused")
 public class ElevatorSubsystem extends SubsystemBase {
     private final SparkMax m_elevatorMotorController;
    DutyCycleEncoder elevatorEncodor = new DutyCycleEncoder(30);
