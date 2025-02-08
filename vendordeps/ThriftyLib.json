@@ -9,11 +9,19 @@
     ],
     "jsonUrl": "https://docs.home.thethriftybot.com/ThriftyLib.json",
     "javaDependencies": [
+<<<<<<< HEAD
+        {
+            "groupId": "com.thethriftybot.frc",
+            "artifactId": "ThriftyLib-java",
+            "version": "2025.0.2"
+        }
+=======
       {
         "groupId": "com.thethriftybot.frc",
         "artifactId": "ThriftyLib-java",
         "version": "2025.0.2"
       }
+>>>>>>> upstream/main
     ],
     "jniDependencies": [],
     "cppDependencies": []
