@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -53,11 +54,13 @@ public class Robot extends LoggedRobot
         Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
         break;
     }
+    // Initialize URCL
     Logger.registerURCL(URCL.startExternal());
-    Logger.start();
-    instance = this;
-    
 
+    // Start AdvantageKit logger
+    Logger.start();
+
+    instance = this;
   }
 
   public static Robot getInstance()
@@ -120,6 +123,7 @@ public class Robot extends LoggedRobot
     {
       m_robotContainer.setMotorBrake(false);
       disabledTimer.stop();
+      disabledTimer.reset();
     }
   }
 
@@ -161,7 +165,6 @@ public class Robot extends LoggedRobot
     {
       CommandScheduler.getInstance().cancelAll();
     }
-    m_robotContainer.setDriveMode();
   }
 
   /**
@@ -177,7 +180,6 @@ public class Robot extends LoggedRobot
   {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
-    m_robotContainer.setDriveMode();
   }
 
   /**

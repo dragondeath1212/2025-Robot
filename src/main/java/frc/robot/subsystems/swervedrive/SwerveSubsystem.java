@@ -74,7 +74,7 @@ public class SwerveSubsystem extends SubsystemBase
   /**
    * PhotonVision class to keep an accurate odometry.
    */
-  private       Vision              vision;
+  private Vision vision;
 
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
@@ -83,20 +83,6 @@ public class SwerveSubsystem extends SubsystemBase
    */
   public SwerveSubsystem(File directory)
   {
-    // Angle conversion factor is 360 / (GEAR RATIO * ENCODER RESOLUTION)
-    //  In this case the gear ratio is 12.8 motor revolutions per wheel rotation.
-    //  The encoder resolution per motor revolution is 1 per motor revolution.
-    double angleConversionFactor = SwerveMath.calculateDegreesPerSteeringRotation(12.8);
-    // Motor conversion factor is (PI * WHEEL DIAMETER IN METERS) / (GEAR RATIO * ENCODER RESOLUTION).
-    //  In this case the wheel diameter is 4 inches, which must be converted to meters to get meters/second.
-    //  The gear ratio is 6.75 motor revolutions per wheel rotation.
-    //  The encoder resolution per motor revolution is 1 per motor revolution.
-    double driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(4), 6.75);
-    System.out.println("\"conversionFactors\": {");
-    System.out.println("\t\"angle\": {\"factor\": " + angleConversionFactor + " },");
-    System.out.println("\t\"drive\": {\"factor\": " + driveConversionFactor + " }");
-    System.out.println("}");
-
     // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being created.
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
     try
@@ -105,20 +91,21 @@ public class SwerveSubsystem extends SubsystemBase
                                                                   new Pose2d(new Translation2d(Meter.of(1),
                                                                                                Meter.of(4)),
                                                                              Rotation2d.fromDegrees(0)));
+      swerveDrive.headingCorrection = true;
       // Alternative method if you don't want to supply the conversion factor via JSON files.
       // swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed, angleConversionFactor, driveConversionFactor);
     } catch (Exception e)
     {
       throw new RuntimeException(e);
     }
-    swerveDrive.setHeadingCorrection(false); // Heading correction should only be used while controlling the robot via angle.
+    swerveDrive.setHeadingCorrection(true); // Heading correction should only be used while controlling the robot via angle.
     swerveDrive.setCosineCompensator(false);//!SwerveDriveTelemetry.isSimulation); // Disables cosine compensation for simulations since it causes discrepancies not seen in real life.
     swerveDrive.setAngularVelocityCompensation(true,
                                                true,
                                                0.1); //Correct for skew that gets worse as angular velocity increases. Start with a coefficient of 0.1.
     swerveDrive.setModuleEncoderAutoSynchronize(false,
                                                 1); // Enable if you want to resynchronize your absolute encoders and motor encoders periodically when they are not moving.
-    swerveDrive.pushOffsetsToEncoders(); // Set the absolute encoder to be used over the internal encoder and push the offsets onto it. Throws warning if not possible
+//    swerveDrive.pushOffsetsToEncoders(); // Set the absolute encoder to be used over the internal encoder and push the offsets onto it. Throws warning if not possible
     if (visionDriveTest)
     {
       setupPhotonVision();
@@ -236,52 +223,6 @@ public class SwerveSubsystem extends SubsystemBase
     //Preload PathPlanner Path finding
     // IF USING CUSTOM PATHFINDER ADD BEFORE THIS LINE
     PathfindingCommand.warmupCommand().schedule();
-  }
-
-  /**
-   * Get the distance to the speaker.
-   *
-   * @return Distance to speaker in meters.
-   */
-  public double getDistanceToSpeaker()
-  {
-    int allianceAprilTag = DriverStation.getAlliance().get() == Alliance.Blue ? 7 : 4;
-    // Taken from PhotonUtils.getDistanceToPose
-    Pose3d speakerAprilTagPose = aprilTagFieldLayout.getTagPose(allianceAprilTag).get();
-    return getPose().getTranslation().getDistance(speakerAprilTagPose.toPose2d().getTranslation());
-  }
-
-  /**
-   * Get the yaw to aim at the speaker.
-   *
-   * @return {@link Rotation2d} of which you need to achieve.
-   */
-  public Rotation2d getSpeakerYaw()
-  {
-    int allianceAprilTag = DriverStation.getAlliance().get() == Alliance.Blue ? 7 : 4;
-    // Taken from PhotonUtils.getYawToPose()
-    Pose3d        speakerAprilTagPose = aprilTagFieldLayout.getTagPose(allianceAprilTag).get();
-    Translation2d relativeTrl         = speakerAprilTagPose.toPose2d().relativeTo(getPose()).getTranslation();
-    return new Rotation2d(relativeTrl.getX(), relativeTrl.getY()).plus(swerveDrive.getOdometryHeading());
-  }
-
-  /**
-   * Aim the robot at the speaker.
-   *
-   * @param tolerance Tolerance in degrees.
-   * @return Command to turn the robot to the speaker.
-   */
-  public Command aimAtSpeaker(double tolerance)
-  {
-    SwerveController controller = swerveDrive.getSwerveController();
-    return run(
-        () -> {
-          ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(0, 0,
-                                                   controller.headingCalculate(getHeading().getRadians(),
-                                                                               getSpeakerYaw().getRadians()),
-                                                                       getHeading());
-          drive(speeds);
-        }).until(() -> Math.abs(getSpeakerYaw().minus(getHeading()).getDegrees()) < tolerance);
   }
 
   /**
@@ -408,7 +349,7 @@ public class SwerveSubsystem extends SubsystemBase
     return SwerveDriveTest.generateSysIdCommand(
         SwerveDriveTest.setDriveSysIdRoutine(
             new Config(),
-            this, swerveDrive, 12),
+            this, swerveDrive, 12, true),
         3.0, 5.0, 3.0);
   }
 
@@ -496,7 +437,7 @@ public class SwerveSubsystem extends SubsystemBase
   public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier headingX,
                               DoubleSupplier headingY)
   {
-    // swerveDrive.setHeadingCorrection(true); // Normally you would want heading correction for this kind of control.
+    swerveDrive.setHeadingCorrection(true); // Normally you would want heading correction for this kind of control.
     return run(() -> {
 
       Translation2d scaledInputs = SwerveMath.scaleTranslation(new Translation2d(translationX.getAsDouble(),
@@ -531,6 +472,7 @@ public class SwerveSubsystem extends SubsystemBase
                       rotation,
                       fieldRelative,
                       false); // Open loop is disabled since it shouldn't be used most of the time.
+    
   }
 
   /**
