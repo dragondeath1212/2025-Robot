@@ -4,27 +4,35 @@ import java.util.function.Supplier;
 import static edu.wpi.first.units.Units.*;
 
 import com.revrobotics.REVLibError;
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase;
+import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+
+import frc.robot.utils.PIDFConfig;
 
 public class ArmSpark {
 
     private static final int maximumRetries = 5;
     private SparkBaseConfig cfg;
     private final SparkBase motor;
-    private final DCMotor motorType;
+    public SparkClosedLoopController pid;
 
     public ArmSpark(SparkBase motor, SparkBaseConfig cfg, DCMotor motorType)
     {
         this.motor = motor;
         this.cfg = cfg;
-        this.motorType = motorType;
+
+        pid = motor.getClosedLoopController();
+
         configureSpark(motor::clearFaults);
     }
 
@@ -73,7 +81,70 @@ public class ArmSpark {
         return motor;
     }
 
+    public void configurePIDF(PIDFConfig config)
+    {
+        cfg.closedLoop.pidf(config.p, config.i, config.d, config.f)
+                      .iZone(config.iz)
+                      .outputRange(config.output.min, config.output.max);
+    }
 
+    public void configurePIDWrapping(double minInput, double maxInput)
+    {
+        cfg.closedLoop
+            .positionWrappingEnabled(true)
+            .positionWrappingInputRange(minInput, maxInput);
+  
+    }
 
+    public void setMotorBrake(boolean isBrakeMode)
+    {
+        cfg.idleMode(isBrakeMode ? IdleMode.kBrake : IdleMode.kCoast);
+    }
+
+    public void setInverted(boolean inverted)
+    {
+        cfg.inverted(inverted);
+    }
+
+    public void burnFlash()
+    {
+        if (!DriverStation.isDisabled())
+        {
+        throw new RuntimeException("Config updates cannot be applied while the robot is Enabled!");
+        }
+        configureSpark(() -> {
+            return motor.configure(cfg, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+        });
+    }
+
+    public void set(double percentOutput)
+    {
+        motor.set(percentOutput);
+    }
+
+    public void setReference(double setpoint, double feedforward)
+    {
+        configureSpark(() -> pid.setReference(setpoint, ControlType.kPosition, ClosedLoopSlot.kSlot0, feedforward));
+    }
+
+    public void setReference(double setpoint, double feedforward, double position)
+    {
+        setReference(setpoint, feedforward);
+    }
+
+    public double getVoltage()
+    {
+        return motor.getAppliedOutput() * motor.getBusVoltage();
+    }
+
+    public void setVoltage(double voltage)
+    {
+        motor.setVoltage(voltage);
+    }
+
+    public double getAppliedOutput()
+    {
+        return motor.getAppliedOutput();
+    }
 }
 
