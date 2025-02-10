@@ -70,6 +70,4 @@ public class Arm extends SubsystemBase {
         configureSpark(() -> motor.configure(motorCfg, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters), motor);
 
     }
-    
-
 }
