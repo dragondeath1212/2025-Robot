@@ -2,25 +2,21 @@ package frc.robot.subsystems.arm;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static edu.wpi.first.units.Units.*;
-
+import edu.wpi.first.units.measure.*;
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.units.measure.AngularVelocity;
-import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.networktables.DoublePublisher;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import com.ctre.phoenix6.hardware.CANdi;
-import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkFlexConfig;
-import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.REVLibError;
-import edu.wpi.first.wpilibj.Timer;
-import java.util.function.Supplier;
 
+import frc.robot.utils.Cache;
+import frc.robot.utils.PIDFConfig;
+import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
 
 import frc.robot.subsystems.arm.ArmSpark;
@@ -31,45 +27,85 @@ public class Arm extends SubsystemBase {
     private final ArmSpark m_shoulderMotor;
     private final ArmSpark m_wristMotor;
     private final CANdi m_armCANdi;
-    private final ArmEncoder m_shoulderEncoder;
-    private final ArmEncoder m_wristEncoder;
-    private static final int maximumRetries = 5;
+    private  ArmEncoder m_shoulderEncoder;
+    private  ArmEncoder m_wristEncoder;
+    public final Cache<Angle> shoulderPositionCache;
+    public final Cache<AngularVelocity> shoulderVelocityCache;
+    public final Cache<Angle> wristPositionCache;
+    public final Cache<AngularVelocity> wristVelocityCache;
+    public final PIDFConfig shoulderPIDFConfig;
+    public final PIDFConfig wristPIDFConfig;
+
+    private final DoublePublisher rawShoulderPositionPublisher;
+    private final DoublePublisher rawShoulderVelocityPublisher;
+    private final DoublePublisher rawWristPositionPublisher;
+    private final DoublePublisher rawWristVelocityPublisher;
 
     public Arm() {
 
         m_shoulderMotor = new ArmSpark(new SparkFlex(18, MotorType.kBrushless), shouldercfg, DCMotor.getNeoVortex(1));
         m_wristMotor = new ArmSpark(new SparkMax(19, MotorType.kBrushless), wristcfg, DCMotor.getNEO(1));
-
         m_armCANdi = new CANdi(34);
-
+        m_armCANdi.clearStickyFaults();
         m_shoulderEncoder = new ArmEncoder(m_armCANdi, ArmConstants.SHOULDER_ENCODER_SIGNAL); 
         m_wristEncoder = new ArmEncoder(m_armCANdi, ArmConstants.WRIST_ENCODER_SIGNAL);
+        m_shoulderEncoder.configCandi();
+        m_wristEncoder.configCandi();
+
+        shoulderPIDFConfig = new PIDFConfig(ArmConstants.SHOULDER_P,
+                                            ArmConstants.SHOULDER_I,
+                                            ArmConstants.SHOULDER_D,
+                                            ArmConstants.SHOULDER_FF,
+                                            ArmConstants.SHOULDER_IZ
+                                            );
+        wristPIDFConfig = new PIDFConfig(ArmConstants.WRIST_P,
+                                            ArmConstants.WRIST_I,
+                                            ArmConstants.WRIST_D,
+                                            ArmConstants.WRIST_FF,
+                                            ArmConstants.WRIST_IZ
+                                            );
+
+
+        m_shoulderMotor.setVoltageCompensation(Constants.NOMINAL_VOLTAGE);
+        m_shoulderMotor.setCurrentLimit(ArmConstants.SHOULDER_MOTOR_CURRENT_LIMIT);
+        m_shoulderMotor.setLoopRampRate(ArmConstants.SHOULDER_MOTOR_RAMP_RATE);
+        m_shoulderMotor.setInverted(ArmConstants.SHOULDER_MOTOR_IS_INVERTED);
+        m_shoulderMotor.setMotorBrake(true);
+        m_wristMotor.setVoltageCompensation(Constants.NOMINAL_VOLTAGE);
+        m_wristMotor.setCurrentLimit(ArmConstants.WRIST_MOTOR_CURRENT_LIMIT);
+        m_wristMotor.setLoopRampRate(ArmConstants.WRIST_MOTOR_RAMP_RATE);
+        m_wristMotor.setInverted(ArmConstants.WRIST_MOTOR_IS_INVERTED);
+        m_wristMotor.setMotorBrake(true);
+
+        m_shoulderMotor.configurePIDF(shoulderPIDFConfig);
+        m_wristMotor.configurePIDF(wristPIDFConfig);
+        m_shoulderMotor.configurePIDWrapping(0, 360);
+        m_wristMotor.configurePIDWrapping(0, 360);
+
+        m_shoulderMotor.burnFlash();
+        m_wristMotor.burnFlash();
+
+        shoulderPositionCache = new Cache<>(m_shoulderEncoder::getPosition, 20);
+        shoulderVelocityCache = new Cache<>(m_shoulderEncoder::getVelocity, 20);
+        wristPositionCache = new Cache<>(m_wristEncoder::getPosition, 20);
+        wristVelocityCache = new Cache<>(m_wristEncoder::getVelocity, 20);
+
+        shoulderPositionCache.update();
+        shoulderVelocityCache.update();
+        wristPositionCache.update();
+        wristVelocityCache.update();
+
+        rawShoulderPositionPublisher = NetworkTableInstance.getDefault().getTable("SmartDashboard").getDoubleTopic("arm/shoulder/Raw Absolute Encoder Position").publish();
+        rawShoulderVelocityPublisher = NetworkTableInstance.getDefault().getTable("SmartDashboard").getDoubleTopic("arm/shoulder/Raw Absolute Encoder Velocity").publish();
+        rawWristPositionPublisher = NetworkTableInstance.getDefault().getTable("SmartDashboard").getDoubleTopic("arm/wrist/Raw Absolute Encoder Position").publish();
+        rawWristVelocityPublisher = NetworkTableInstance.getDefault().getTable("SmartDashboard").getDoubleTopic("arm/wrist/Raw Absolute Encoder Velocity").publish();
     }
 
-
-    public void configureSpark(Supplier<REVLibError> config, SparkBase motor)
+    public void updateTelemetry()
     {
-        for (int i =0; i < maximumRetries; i++)
-        {
-            if (config.get() == REVLibError.kOk)
-            {
-                return;
-            }
-            Timer.delay(Milliseconds.of(5).in(Seconds));
-        }
-        DriverStation.reportWarning("Failure configuring motor " + motor.getDeviceId(), true);
+        rawShoulderPositionPublisher.set(m_shoulderEncoder.getPosition().in(Degrees));
+        rawShoulderVelocityPublisher.set(m_shoulderEncoder.getVelocity().in(DegreesPerSecond));
+        rawWristPositionPublisher.set(m_wristEncoder.getPosition().in(Degrees));
+        rawWristVelocityPublisher.set(m_wristEncoder.getVelocity().in(DegreesPerSecond));
     }
-
-    public void updateConfig(SparkBase motor, SparkMaxConfig motorCfg, SparkMaxConfig cfgGiven)
-    {
-        if (!DriverStation.isDisabled())
-        {
-            throw new RuntimeException("Configuration changes cannot be applied while the robot is enabled.");
-        }
-        motorCfg.apply(cfgGiven);
-        configureSpark(() -> motor.configure(motorCfg, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters), motor);
-
-    }
-    
-
 }
