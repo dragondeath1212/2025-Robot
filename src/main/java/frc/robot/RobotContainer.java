@@ -106,8 +106,6 @@ public class RobotContainer
    */
   private void configureBindings()
   {
-<<<<<<< HEAD
-=======
 
     Command driveFieldOrientedDirectAngle      = drivebase.driveFieldOriented(driveDirectAngle);
     Command driveFieldOrientedAnglularVelocity = drivebase.driveFieldOriented(driveAngularVelocity);
@@ -126,7 +124,6 @@ public class RobotContainer
     {
       drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
     }
->>>>>>> 070219f9177d1e24969b5243ff8ee51c979be545
 
 
     Command driveFieldOrientedDirectAngle      = drivebase.driveFieldOriented(driveDirectAngle);

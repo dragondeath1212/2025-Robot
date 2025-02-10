@@ -108,18 +108,4 @@ public class Arm extends SubsystemBase {
         rawWristPositionPublisher.set(m_wristEncoder.getPosition().in(Degrees));
         rawWristVelocityPublisher.set(m_wristEncoder.getVelocity().in(DegreesPerSecond));
     }
-<<<<<<< HEAD
-
-    public void updateConfig(SparkBase motor, SparkMaxConfig motorCfg, SparkMaxConfig cfgGiven)
-    {
-        if (!DriverStation.isDisabled())
-        {
-            throw new RuntimeException("Configuration changes cannot be applied while the robot is enabled.");
-        }
-        motorCfg.apply(cfgGiven);
-        configureSpark(() -> motor.configure(motorCfg, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters), motor);
-
-    }
-=======
->>>>>>> 070219f9177d1e24969b5243ff8ee51c979be545
 }
