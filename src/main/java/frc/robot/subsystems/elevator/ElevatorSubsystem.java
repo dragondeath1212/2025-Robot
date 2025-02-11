@@ -2,9 +2,7 @@ package frc.robot.subsystems.elevator;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
@@ -18,7 +16,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     private RelativeEncoder elevatorEncoder;
     public ElevatorSubsystem() {
     
-          m_elevatorMotorController = new SparkMax(22, MotorType.kBrushless); 
+          m_elevatorMotorController = new SparkMax(ElevatorConstants.ELEVATOR_MOTOR_ID, MotorType.kBrushless); 
         elevatorEncoder = m_elevatorMotorController.getEncoder();
         // elevatorEncoder.setPositionConversionFactor(Double.parseDouble(ElevatorConstants.METERS_PER_REVOLUTION));
         // dividing by 60 to convert meters per minute to meters per second
@@ -66,4 +64,4 @@ public class ElevatorSubsystem extends SubsystemBase {
             m_elevatorMotorController.set(0.0);
         }
     }
-}
+} 
