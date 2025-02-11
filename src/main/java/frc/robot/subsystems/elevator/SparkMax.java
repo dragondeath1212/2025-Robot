@@ -1,17 +1,25 @@
+
 package frc.robot.subsystems.elevator;
 
-public class elevatorMotorController {
+import com.revrobotics.RelativeEncoder;
 
-    public static void set(double speed) {
+public class SparkMax {
+
+    public RelativeEncoder getEncoder() {
+        throw new UnsupportedOperationException("Unimplemented method 'getEncoder'");
+    }
+
+    public void set(double speed) {
         throw new UnsupportedOperationException("Unimplemented method 'set'");
     }
 
-    public static double getOutputCurrent() {
+    public double getOutputCurrent() {
         throw new UnsupportedOperationException("Unimplemented method 'getOutputCurrent'");
     }
 
-    public static double getMotorTemperature() {
+    public double getMotorTemperature() {
         throw new UnsupportedOperationException("Unimplemented method 'getMotorTemperature'");
     }
-    
 }
+
+
