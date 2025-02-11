@@ -1,6 +1,7 @@
 package frc.robot.subsystems.elevator;
 
 import com.revrobotics.spark.SparkMax;
+import frc.robot.Constants.ElevatorConstants;
 
 public class MotorUtil {
 

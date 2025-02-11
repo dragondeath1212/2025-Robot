@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -62,5 +64,15 @@ public static final String NEO_CURRENT_LIMIT = null;
     public static final double LEFT_Y_DEADBAND = 0.1;
     public static final double RIGHT_X_DEADBAND = 0.1;
     public static final double TURN_CONSTANT    = 6;
+  }
+
+  public final class ElevatorConstants {
+
+    // Add your constants here
+
+    public static final int ELEVATOR_MOTOR_ID = 22; // Replace 1 with the actual motor ID
+    public static final String METERS_PER_REVOLUTION = "1.0"; // Replace 0.1 with the actual value
+    public MotorType kBrushless;
+    
   }
 }
