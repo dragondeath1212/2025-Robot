@@ -2,7 +2,11 @@
 // Last Updated : today
 
 package frc.robot.subsystems;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkMaxConfig;
+
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -18,7 +22,9 @@ public class IntakeSubsystem extends SubsystemBase {
         final private DoubleSolenoid m_leftDoubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);
         final private DoubleSolenoid m_rightDoubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 2, 3);
         final private DoubleSolenoid m_extenderDoubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 4,5);
-     
+        private  SparkMaxConfig   m_leftCfg   = new SparkMaxConfig();
+        private  SparkMaxConfig   m_rightCfg   = new SparkMaxConfig();
+    
 
       public void extendIntake(){
             m_extenderDoubleSolenoid.set(Value.kForward);
@@ -45,19 +51,25 @@ public class IntakeSubsystem extends SubsystemBase {
             
             }
         public void startIntake()  {
-            m_leftIntakeMotor.set(1);
-            m_rightIntakeMotor.set(1);
+            m_leftIntakeMotor.setVoltage(6);
+            m_rightIntakeMotor.setVoltage(6);
             
 
         }
         public void stopIntake(){
-            m_leftIntakeMotor.set(0);
-            m_rightIntakeMotor.set(0);
+            m_leftIntakeMotor.setVoltage(0);
+            m_rightIntakeMotor.setVoltage(0);
         }
         @SuppressWarnings("deprecation")
         public IntakeSubsystem(){
-           
-            m_rightIntakeMotor.setInverted(false);
+            m_leftCfg.voltageCompensation(12);
+            m_leftCfg.follow(m_rightIntakeMotor);
+            m_leftIntakeMotor.configure(m_leftCfg, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+
+            m_rightCfg.voltageCompensation(12);
+            m_rightIntakeMotor.configure(m_rightCfg, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+
+            m_rightIntakeMotor.setInverted(true);
             m_leftIntakeMotor.setInverted(false);
 
 
