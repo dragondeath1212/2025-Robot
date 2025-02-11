@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.Timer;
 
 import frc.robot.utils.PIDFConfig;
 
-public class ArmSpark {
+public class ArmSpark implements ArmIO{
 
     private static final int maximumRetries = 5;
     private SparkBaseConfig cfg;
@@ -145,6 +145,29 @@ public class ArmSpark {
     public double getAppliedOutput()
     {
         return motor.getAppliedOutput();
+    }
+
+    public double getOutputCurrent()
+    {
+        return motor.getOutputCurrent();
+    }
+
+    public double getMotorTemperature()
+    {
+        return motor.getMotorTemperature();
+    }
+
+    public void updateInputs(ArmIOInputs inputs, ArmSpark shoulderMotor, ArmSpark wristMotor, ArmEncoder shoulderEncoder, ArmEncoder wristEncoder) {
+        inputs.shoulderPositionRad = shoulderEncoder.getPosition().in(Radians);
+        inputs.wristPositionRad = wristEncoder.getPosition().in(Radians);
+        inputs.shoulderVelocityRadPerSec = shoulderEncoder.getVelocity().in(RadiansPerSecond);
+        inputs.wristVelocityRadPerSec = wristEncoder.getVelocity().in(RadiansPerSecond);  
+        inputs.shoulderAppliedVolts = shoulderMotor.getVoltage();
+        inputs.wristAppliedVolts = wristMotor.getVoltage();
+        inputs.shoulderSupplyCurrentAmps = shoulderMotor.getOutputCurrent();
+        inputs.wristSupplyCurrentAmps = wristMotor.getOutputCurrent();
+        inputs.shoulderTempCelsius = shoulderMotor.getMotorTemperature();
+        inputs.wristTempCelsius = wristMotor.getMotorTemperature();
     }
 }
 
