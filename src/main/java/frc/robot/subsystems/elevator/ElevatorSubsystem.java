@@ -2,7 +2,12 @@ package frc.robot.subsystems.elevator;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+<<<<<<< HEAD
+=======
+import frc.robot.Constants;
+>>>>>>> 070219f9177d1e24969b5243ff8ee51c979be545
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
@@ -10,14 +15,23 @@ import frc.robot.Constants.ElevatorConstants;
 
 
 
+
 public class ElevatorSubsystem extends SubsystemBase {
     private final SparkMax m_elevatorMotorController;
    DutyCycleEncoder elevatorEncodor = new DutyCycleEncoder(30);
+<<<<<<< HEAD
     public static frc.robot.subsystems.elevator.ElevatorSpark elevatorMotorController;
     private RelativeEncoder elevatorEncoder;
     public ElevatorSubsystem() {
     
           m_elevatorMotorController = new SparkMax(ElevatorConstants.ELEVATOR_MOTOR_ID, MotorType.kBrushless); 
+=======
+    public static frc.robot.subsystems.elevator.SparkMax elevatorMotorController;
+    public static RelativeEncoder elevatorEncoder;
+    public ElevatorSubsystem() {
+    
+          m_elevatorMotorController = new SparkMax(22, MotorType.kBrushless); 
+>>>>>>> 070219f9177d1e24969b5243ff8ee51c979be545
         elevatorEncoder = m_elevatorMotorController.getEncoder();
         // elevatorEncoder.setPositionConversionFactor(Double.parseDouble(ElevatorConstants.METERS_PER_REVOLUTION));
         // dividing by 60 to convert meters per minute to meters per second
@@ -32,7 +46,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void setMotorSpeed(double speed) {
-        elevatorMotorController.set(speed);
+        m_elevatorMotorController.set(speed);
     }
 
     public void setEncoderPosition(double position) {
@@ -40,7 +54,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public double getElevatorCurrent() {
-        return elevatorMotorController.getOutputCurrent();
+        return m_elevatorMotorController.getOutputCurrent();
     }
 
     public void periodicUpdate() {
@@ -65,4 +79,8 @@ public class ElevatorSubsystem extends SubsystemBase {
             m_elevatorMotorController.set(0.0);
         }
     }
+<<<<<<< HEAD
 } 
+=======
+}
+>>>>>>> 070219f9177d1e24969b5243ff8ee51c979be545
