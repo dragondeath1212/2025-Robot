@@ -13,6 +13,7 @@ import swervelib.math.Matter;
 import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.units.measure.*;
 
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean constants. This
  * class should not be used for any other purpose. All constants should be declared globally (i.e. public static). Do
@@ -69,18 +70,16 @@ public final class Constants
     public static final double TURN_CONSTANT    = 6;
   }
 
-<<<<<<< HEAD
   public final class ElevatorConstants {
 
     // Add your constants here
 
-    public static final int ELEVATOR_MOTOR_ID = 22; // Replace 1 with the actual motor ID
+    public static final int ELEVATOR_MOTOR_ID = 22; // Replace 1 with the asctual motor ID
     public static final String METERS_PER_REVOLUTION = "1.0"; // Replace 0.1 with the actual value
     public MotorType kBrushless;
     
   }
 }
-=======
   public static final class ArmConstants
   {
     public static final double ARM_S1_ANGLES[] = {30.0, 30.0};
@@ -124,5 +123,4 @@ public final class Constants
     public static final boolean WRIST_MOTOR_IS_INVERTED =  false;
 
   }
-}
->>>>>>> 070219f9177d1e24969b5243ff8ee51c979be545
+
