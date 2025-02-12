@@ -23,7 +23,6 @@ import frc.robot.math.ArmMath;
 import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
 
-import frc.robot.subsystems.arm.ArmSpark;
 
 public class Arm extends SubsystemBase {
     private SparkBaseConfig wristcfg = new SparkFlexConfig();
