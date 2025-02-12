@@ -42,7 +42,6 @@ public final class Constants
   public static final double MAX_SPEED  = Units.feetToMeters(14.5);
   public static final double NOMINAL_VOLTAGE = 12.0;
   // Maximum speed of the robot in meters per second, used to limit acceleration.
-<<<<<<< HEAD
   public static final String NEO_CURRENT_LIMIT = null;
 public static final int LOWER_INTAKE_BAR_MOTOR_ID = 0;
 public static final int UPPER_INTAKE_BAR_MOTOR_ID = 1;
@@ -50,8 +49,6 @@ public static final boolean LOWER_INTAKE_BAR_INVERT = true;
 public static final boolean UPPER_INTAKE_BAR_INVERT = false;
 public static final double UPPER_INTAKE_BAR_SPEED = 0.5;
 public static final double LOWER_INTAKE_BAR_SPEED = 0.5;
-=======
->>>>>>> 070219f9177d1e24969b5243ff8ee51c979be545
 
 //  public static final class AutonConstants
 //  {

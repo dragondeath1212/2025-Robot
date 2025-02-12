@@ -5,11 +5,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-<<<<<<< HEAD
-=======
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
->>>>>>> 070219f9177d1e24969b5243ff8ee51c979be545
 import com.revrobotics.RelativeEncoder;
 
 

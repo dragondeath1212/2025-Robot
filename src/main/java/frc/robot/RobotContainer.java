@@ -4,11 +4,8 @@
 
 package frc.robot;
 
-<<<<<<< HEAD
 import com.fasterxml.jackson.databind.introspect.WithMember;
 import com.pathplanner.lib.auto.AutoBuilder;
-=======
->>>>>>> 070219f9177d1e24969b5243ff8ee51c979be545
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -21,14 +18,11 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-<<<<<<< HEAD
 import frc.robot.commands.intake.ActivateIntake;
 import frc.robot.commands.intake.CloseIntake;
 import frc.robot.commands.intake.DeactivateIntake;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.IntakeSubsystem;
-=======
->>>>>>> 070219f9177d1e24969b5243ff8ee51c979be545
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 import swervelib.SwerveInputStream;
