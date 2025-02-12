@@ -9,6 +9,9 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 import swervelib.math.Matter;
 import static edu.wpi.first.units.Units.*;
+
+import java.security.PublicKey;
+
 import edu.wpi.first.units.measure.*;
 
 /**
@@ -100,6 +103,16 @@ public static final double LOWER_INTAKE_BAR_SPEED = 0.5;
     public static final double SHOULDER_FF = 0;
     public static final double SHOULDER_IZ = 10.0;
 
+    public static final double SHOULDER_KG = 1.07;
+    public static final double SHOULDER_KV = 1.69;
+    public static final double SHOULDER_KA = 0.06;
+
+    public static final double WRIST_KG = 0.05;
+    public static final double WRIST_KV = 0.98;
+    public static final double WRIST_KA = 0.00;
+
+    
+
     public static final double WRIST_P = 1.0;
     public static final double WRIST_I = 0;
     public static final double WRIST_D = 0;
@@ -116,5 +129,6 @@ public static final double LOWER_INTAKE_BAR_SPEED = 0.5;
     public static final boolean SHOULDER_MOTOR_IS_INVERTED = false;
     public static final boolean WRIST_MOTOR_IS_INVERTED =  false;
 
+    public static final double SHOULDER_MAX_VELOCITY_DEG_PER_SEC = 100.0;
   }
 }
