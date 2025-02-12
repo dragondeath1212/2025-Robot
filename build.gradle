@@ -72,12 +72,6 @@ dependencies {
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-<<<<<<< HEAD
-    implementation 'com.revrobotics.frc:SparkMax-java:1.5.2'
-    implementation 'edu.wpi.first.wpilibj:wpilibj-java:2023.4.3'
-    implementation 'com.revrobotics.frc:SparkMax-java:1.5.2'
-=======
->>>>>>> upstream/main
 }
 
 test {
