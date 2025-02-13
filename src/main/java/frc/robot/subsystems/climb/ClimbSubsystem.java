@@ -12,12 +12,8 @@ public class ClimbSubsystem extends SubsystemBase {
 
     public void Climb() {
         m_climbMotorController.set(1.0);
-        try {
-            wait(100);
-        }
-        catch (InterruptedException e) {
-            //do nothing
-        }
-        m_climbMotorController.set(0.0);
+    }
+    public void StopMotor(){    
+    m_climbMotorController.set(0.0);
     }
 }
