@@ -21,7 +21,7 @@ public void initialize() {
 
 }
 public void execute() {
-    if (!m_finished == true) {
+    if (!m_finished) {
         m_intakeSubsystem.stopIntake();
    
         m_intakeSubsystem.returnIntake();
