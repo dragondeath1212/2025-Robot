@@ -149,22 +149,21 @@ public class RobotContainer
       driverXbox.y().whileTrue(drivebase.driveToDistanceCommand(1.0, 0.2));
       driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
       driverXbox.back().whileTrue(drivebase.centerModulesCommand());
-      driverXbox.leftBumper().onTrue(new CloseIntake(m_intakeSubsystem)
-      .andThen(new DeactivateIntake(m_intakeSubsystem)));
+      driverXbox.leftBumper().onTrue(new CloseIntake(m_intakeSubsystem).andThen(new DeactivateIntake(m_intakeSubsystem)));
       driverXbox.rightBumper().onTrue(Commands.none());
     } else
     {
       driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
       driverXbox.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
-      driverXbox.b().whileTrue(
-          drivebase.driveToPose(
-              new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
-                              );
+      driverXbox.b().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+      drivebase.driveToPose(
+              new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)));
+                             
       driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());
-      driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+      driverXbox.leftBumper().onTrue(new CloseIntake(m_intakeSubsystem).andThen(new DeactivateIntake(m_intakeSubsystem)));
       driverXbox.rightBumper().onTrue(Commands.run(elevator::raiseElevator));
-      driverXbox.leftTrigger().whileTrue(drivebase.centerModulesCommand());
+      driverXbox.axisGreaterThan(2,0.9).onTrue(new ActivateIntake(m_intakeSubsystem)); 
       driverXbox.rightTrigger().onTrue(Commands.run(elevator::lowerElevator));
     }
 

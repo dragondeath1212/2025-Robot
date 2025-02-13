@@ -60,7 +60,7 @@ public class IntakeSubsystem extends SubsystemBase {
             m_leftIntakeMotor.setVoltage(0);
             m_rightIntakeMotor.setVoltage(0);
         }
-        @SuppressWarnings("deprecation")
+        
         public IntakeSubsystem(){
             m_leftCfg.voltageCompensation(12);
             m_leftCfg.follow(m_rightIntakeMotor);
@@ -69,9 +69,7 @@ public class IntakeSubsystem extends SubsystemBase {
             m_rightCfg.voltageCompensation(12);
             m_rightIntakeMotor.configure(m_rightCfg, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
 
-            m_rightIntakeMotor.setInverted(true);
-            m_leftIntakeMotor.setInverted(false);
-
+            
 
 
 

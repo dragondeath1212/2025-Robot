@@ -93,20 +93,6 @@
     {
       "guid": "78696e70757401000000000000000000",
       "useGamepad": true
-<<<<<<< HEAD
-=======
-    },
-    {
-      "guid": "Keyboard1"
-    },
-    {
-      "guid": "Keyboard2"
-<<<<<<< HEAD
-    },
-    {
-      "guid": "Keyboard0"
-=======
->>>>>>> 070219f9177d1e24969b5243ff8ee51c979be545
     }
   ]
 }

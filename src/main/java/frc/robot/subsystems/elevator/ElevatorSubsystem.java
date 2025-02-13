@@ -13,7 +13,7 @@ import com.revrobotics.RelativeEncoder;
 public class ElevatorSubsystem extends SubsystemBase {
     private final SparkMax m_elevatorMotorController;
    DutyCycleEncoder elevatorEncodor = new DutyCycleEncoder(30);
-    public static frc.robot.subsystems.elevator.SparkMax elevatorMotorController;
+    public static frc.robot.subsystems.elevator.ElevatorSpark elevatorMotorController;
     public static RelativeEncoder elevatorEncoder;
     public ElevatorSubsystem() {
     
