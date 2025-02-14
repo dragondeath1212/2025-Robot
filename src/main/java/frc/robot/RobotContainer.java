@@ -149,7 +149,7 @@ public class RobotContainer
       driverXbox.y().whileTrue(drivebase.driveToDistanceCommand(1.0, 0.2));
       driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
       driverXbox.back().whileTrue(drivebase.centerModulesCommand());
-      driverXbox.leftBumper().onTrue(new CloseIntake(m_intakeSubsystem).andThen(new DeactivateIntake(m_intakeSubsystem)));
+      driverXbox.leftBumper();
       driverXbox.rightBumper().onTrue(Commands.none());
     } else
     {
@@ -161,7 +161,10 @@ public class RobotContainer
                              
       driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());
-      driverXbox.leftBumper().onTrue(new CloseIntake(m_intakeSubsystem).andThen(new DeactivateIntake(m_intakeSubsystem)));
+      //driverXbox.leftBumper().onTrue(new CloseIntake(m_intakeSubsystem).andThen(new DeactivateIntake(m_intakeSubsystem)));
+      driverXbox.leftBumper().onTrue(Commands.runOnce(m_intakeSubsystem::closeIntake)
+                                     .andThen(Commands.runOnce(m_intakeSubsystem::stopIntake))
+                                     .andThen(Commands.runOnce(m_intakeSubsystem::returnIntake)));
       driverXbox.rightBumper().onTrue(Commands.run(elevator::raiseElevator));
       driverXbox.axisGreaterThan(2,0.9).onTrue(new ActivateIntake(m_intakeSubsystem)); 
       driverXbox.rightTrigger().onTrue(Commands.run(elevator::lowerElevator));
