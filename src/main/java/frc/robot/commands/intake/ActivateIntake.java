@@ -25,7 +25,7 @@ this.intakeSubsystem = intakeSubsystem;
             intakeSubsystem.extendIntake();
             intakeSubsystem.openIntake();
             intakeSubsystem.startIntake();
-
+            m_finished = true;
         }
     }
 

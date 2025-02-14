@@ -21,7 +21,7 @@ public void initialize() {
 public void execute() {
 	if (!m_finished) {
 		intakeSubsystem.closeIntake();
-
+		m_finished = true;
 
 	}
 }
