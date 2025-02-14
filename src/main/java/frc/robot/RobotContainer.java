@@ -13,14 +13,16 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.ClimbComands.ClimbCommand;
+import frc.robot.commands.ClimbComands.StopClimbing;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 import swervelib.SwerveInputStream;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
-import frc.robot.commands.ClimbCommand;
 import frc.robot.subsystems.climb.ClimbSubsystem;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
@@ -147,7 +149,7 @@ public class RobotContainer
       driverXbox.rightBumper().onTrue(Commands.none());
     } else
     {
-      driverXbox.y().onTrue(new ClimbCommand(m_climbSubsystem));
+      driverXbox.y().onTrue(new ClimbCommand(m_climbSubsystem).andThen(new WaitCommand(1)).andThen(new StopClimbing(m_climbSubsystem)));
       driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
       driverXbox.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
       driverXbox.b().whileTrue(

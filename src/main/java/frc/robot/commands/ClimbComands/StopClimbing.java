@@ -1,25 +1,23 @@
-package frc.robot.commands;
+package frc.robot.commands.ClimbComands;
+
 import frc.robot.subsystems.climb.ClimbSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 
-public class ClimbCommand extends WaitCommand {
+public class StopClimbing extends Command {
 private final ClimbSubsystem m_climbSubsystem;
-WaitCommand waitCommand = new WaitCommand(1);
-public  ClimbCommand(ClimbSubsystem ClimbSubsystem) {
-    super(1); // Call the superclass constructor with a duration
+public  StopClimbing(ClimbSubsystem ClimbSubsystem) {
    this.m_climbSubsystem = ClimbSubsystem;
 }
 
 public void initialize() {
-    m_climbSubsystem.Climb();
+    m_climbSubsystem.StopMotor();
   }
   public void end(boolean interrupted) {
    
   }
   public boolean isFinished() {
-    m_climbSubsystem.StopMotor();
+    
         return false;
   }
 
