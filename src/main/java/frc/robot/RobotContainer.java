@@ -19,16 +19,12 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-<<<<<<< HEAD
+
 import frc.robot.commands.ClimbComands.ClimbCommand;
 import frc.robot.commands.ClimbComands.StopClimbing;
-=======
-import frc.robot.commands.intake.ActivateIntake;
-import frc.robot.commands.intake.CloseIntake;
-import frc.robot.commands.intake.DeactivateIntake;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
-import frc.robot.subsystems.IntakeSubsystem;
->>>>>>> 4c35495ff521505f6d0229917f57fe29bc3ca1c1
+import frc.robot.subsystems.GrabberSubsystem;
+
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 import swervelib.SwerveInputStream;
@@ -42,7 +38,7 @@ import frc.robot.subsystems.climb.ClimbSubsystem;
 @SuppressWarnings("unused")
 public class RobotContainer
 {
-  IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
+  GrabberSubsystem m_GrabberSubsystem = new GrabberSubsystem();
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverXbox = new CommandXboxController(0);
   // The robot's subsystems and commands are defined here...
@@ -170,11 +166,9 @@ public class RobotContainer
       driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());
       //driverXbox.leftBumper().onTrue(new CloseIntake(m_intakeSubsystem).andThen(new DeactivateIntake(m_intakeSubsystem)));
-      driverXbox.leftBumper().onTrue(Commands.runOnce(m_intakeSubsystem::closeIntake)
-                                     .andThen(Commands.runOnce(m_intakeSubsystem::stopIntake))
-                                     .andThen(Commands.runOnce(m_intakeSubsystem::returnIntake)));
+      driverXbox.leftBumper().onTrue(Commands.runOnce(m_GrabberSubsystem::stopIntake));
       driverXbox.rightBumper().onTrue(Commands.run(elevator::raiseElevator));
-      driverXbox.axisGreaterThan(2,0.9).onTrue(new ActivateIntake(m_intakeSubsystem)); 
+      driverXbox.axisGreaterThan(2,0.9).onTrue(Commands.runOnce(m_GrabberSubsystem::startIntake));
       driverXbox.rightTrigger().onTrue(Commands.run(elevator::lowerElevator));
     }
 

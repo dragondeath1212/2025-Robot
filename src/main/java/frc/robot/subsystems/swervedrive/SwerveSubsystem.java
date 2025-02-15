@@ -737,11 +737,10 @@ public class SwerveSubsystem extends SubsystemBase
   }
 
 public void setDefaultCommand(SwerveInputStream driveDirectAngleKeyboard) {
-<<<<<<< HEAD
+
   //  throw new UnsupportedOperationException("Unimplemented method 'setDefaultCommand'");
-=======
-    // TODO Auto-generated method stub
+   // TODO Auto-generated method stub
    // throw new UnsupportedOperationException("Unimplemented method 'setDefaultCommand'");
->>>>>>> 4c35495ff521505f6d0229917f57fe29bc3ca1c1
+
 }
 }
