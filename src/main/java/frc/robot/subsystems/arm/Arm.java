@@ -139,6 +139,8 @@ public class Arm extends SubsystemBase {
 
     public void periodic() {
         updateTelemetry();
+        setShoulderPosition(shoulderPositionCache.get());
+        setWristPosition(wristPositionCache.get());
 
     }
 }

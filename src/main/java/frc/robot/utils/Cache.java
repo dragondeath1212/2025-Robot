@@ -1,5 +1,6 @@
 package frc.robot.utils;
 
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import java.util.function.Supplier;
@@ -102,5 +103,10 @@ public class Cache<T>
     }
     return value;
   }
+
+public Angle get() {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'get'");
+}
 
 }
