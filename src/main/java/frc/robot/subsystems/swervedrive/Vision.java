@@ -53,7 +53,7 @@ public class Vision
    * April Tag Field Layout of the year.
    */
   public static final AprilTagFieldLayout fieldLayout                     = AprilTagFieldLayout.loadField(
-      AprilTagFields.k2025Reefscape);
+      AprilTagFields.kDefaultField);
   /**
    * Ambiguity defined as a value between (0,1). Used in {@link Vision#filterPose}.
    */
@@ -367,7 +367,7 @@ public class Vision
      * Latency alert to use when high latency is detected.
      */
     public final  Alert                        latencyAlert;
-    /**
+    /** k  
      * Camera instance for comms.
      */
     public final  PhotonCamera                 camera;

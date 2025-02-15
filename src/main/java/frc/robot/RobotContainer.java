@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.fasterxml.jackson.databind.introspect.WithMember;
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -17,8 +19,16 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+<<<<<<< HEAD
 import frc.robot.commands.ClimbComands.ClimbCommand;
 import frc.robot.commands.ClimbComands.StopClimbing;
+=======
+import frc.robot.commands.intake.ActivateIntake;
+import frc.robot.commands.intake.CloseIntake;
+import frc.robot.commands.intake.DeactivateIntake;
+import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
+import frc.robot.subsystems.IntakeSubsystem;
+>>>>>>> 4c35495ff521505f6d0229917f57fe29bc3ca1c1
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 import swervelib.SwerveInputStream;
@@ -29,9 +39,10 @@ import frc.robot.subsystems.climb.ClimbSubsystem;
  * little robot logic should actually be handled in the {@link Robot} periodic methods (other than the scheduler calls).
  * Instead, the structure of the robot (including subsystems, commands, and trigger mappings) should be declared here.
  */
+@SuppressWarnings("unused")
 public class RobotContainer
 {
-
+  IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverXbox = new CommandXboxController(0);
   // The robot's subsystems and commands are defined here...
@@ -145,22 +156,25 @@ public class RobotContainer
       driverXbox.y().whileTrue(drivebase.driveToDistanceCommand(1.0, 0.2));
       driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
       driverXbox.back().whileTrue(drivebase.centerModulesCommand());
-      driverXbox.leftBumper().onTrue(Commands.none());
+      driverXbox.leftBumper();
       driverXbox.rightBumper().onTrue(Commands.none());
     } else
     {
       driverXbox.y().onTrue(new ClimbCommand(m_climbSubsystem).andThen(new WaitCommand(1)).andThen(new StopClimbing(m_climbSubsystem)));
       driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
       driverXbox.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
-      driverXbox.b().whileTrue(
-          drivebase.driveToPose(
-              new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
-                              );
+      driverXbox.b().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+      drivebase.driveToPose(
+              new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)));
+                             
       driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());
-      driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+      //driverXbox.leftBumper().onTrue(new CloseIntake(m_intakeSubsystem).andThen(new DeactivateIntake(m_intakeSubsystem)));
+      driverXbox.leftBumper().onTrue(Commands.runOnce(m_intakeSubsystem::closeIntake)
+                                     .andThen(Commands.runOnce(m_intakeSubsystem::stopIntake))
+                                     .andThen(Commands.runOnce(m_intakeSubsystem::returnIntake)));
       driverXbox.rightBumper().onTrue(Commands.run(elevator::raiseElevator));
-      driverXbox.leftTrigger().whileTrue(drivebase.centerModulesCommand());
+      driverXbox.axisGreaterThan(2,0.9).onTrue(new ActivateIntake(m_intakeSubsystem)); 
       driverXbox.rightTrigger().onTrue(Commands.run(elevator::lowerElevator));
     }
 

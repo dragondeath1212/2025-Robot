@@ -67,7 +67,7 @@ public class SwerveSubsystem extends SubsystemBase
   /**
    * AprilTag field layout.
    */
-  private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+  private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
   /**
    * Enable vision odometry updates while driving.
    */
@@ -350,7 +350,7 @@ public class SwerveSubsystem extends SubsystemBase
     return SwerveDriveTest.generateSysIdCommand(
         SwerveDriveTest.setDriveSysIdRoutine(
             new Config(),
-            this, swerveDrive, 12, true),
+            this, swerveDrive, 12, false),
         3.0, 5.0, 3.0);
   }
 
@@ -737,6 +737,11 @@ public class SwerveSubsystem extends SubsystemBase
   }
 
 public void setDefaultCommand(SwerveInputStream driveDirectAngleKeyboard) {
+<<<<<<< HEAD
   //  throw new UnsupportedOperationException("Unimplemented method 'setDefaultCommand'");
+=======
+    // TODO Auto-generated method stub
+   // throw new UnsupportedOperationException("Unimplemented method 'setDefaultCommand'");
+>>>>>>> 4c35495ff521505f6d0229917f57fe29bc3ca1c1
 }
 }
