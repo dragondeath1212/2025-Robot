@@ -1,6 +1,8 @@
 package frc.robot.subsystems.elevator;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -65,4 +67,7 @@ public class ElevatorSubsystem extends SubsystemBase {
             m_elevatorMotorController.set(0.0);
         }
     }
+
+    Mechanism2d mech = new Mechanism2d(3, 3);
+    MechanismRoot2d elevator = mech.getRoot("Elevator", 0.5, 0.5);
 }

@@ -1,5 +1,6 @@
 package frc.robot.commands.ClimbComands;
 import frc.robot.subsystems.climb.ClimbSubsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 
@@ -26,4 +27,5 @@ public void execute() {
 public void end() {
   m_climbSubsystem.StopMotor();
 }
+
 }
