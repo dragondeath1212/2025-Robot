@@ -70,4 +70,10 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     Mechanism2d mech = new Mechanism2d(3, 3);
     MechanismRoot2d elevator = mech.getRoot("Elevator", 0.5, 0.5);
+    m_elevator = root.append(new MechanismLigament2d("Elevator", kElevatorMinimunLength, 90));
+    m_wrist =
+        m_elevator.append(
+            new MechanismLigament2d("Wrist", 0.5, 90, 6, new Color8Bit(Color.kPurple))
+        );
+}
 }
