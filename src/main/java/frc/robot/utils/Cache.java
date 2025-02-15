@@ -105,8 +105,7 @@ public class Cache<T>
   }
 
 public Angle get() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'get'");
+    return (Angle) getValue();
 }
 
 }
