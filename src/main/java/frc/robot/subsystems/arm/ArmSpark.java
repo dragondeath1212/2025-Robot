@@ -14,6 +14,7 @@ import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 
@@ -122,17 +123,21 @@ public class ArmSpark implements ArmIO{
         motor.set(percentOutput);
     }
 
-    public void setReference(double setpoint, double feedforward)
-    {
-        configureSpark(() -> pid.setReference(setpoint, ControlType.kPosition, ClosedLoopSlot.kSlot0, feedforward));
+    public void setReference(double position, double feedforward)
+            {
+                configureSpark(() -> pid.setReference(position, ControlType.kPosition, ClosedLoopSlot.kSlot0, feedforward));
     }
 
-    public void setReference(double setpoint, double feedforward, double position)
+    public void setReference(double setpoint, double feedforward, Angle position)
     {
-        setReference(setpoint, feedforward);
-    }
-
-    public double getVoltage()
+        setReference(position, feedforward);
+            }
+        
+            void setReference(Angle position, double feedforward) {
+                throw new UnsupportedOperationException("Unimplemented method 'setReference'");
+            }
+        
+            public double getVoltage()
     {
         return motor.getAppliedOutput() * motor.getBusVoltage();
     }
@@ -169,5 +174,6 @@ public class ArmSpark implements ArmIO{
         inputs.shoulderTempCelsius = shoulderMotor.getMotorTemperature();
         inputs.wristTempCelsius = wristMotor.getMotorTemperature();
     }
+
 }
 

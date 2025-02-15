@@ -22,6 +22,7 @@ import frc.robot.utils.PIDFConfig;
 import frc.robot.math.ArmMath;
 import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
+import frc.robot.subsystems.elevator.*;
 
 
 public class Arm extends SubsystemBase {
@@ -48,6 +49,7 @@ public class Arm extends SubsystemBase {
     private final DoublePublisher rawWristVelocityPublisher;
 
     public Arm() {
+
 
         m_shoulderMotor = new ArmSpark(new SparkFlex(18, MotorType.kBrushless), shouldercfg, DCMotor.getNeoVortex(1));
         m_wristMotor = new ArmSpark(new SparkMax(19, MotorType.kBrushless), wristcfg, DCMotor.getNEO(1));
@@ -119,6 +121,13 @@ public class Arm extends SubsystemBase {
         rawShoulderVelocityPublisher.set(m_shoulderEncoder.getVelocity().in(DegreesPerSecond));
         rawWristPositionPublisher.set(m_wristEncoder.getPosition().in(Degrees));
         rawWristVelocityPublisher.set(m_wristEncoder.getVelocity().in(DegreesPerSecond));
+    }
+
+    public void setShoulderPosition(Angle position) {
+        m_shoulderMotor.setReference(position, shoulderFeedforward.calculate(position.in(Radians), ArmConstants.SHOULDER_MAX_VELOCITY_DEG_PER_SEC));
+    }
+    public void setWristPosition(Angle position) {
+        m_wristMotor.setReference(position, wristFeedforward.calculate(position.in(Radians), ArmConstants.SHOULDER_MAX_VELOCITY_DEG_PER_SEC));
     }
 
     public ArmFeedforward getDefaultShoulderFeedForward() {
