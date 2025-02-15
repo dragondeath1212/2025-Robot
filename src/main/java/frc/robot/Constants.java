@@ -131,4 +131,32 @@ public static final double LOWER_INTAKE_BAR_SPEED = 0.5;
 
     public static final double SHOULDER_MAX_VELOCITY_DEG_PER_SEC = 100.0;
   }
+
+  public static final class ElevatorConstants {
+  public static final Distance ELEVATOR_INITIAL_HEIGHT = Meters.of(0.0);
+  public static final Distance ELEVATOR_MAX_HEIGHT = Inches.of(26.0);
+  public static final boolean ELEVATOR_MOTOR_IS_INVERTED = false;
+  public static final boolean ELEVATOR_ENCODER_IS_INVERTED = false;
+  public static final double ELEVATOR_ABSOLUTE_SENSOR_DISCONTINUITY_POINT = 0.0;
+  public static final double ELEVATOR_ABSOLUTE_SENSOR_OFFSET = 0.0;
+  public static final double ELEVATOR_P = 1.0;
+  public static final double ELEVATOR_I = 0;
+  public static final double ELEVATOR_D = 0;
+  public static final double ELEVATOR_FF = 0;
+  public static final double ELEVATOR_IZ = 10.0;
+
+  public static final double ELEVATOR_KG = 0.48;
+  public static final double ELEVATOR_KV = 2.66;
+  public static final double ELEVATOR_KA = 0.05;
+
+  public static final int ELEVATOR_MOTOR_CURRENT_LIMIT = 40;
+  public static final double ELEVATOR_MOTOR_RAMP_RATE = 0.25;
+  public static final LinearVelocity ELEVATOR_MAX_VELOCITY = MetersPerSecond.of(1.0);
+
+  public static final Distance ELEVATOR_DRUM_DIAMETER = Inches.of(1.432);
+  public static final Distance ELEVATOR_CONVERSION_FACTOR = ELEVATOR_DRUM_DIAMETER.times(Math.PI * 64.0 / 24.0 * 64.0 / 24.0); // Distance per Magnet Rotation
+  public static final Distance ELEVATOR_THRESHOLD = Inches.of(0.125);
+  
+  }
+
 }
