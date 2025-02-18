@@ -29,7 +29,7 @@ import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 import swervelib.SwerveInputStream;
-import frc.robot.subsystems.elevator.ElevatorSubsystem;
+
 import frc.robot.subsystems.climb.ClimbSubsystem;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
@@ -39,7 +39,7 @@ import frc.robot.subsystems.climb.ClimbSubsystem;
 @SuppressWarnings("unused")
 public class RobotContainer
 {
-  ElevatorSubsystem m_elevator = new ElevatorSubsystem(new CANdi(0));
+ 
  
   GripperSubsystem m_GrabberSubsystem = new GripperSubsystem();
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -101,7 +101,7 @@ public class RobotContainer
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
-  private final ElevatorSubsystem elevator = new ElevatorSubsystem(new CANdi(1));
+  private final ElevatorSubsystem m_elevator = new ElevatorSubsystem(new CANdi(1));
   private final ClimbSubsystem m_climbSubsystem = new ClimbSubsystem();
 
   
@@ -170,9 +170,9 @@ public class RobotContainer
       driverXbox.back().whileTrue(Commands.none());
       //driverXbox.leftBumper().onTrue(new CloseIntake(m_intakeSubsystem).andThen(new DeactivateIntake(m_intakeSubsystem)));
       driverXbox.leftBumper().onTrue(Commands.runOnce(m_GrabberSubsystem::stopIntake));
-      //driverXbox.rightBumper().onTrue(Commands.run(m_elevator::raiseElevator));
+      driverXbox.rightBumper().onTrue(Commands.run(m_elevator::raiseElevator));
       driverXbox.axisGreaterThan(2,0.9).onTrue(Commands.runOnce(m_GrabberSubsystem::startIntake));
-      //driverXbox.rightTrigger().onTrue(Commands.run(m_elevator::lowerElevator));
+      driverXbox.rightTrigger().onTrue(Commands.run(m_elevator::lowerElevator));
     }
 
   }

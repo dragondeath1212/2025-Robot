@@ -105,12 +105,20 @@ public class ElevatorSubsystem extends SubsystemBase {
     public double getElevatorCurrent() {
         return m_elevatorMotor.getOutputCurrent();
     }
-
+    public void periodicUpdate() {
+       //martDashboard.putNumber("elevator/ real motor tempc (C)",m_elevatorMotor.getMotorTemperature());
+    }
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-        periodic();
+       //eriodicUpdate();
     }
     
-    
+    public void raiseElevator() {
+        
+    }
+    public void lowerElevator() {
+        
+    }
 }
+
