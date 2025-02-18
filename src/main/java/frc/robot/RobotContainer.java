@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.hardware.CANdi;
 import com.fasterxml.jackson.databind.introspect.WithMember;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -19,11 +20,11 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-
+import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.commands.ClimbComands.ClimbCommand;
 import frc.robot.commands.ClimbComands.StopClimbing;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
-import frc.robot.subsystems.GrabberSubsystem;
+import frc.robot.subsystems.GripperSubsystem;
 
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
@@ -38,7 +39,9 @@ import frc.robot.subsystems.climb.ClimbSubsystem;
 @SuppressWarnings("unused")
 public class RobotContainer
 {
-  GrabberSubsystem m_GrabberSubsystem = new GrabberSubsystem();
+  ElevatorSubsystem m_elevator = new ElevatorSubsystem(new CANdi(0));
+ 
+  GripperSubsystem m_GrabberSubsystem = new GripperSubsystem();
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverXbox = new CommandXboxController(0);
   // The robot's subsystems and commands are defined here...
@@ -98,15 +101,15 @@ public class RobotContainer
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
-  private final ElevatorSubsystem elevator;
+  private final ElevatorSubsystem elevator = new ElevatorSubsystem(new CANdi(1));
   private final ClimbSubsystem m_climbSubsystem = new ClimbSubsystem();
 
   
   public RobotContainer()
   {
- 
     
-    elevator = new ElevatorSubsystem();
+  
+    
     
     // Configure the trigger bindings
     configureBindings();
@@ -167,9 +170,9 @@ public class RobotContainer
       driverXbox.back().whileTrue(Commands.none());
       //driverXbox.leftBumper().onTrue(new CloseIntake(m_intakeSubsystem).andThen(new DeactivateIntake(m_intakeSubsystem)));
       driverXbox.leftBumper().onTrue(Commands.runOnce(m_GrabberSubsystem::stopIntake));
-      driverXbox.rightBumper().onTrue(Commands.run(elevator::raiseElevator));
+      //driverXbox.rightBumper().onTrue(Commands.run(m_elevator::raiseElevator));
       driverXbox.axisGreaterThan(2,0.9).onTrue(Commands.runOnce(m_GrabberSubsystem::startIntake));
-      driverXbox.rightTrigger().onTrue(Commands.run(elevator::lowerElevator));
+      //driverXbox.rightTrigger().onTrue(Commands.run(m_elevator::lowerElevator));
     }
 
   }

@@ -81,8 +81,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         m_elevatorMotor.setMotorBrake(true);
         m_elevatorMotor.burnFlash();
 
-        elevatorPositionCache = new Cache<>(m_elevatorEncoder::getPosition, 20);
-        elevatorVelocityCache = new Cache<>(m_elevatorEncoder::getVelocity, 20);
+        elevatorPositionCache = new Cache(m_elevatorEncoder::getPosition, 20);
+        elevatorVelocityCache = new Cache(m_elevatorEncoder::getVelocity, 20);
         elevatorPositionCache.update();
         elevatorVelocityCache.update();
 
@@ -109,7 +109,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-        periodicUpdate();
+        periodic();
     }
     
     

@@ -10,7 +10,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class GrabberSubsystem extends SubsystemBase {
+public class GripperSubsystem extends SubsystemBase {
 
     
     
@@ -32,7 +32,7 @@ public class GrabberSubsystem extends SubsystemBase {
             m_rightIntakeMotor.setVoltage(0);
         }
         
-        public GrabberSubsystem(){
+        public GripperSubsystem(){
             m_leftCfg.voltageCompensation(12);
             m_leftCfg.follow(m_rightIntakeMotor);
             m_leftIntakeMotor.configure(m_leftCfg, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
