@@ -18,6 +18,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.elevator.ElevatorSubsystem;
+
 import java.io.File;
 import swervelib.SwerveInputStream;
 

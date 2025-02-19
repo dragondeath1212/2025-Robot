@@ -28,8 +28,5 @@ public class ArmMath {
         return new ArmFeedforward(ks, kg, kv, ka);
     };
 
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 9085919567430aeaff0f598e589cf97442a6c8aa
+
