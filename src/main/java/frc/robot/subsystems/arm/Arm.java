@@ -123,6 +123,7 @@ public class Arm extends SubsystemBase {
         rawWristVelocityPublisher.set(m_wristEncoder.getVelocity().in(DegreesPerSecond));
     }
 
+<<<<<<< HEAD
     public void setShoulderPosition(Angle position) {
         m_shoulderMotor.setReference(position, shoulderFeedforward.calculate(position.in(Radians), ArmConstants.SHOULDER_MAX_VELOCITY_DEG_PER_SEC));
     }
@@ -130,6 +131,8 @@ public class Arm extends SubsystemBase {
         m_wristMotor.setReference(position, wristFeedforward.calculate(position.in(Radians), ArmConstants.SHOULDER_MAX_VELOCITY_DEG_PER_SEC));
     }
 
+=======
+>>>>>>> 9085919567430aeaff0f598e589cf97442a6c8aa
     public ArmFeedforward getDefaultShoulderFeedForward() {
         return ArmMath.createShoulderFeedforward();
     }
@@ -139,8 +142,11 @@ public class Arm extends SubsystemBase {
 
     public void periodic() {
         updateTelemetry();
+<<<<<<< HEAD
         setShoulderPosition(shoulderPositionCache.get());
         setWristPosition(wristPositionCache.get());
+=======
+>>>>>>> 9085919567430aeaff0f598e589cf97442a6c8aa
 
     }
 }
