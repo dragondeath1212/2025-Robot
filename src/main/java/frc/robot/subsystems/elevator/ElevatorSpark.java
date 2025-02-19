@@ -76,7 +76,7 @@ public class ElevatorSpark {
            .openLoopRampRate(rampRate);
     }
 
-    public Object getMotor()
+    public SparkBase getMotor()
     {
         return motor;
     }
@@ -150,6 +150,11 @@ public class ElevatorSpark {
     public double getOutputCurrent()
     {
         return motor.getOutputCurrent();
+    }
+
+    public double getMotorTemperature()
+    {
+        return motor.getMotorTemperature();
     }
 }
 

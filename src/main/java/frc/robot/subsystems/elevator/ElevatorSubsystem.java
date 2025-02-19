@@ -106,6 +106,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         return m_elevatorMotor.getOutputCurrent();
     }
     public void periodicUpdate() {
+        m_elevatorMotor.getMotorTemperature();
        //martDashboard.putNumber("elevator/ real motor tempc (C)",m_elevatorMotor.getMotorTemperature());
     }
     @Override
