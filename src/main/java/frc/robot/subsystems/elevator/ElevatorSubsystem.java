@@ -115,11 +115,18 @@ public class ElevatorSubsystem extends SubsystemBase {
        //eriodicUpdate();
     }
     
-    public void raiseElevator() {
-        
+    public void raiseElevator(){
+        m_elevatorMotor.set(1.0);
+        if (m_elevatorEncoder.getPosition().in(Rotations) >= 0.75) {
+            m_elevatorMotor.set(0.0);
+        }
     }
-    public void lowerElevator() {
-        
+            public void lowerElevator(){
+            m_elevatorMotor.set(-1.0);
+            if (m_elevatorEncoder.getPosition().in(Rotations) <= 0.0){
+                m_elevatorMotor.set(0.0);
+            }
+        }
     }
-}
+
 
