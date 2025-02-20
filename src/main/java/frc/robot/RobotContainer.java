@@ -166,7 +166,11 @@ public class RobotContainer
                                      .andThen(Commands.runOnce(m_intakeSubsystem::stopIntake))
                                      .andThen(Commands.runOnce(m_intakeSubsystem::returnIntake)));
       driverXbox.rightBumper().onTrue(Commands.run(elevator::raiseElevator));
-      driverXbox.axisGreaterThan(2,0.9).onTrue(new ActivateIntake(m_intakeSubsystem)); 
+      //driverXbox.axisGreaterThan(2,0.9).onTrue(new ActivateIntake(m_intakeSubsystem)); 
+      driverXbox.axisGreaterThan(2,0.9).onTrue(new ActivateIntake(m_intakeSubsystem));
+driverXbox.axisGreaterThan(2,0.9).onTrue(Commands.runOnce(m_intakeSubsystem::extendIntake)
+                                                      .andThen(Commands.runOnce(m_intakeSubsystem::openIntake))
+                                                      .andThen(Commands.runOnce(m_intakeSubsystem::startIntake)));
       driverXbox.rightTrigger().onTrue(Commands.run(elevator::lowerElevator));
     }
 
