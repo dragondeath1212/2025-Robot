@@ -3,7 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-
+ 
 import com.ctre.phoenix6.hardware.CANdi;
 import com.fasterxml.jackson.databind.introspect.WithMember;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -170,9 +170,9 @@ public class RobotContainer
       driverXbox.back().whileTrue(Commands.none());
       //driverXbox.leftBumper().onTrue(new CloseIntake(m_intakeSubsystem).andThen(new DeactivateIntake(m_intakeSubsystem)));
       driverXbox.leftBumper().onTrue(Commands.runOnce(m_GrabberSubsystem::stopIntake));
-      driverXbox.axisGreaterThan(3,0.9).onTrue(Commands.run(m_elevator::raiseElevator));
+      driverXbox.rightBumper().onTrue(Commands.run(m_elevator::raiseElevator));
       driverXbox.axisGreaterThan(2,0.9).onTrue(Commands.runOnce(m_GrabberSubsystem::startIntake));
-      driverXbox.rightTrigger().onTrue(Commands.run(m_elevator::lowerElevator));
+      driverXbox.axisGreaterThan(3,0.9).onTrue(Commands.run(m_elevator::lowerElevator));
     }               
                                       
   }
