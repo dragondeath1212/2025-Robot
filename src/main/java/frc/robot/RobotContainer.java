@@ -170,11 +170,11 @@ public class RobotContainer
       driverXbox.back().whileTrue(Commands.none());
       //driverXbox.leftBumper().onTrue(new CloseIntake(m_intakeSubsystem).andThen(new DeactivateIntake(m_intakeSubsystem)));
       driverXbox.leftBumper().onTrue(Commands.runOnce(m_GrabberSubsystem::stopIntake));
-      driverXbox.rightBumper().onTrue(Commands.run(m_elevator::raiseElevator));
+      driverXbox.axisGreaterThan(3,0.9).onTrue(Commands.run(m_elevator::raiseElevator));
       driverXbox.axisGreaterThan(2,0.9).onTrue(Commands.runOnce(m_GrabberSubsystem::startIntake));
       driverXbox.rightTrigger().onTrue(Commands.run(m_elevator::lowerElevator));
-    }
-
+    }               
+                                      
   }
 
   /**
