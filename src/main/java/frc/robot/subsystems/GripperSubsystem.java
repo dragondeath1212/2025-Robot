@@ -30,7 +30,7 @@ public class GripperSubsystem extends SubsystemBase {
             m_leftIntakeMotor.set(0);
             m_rightIntakeMotor.set(0);
         }
-        public int getValue(int currentValue) {
+        public int getLightSensorValue() {
 
             return m_lightsensor.getAverageValue();
         }
