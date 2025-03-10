@@ -11,19 +11,15 @@ public interface ArmIO {
         public double wristVelocityRadPerSec = 0.0;
         public double shoulderAppliedVolts = 0.0;
         public double wristAppliedVolts = 0.0;
-        public double[] shoulderSupplyCurrentAmps = new double[] {};
-        public double[] wristSupplyCurrentAmps = new double[] {};
-        public double[] shoulderTorqueCurrentAmps = new double[] {};
-        public double[] wristTorqueCurrentAmps = new double[] {};
-        public double[] shouldertTempCelsius = new double[] {};
-        public double[] wristTempCelsius = new double[] {};
+        public double shoulderSupplyCurrentAmps = 0.0;
+        public double wristSupplyCurrentAmps = 0.0;
+        public double shoulderTempCelsius = 0.0;
+        public double wristTempCelsius = 0.0;
     }
 
     default void updateInputs(ArmIOInputs inputs) {}
-    public default void setShoulderVoltage(double volts) {}
-    public default void setWristVoltage(double volts) {}
-    public default void setBrakeMode(boolean shoulderBrake, boolean wristBrake) {}
-    
+    public default void setVoltage(double volts) {}
+    public default void setMotorBrake(boolean brake) {}
     
     
 }
