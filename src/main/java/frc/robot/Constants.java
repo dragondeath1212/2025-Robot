@@ -152,9 +152,7 @@ public static final double LOWER_INTAKE_BAR_SPEED = 0.5;
     public static final Distance ELEVATOR_L4_HEIGHT = Inches.of(25.0);
     public static final Distance ELEVATOR_STOWED_HEIGHT = Inches.of(0.0);
     public static final double SHOULDER_MAX_VELOCITY_DEG_PER_SEC = 100.0;
-  }
 
-  public static final class ElevatorConstants {
   public static final Distance ELEVATOR_INITIAL_HEIGHT = Meters.of(0.0);
   public static final Distance ELEVATOR_MAX_HEIGHT = Inches.of(26.0);
   public static final boolean ELEVATOR_MOTOR_IS_INVERTED = false;
