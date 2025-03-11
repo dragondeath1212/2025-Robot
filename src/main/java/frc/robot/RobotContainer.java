@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.hardware.CANdi;
+import com.fasterxml.jackson.databind.introspect.WithMember;
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -13,9 +16,16 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.subsystems.elevator.ElevatorSubsystem;
+import frc.robot.commands.ClimbComands.ClimbCommand;
+import frc.robot.commands.ClimbComands.StopClimbing;
+import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
+import frc.robot.subsystems.GripperSubsystem;
+
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
@@ -23,14 +33,18 @@ import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import java.io.File;
 import swervelib.SwerveInputStream;
 
+import frc.robot.subsystems.climb.ClimbSubsystem;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
  * little robot logic should actually be handled in the {@link Robot} periodic methods (other than the scheduler calls).
  * Instead, the structure of the robot (including subsystems, commands, and trigger mappings) should be declared here.
  */
+@SuppressWarnings("unused")
 public class RobotContainer
 {
-
+ 
+ 
+  GripperSubsystem m_GripperSubsystem = new GripperSubsystem();
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverXbox = new CommandXboxController(0);
   // The robot's subsystems and commands are defined here...
@@ -90,14 +104,15 @@ public class RobotContainer
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
-  private final ElevatorSubsystem elevator;
+  private final ElevatorSubsystem m_elevator = new ElevatorSubsystem(new CANdi(1));
+  private final ClimbSubsystem m_climbSubsystem = new ClimbSubsystem();
 
   
   public RobotContainer()
   {
- 
     
-    elevator = new ElevatorSubsystem();
+  
+    
     
     // Configure the trigger bindings
     configureBindings();
@@ -141,22 +156,24 @@ public class RobotContainer
       driverXbox.y().whileTrue(drivebase.driveToDistanceCommand(1.0, 0.2));
       driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
       driverXbox.back().whileTrue(drivebase.centerModulesCommand());
-      driverXbox.leftBumper().onTrue(Commands.none());
+      driverXbox.leftBumper();
       driverXbox.rightBumper().onTrue(Commands.none());
     } else
     {
+      driverXbox.y().onTrue(new ClimbCommand(m_climbSubsystem).andThen(new WaitCommand(1)).andThen(new StopClimbing(m_climbSubsystem)));
       driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
       driverXbox.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
-      driverXbox.b().whileTrue(
-          drivebase.driveToPose(
-              new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
-                              );
+      driverXbox.b().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+      drivebase.driveToPose(
+              new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)));
+                             
       driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());
-      driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-      driverXbox.rightBumper().onTrue(Commands.run(elevator::raiseElevator));
-      driverXbox.leftTrigger().whileTrue(drivebase.centerModulesCommand());
-      driverXbox.rightTrigger().onTrue(Commands.run(elevator::lowerElevator));
+      //driverXbox.leftBumper().onTrue(new CloseIntake(m_intakeSubsystem).andThen(new DeactivateIntake(m_intakeSubsystem)));
+      driverXbox.leftBumper().onTrue(Commands.runOnce(m_GripperSubsystem::stopIntake));
+      driverXbox.rightBumper().onTrue(Commands.run(m_elevator::raiseElevator));
+      driverXbox.axisGreaterThan(2,0.9).onTrue(Commands.runOnce(m_GripperSubsystem::startIntake).andThen(Commands.print("motor has started")));
+      driverXbox.rightTrigger().onTrue(Commands.run(m_elevator::lowerElevator));
     }
 
   }
