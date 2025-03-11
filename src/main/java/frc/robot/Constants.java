@@ -155,11 +155,11 @@ public static final double LOWER_INTAKE_BAR_SPEED = 0.5;
 
   public static final Distance ELEVATOR_INITIAL_HEIGHT = Meters.of(0.0);
   public static final Distance ELEVATOR_MAX_HEIGHT = Inches.of(26.0);
-  public static final boolean ELEVATOR_MOTOR_IS_INVERTED = false;
-  public static final boolean ELEVATOR_ENCODER_IS_INVERTED = false;
+  public static final boolean ELEVATOR_MOTOR_IS_INVERTED = true;
+  public static final boolean ELEVATOR_ENCODER_IS_INVERTED = true;
   public static final double ELEVATOR_ABSOLUTE_SENSOR_DISCONTINUITY_POINT = 0.0;
-  public static final double ELEVATOR_ABSOLUTE_SENSOR_OFFSET = 0.0;
-  public static final double ELEVATOR_P = 1.0;
+  public static final double ELEVATOR_ABSOLUTE_SENSOR_OFFSET = 0.225;
+  public static final double ELEVATOR_P = 2;
   public static final double ELEVATOR_I = 0;
   public static final double ELEVATOR_D = 0;
   public static final double ELEVATOR_FF = 0;

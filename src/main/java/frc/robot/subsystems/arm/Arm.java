@@ -22,12 +22,11 @@ import frc.robot.utils.PIDFConfig;
 import frc.robot.math.ArmMath;
 import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
-import frc.robot.subsystems.elevator.*;
 
 
 public class Arm extends SubsystemBase {
-    private SparkBaseConfig wristcfg = new SparkFlexConfig();
-    private SparkBaseConfig shouldercfg = new SparkMaxConfig();
+    private SparkBaseConfig wristcfg = new SparkMaxConfig();
+    private SparkBaseConfig shouldercfg = new SparkFlexConfig();
     private final ArmSpark m_shoulderMotor;
     private final ArmSpark m_wristMotor;
     private final CANdi m_armCANdi;
@@ -48,17 +47,19 @@ public class Arm extends SubsystemBase {
     private final DoublePublisher rawWristPositionPublisher;
     private final DoublePublisher rawWristVelocityPublisher;
 
-    public Arm() {
+    public Arm(CANdi armCANDi) {
 
 
         m_shoulderMotor = new ArmSpark(new SparkFlex(18, MotorType.kBrushless), shouldercfg, DCMotor.getNeoVortex(1));
-        m_wristMotor = new ArmSpark(new SparkMax(19, MotorType.kBrushless), wristcfg, DCMotor.getNEO(1));
-        m_armCANdi = new CANdi(34);
+        m_wristMotor = new ArmSpark(new SparkMax(19, MotorType.kBrushless), wristcfg, DCMotor.getNeo550(1));
+        m_armCANdi = armCANDi;
         m_armCANdi.clearStickyFaults();
         m_shoulderEncoder = new ArmEncoder(m_armCANdi, ArmConstants.SHOULDER_ENCODER_SIGNAL); 
         m_wristEncoder = new ArmEncoder(m_armCANdi, ArmConstants.WRIST_ENCODER_SIGNAL);
         m_shoulderEncoder.configCandi();
         m_wristEncoder.configCandi();
+
+        
 
         shoulderPIDFConfig = new PIDFConfig(ArmConstants.SHOULDER_P,
                                             ArmConstants.SHOULDER_I,
