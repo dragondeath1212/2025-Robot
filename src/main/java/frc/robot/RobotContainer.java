@@ -27,6 +27,9 @@ import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.GripperSubsystem;
 
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.elevator.ElevatorSubsystem;
+
 import java.io.File;
 import swervelib.SwerveInputStream;
 
@@ -47,7 +50,7 @@ public class RobotContainer
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/neo"));
-
+  private final Arm arm = new Arm();
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
    */
@@ -136,12 +139,10 @@ public class RobotContainer
 
     if (RobotBase.isSimulation())
     {
-      drivebase.setDefaultCommand(driveDirectAngleKeyboard);
-    } else
-    {
       drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
     }
 
+    driverXbox.x().whileTrue(drivebase.sysIdAngleMotorCommand());
     if (Robot.isSimulation())
     {
       driverXbox.start().onTrue(Commands.runOnce(() -> drivebase.resetOdometry(new Pose2d(3, 3, new Rotation2d()))));
