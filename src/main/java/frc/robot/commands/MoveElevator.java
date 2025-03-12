@@ -11,6 +11,7 @@ import frc.robot.subsystems.elevator.ElevatorSubsystem;
 public class MoveElevator extends Command {
     private final ElevatorSubsystem m_elevatorSubsystem;
     private Distance elevatorSetpoint;
+    boolean finished;
 
     public MoveElevator(ElevatorSubsystem elevatorSubsystem, Distance elevatorSetpoint) {
         m_elevatorSubsystem = elevatorSubsystem;
@@ -19,13 +20,18 @@ public class MoveElevator extends Command {
     }
     @Override
     public void initialize() {
-
     }
 
     @Override
     public void execute() {
         m_elevatorSubsystem.setElevatorPosition(elevatorSetpoint);
+        if (m_elevatorSubsystem.atSetpoint) {
+            finished = true;
+        }
     }
+
+    @Override
+    public void end(boolean interrupted) {}
 
     @Override
     public boolean isFinished() {

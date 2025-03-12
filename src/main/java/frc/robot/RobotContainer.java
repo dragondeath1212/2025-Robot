@@ -24,6 +24,8 @@ import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.commands.ClimbComands.ClimbCommand;
 import frc.robot.commands.ClimbComands.StopClimbing;
 import frc.robot.commands.MoveElevator;
+import frc.robot.commands.MoveWrist;
+import frc.robot.commands.MoveShoulder;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.GripperSubsystem;
 
@@ -165,10 +167,10 @@ public class RobotContainer
     } else
     {
       drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
-      driverXbox.y().onTrue(new ClimbCommand(m_climbSubsystem).andThen(new WaitCommand(1)).andThen(new StopClimbing(m_climbSubsystem)));
-      driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-      driverXbox.x().onTrue(new MoveElevator(m_elevator, Meters.of(0.148)));
-      driverXbox.b().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+      driverXbox.y().onTrue(new MoveShoulder(arm, Rotations.of(0.0)).repeatedly());
+      driverXbox.a().onTrue(new MoveShoulder(arm, Rotations.of(-0.4)).repeatedly());
+      driverXbox.x().onTrue(new MoveWrist(arm, Rotations.of(0.1)).repeatedly());
+      driverXbox.b().onTrue(new MoveWrist(arm, Rotations.of(0.4)).repeatedly());
       driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());
       //driverXbox.leftBumper().onTrue(new CloseIntake(m_intakeSubsystem).andThen(new DeactivateIntake(m_intakeSubsystem)));
