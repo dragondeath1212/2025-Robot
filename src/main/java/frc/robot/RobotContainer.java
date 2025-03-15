@@ -14,6 +14,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -21,14 +23,19 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
+import frc.robot.subsystems.gripper.GripperSubsystem;
 import frc.robot.commands.ClimbComands.ClimbCommand;
 import frc.robot.commands.ClimbComands.StopClimbing;
+import frc.robot.commands.IntakeGamepiece;
 import frc.robot.commands.MoveElevator;
 import frc.robot.commands.MoveWrist;
 import frc.robot.commands.MoveShoulder;
+import frc.robot.commands.RunGripper;
+import frc.robot.commands.SetToLevelOne;
+import frc.robot.commands.SetToLevelTwo;
+import frc.robot.commands.SetToLevelThree;
+import frc.robot.commands.SetToLevelFour;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
-import frc.robot.subsystems.GripperSubsystem;
-
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
@@ -51,7 +58,7 @@ public class RobotContainer
   GripperSubsystem m_GripperSubsystem = new GripperSubsystem();
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverXbox = new CommandXboxController(0);
-  //private final CommandXboxController operatorXbox = new CommandXboxController(1);
+  private final CommandXboxController operatorXbox = new CommandXboxController(1);
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/neo"));
@@ -114,7 +121,13 @@ public class RobotContainer
    */
   private final ElevatorSubsystem m_elevator = new ElevatorSubsystem(elevatorCANdi);
   private final ClimbSubsystem m_climbSubsystem = new ClimbSubsystem();
-
+  private static final String autoDefault = "Drive Forward";
+  private static final String autoDoNothing = "Do Nothing";
+  private static final String autoLeftSideL1 = "Left Side L1";
+  private static final String autoCenterL1 = "Center L1";
+  private static final String autoRightSideL1 = "Right Side L1";
+  private String m_autoSelected;
+  private final SendableChooser<String> m_chooser = new SendableChooser<>();
   
   public RobotContainer()
   {
@@ -127,6 +140,13 @@ public class RobotContainer
     
     DriverStation.silenceJoystickConnectionWarning(true);
     NamedCommands.registerCommand("test", Commands.print("I EXIST"));
+    m_chooser.setDefaultOption("Drive Forward", autoDefault);
+    m_chooser.addOption("Do Nothing", autoDoNothing);
+    m_chooser.addOption("Left Side L1", autoLeftSideL1);
+    m_chooser.addOption("Center L1", autoCenterL1);
+    m_chooser.addOption("Right Side L1", autoRightSideL1);
+
+    SmartDashboard.putData("Auto choices", m_chooser);
   }
   
   /**
@@ -164,18 +184,26 @@ public class RobotContainer
       driverXbox.back().whileTrue(drivebase.centerModulesCommand());
       driverXbox.leftBumper();
       driverXbox.rightBumper().onTrue(Commands.none());
-    } else
+    } else 
     {
       drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
-      driverXbox.y().onTrue(new MoveShoulder(arm, Rotations.of(0.0)).repeatedly());
-      driverXbox.a().onTrue(new MoveShoulder(arm, Rotations.of(-0.4)).repeatedly());
-      driverXbox.x().onTrue(new MoveWrist(arm, Rotations.of(0.1)).repeatedly());
-      driverXbox.b().onTrue(new MoveWrist(arm, Rotations.of(0.4)).repeatedly());
+      operatorXbox.y().onTrue(new MoveShoulder(arm, Rotations.of(-0.171)).repeatedly().andThen(new MoveWrist(arm, Rotations.of(0.112)).repeatedly()));
+      operatorXbox.a().onTrue(new MoveShoulder(arm, Rotations.of(0.044)).repeatedly());
+      //operatorXbox.x().onTrue(new MoveWrist(arm, Rotations.of(0.112)).repeatedly());
+      //operatorXbox.b().onTrue(new MoveWrist(arm, Rotations.of(0.002)).repeatedly());
+      //operatorXbox.y().onTrue(new RunGripper(m_GripperSubsystem, 0.3 ).repeatedly());
+      operatorXbox.leftBumper().onTrue(new RunGripper(m_GripperSubsystem, 0.1).repeatedly());
+      operatorXbox.rightBumper().onTrue(new RunGripper(m_GripperSubsystem, 1).repeatedly());
+      operatorXbox.leftBumper().onFalse(new RunGripper(m_GripperSubsystem, 0.0).repeatedly());
+      operatorXbox.rightBumper().onFalse(new RunGripper(m_GripperSubsystem, 0.0).repeatedly());
+      //operatorXbox.a().onTrue(new SetToLevelOne(m_elevator, arm));
+      //operatorXbox.x().onTrue(new SetToLevelTwo(m_elevator, arm));
+      //operatorXbox.b().onTrue(new SetToLevelThree(m_elevator, arm));
+      //operatorXbox.y().onTrue(new SetToLevelFour(m_elevator, arm));
+
       driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());
       //driverXbox.leftBumper().onTrue(new CloseIntake(m_intakeSubsystem).andThen(new DeactivateIntake(m_intakeSubsystem)));
-      driverXbox.leftBumper().onTrue(Commands.runOnce(m_GripperSubsystem::stopIntake));
-      driverXbox.axisGreaterThan(2,0.9).onTrue(Commands.runOnce(m_GripperSubsystem::startIntake).andThen(Commands.print("motor has started")));
     }
 
   }
@@ -188,7 +216,11 @@ public class RobotContainer
   public Command getAutonomousCommand()
   {
     // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("New Auto");
+    return drivebase.getAutonomousCommand("Left Side L1");
+    //return drivebase.getAutonomousCommand("Center L1");
+    //return drivebase.getAutonomousCommand("Right Side L1");
+    //return drivebase.getAutonomousCommand("Do Nothing");
+    
   }
 
   public void setMotorBrake(boolean brake)

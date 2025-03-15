@@ -133,7 +133,12 @@ public class ElevatorSubsystem extends SubsystemBase {
         if (Constants.ElevatorConstants.ELEVATOR_MOTOR_IS_INVERTED) {
             voltage = -1 * voltage;
         }
-        m_elevatorMotor.setVoltage(voltage);
+        if (getElevatorPosition().in(Meters) > 0.01 & getElevatorPosition().in(Meters) < ElevatorConstants.ELEVATOR_MAX_HEIGHT.in(Meters) - 0.01) {
+            m_elevatorMotor.setVoltage(voltage);
+        }
+        else {
+            m_elevatorMotor.setVoltage(0);
+        }
         //m_elevatorMotor.setReference(setpoint.in(Meters), elevatorFeedforward.calculate(0.0));
     }
 

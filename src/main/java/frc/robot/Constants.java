@@ -87,17 +87,18 @@ public static final double LOWER_INTAKE_BAR_SPEED = 0.5;
 
   public static final class ArmConstants
   {
-    public static final Angle ARM_L1_ANGLES[] = {Degrees.of(30.0), Degrees.of(30.0)};
-    public static final Angle ARM_L2_ANGLES[] = {Degrees.of(30.0), Degrees.of(30.0)};
-    public static final Angle ARM_L3_ANGLES[] = {Degrees.of(30.0), Degrees.of(30.0)};
-    public static final Angle ARM_L4_ANGLES[] = {Degrees.of(30.0), Degrees.of(30.0)};
-    public static final Angle ARM_STOWED_ANGLES[] = {Degrees.of(-150.0), Degrees.of(30.0)};
+    public static final Angle ARM_INTAKE_ANGLES[] = {Rotations.of(0.039), Rotations.of(0.122)};
+    public static final Angle ARM_L1_ANGLES[] = {Rotations.of(-0.171), Rotations.of(-0.238)};
+    public static final Angle ARM_L2_ANGLES[] = {Rotations.of(-0.235), Rotations.of(-0.110)};
+    public static final Angle ARM_L3_ANGLES[] = {Rotations.of(-0.374), Rotations.of(0.002)};
+    public static final Angle ARM_L4_ANGLES[] = {Rotations.of(-0.421), Rotations.of(0.096)};
+    public static final Angle ARM_STOWED_ANGLES[] = {Rotations.of(0.03), Rotations.of(0.112)};
 
     public static final int SHOULDER_ENCODER_SIGNAL = 1;
     public static final int WRIST_ENCODER_SIGNAL = 2;
 
     public static final Angle SHOULDER_ABSOLUTE_SENSOR_DISCONTINUITY_POINT = Rotations.of(0.3);
-    public static final Angle WRIST_ABSOLUTE_SENSOR_DISCONTINUITY_POINT = Rotations.of(0.95);
+    public static final Angle WRIST_ABSOLUTE_SENSOR_DISCONTINUITY_POINT = Rotations.of(0.5);
 
     public static final Angle SHOULDER_ABSOLUTE_SENSOR_OFFSET = Rotations.of(0.552);
     public static final Angle WRIST_ABSOLUTE_SENSOR_OFFSET = Rotations.of(0.012);
@@ -107,11 +108,11 @@ public static final double LOWER_INTAKE_BAR_SPEED = 0.5;
 
     public static final double WRIST_MAX_ROTATION = 0.650;
 
-    public static final double SHOULDER_P = 24.0;
-    public static final double SHOULDER_I = 0;
+    public static final double SHOULDER_P = 10;//20.0;
+    public static final double SHOULDER_I = 0.6;
     public static final double SHOULDER_D = 0;
     public static final double SHOULDER_FF = 0;
-    public static final double SHOULDER_IZ = 10.0;
+    public static final double SHOULDER_IZ = 0.15;
 
     public static final double SHOULDER_KG = 1.07;
     public static final double SHOULDER_KV = 1.69;
@@ -123,7 +124,7 @@ public static final double LOWER_INTAKE_BAR_SPEED = 0.5;
 
     
 
-    public static final double WRIST_P = 26.0;
+    public static final double WRIST_P = 6;//26.0;
     public static final double WRIST_I = 0;
     public static final double WRIST_D = 0;
     public static final double WRIST_FF = 0;
@@ -147,12 +148,12 @@ public static final double LOWER_INTAKE_BAR_SPEED = 0.5;
     public static final Distance MINIMUM_SHOULDER_MOVE_SAFE_HEIGHT = Inches.of(10.0); 
     public static final Distance MAXIMUM_SAFE_HEIGHT = Inches.of(27.0);
 
-    public static final Distance ELEVATOR_L1_HEIGHT = Inches.of(0.0);
-    public static final Distance ELEVATOR_L2_HEIGHT = Inches.of(10.0);
-    public static final Distance ELEVATOR_L3_HEIGHT = Inches.of(16.0);
-    public static final Distance ELEVATOR_L4_HEIGHT = Inches.of(25.0);
-    public static final Distance ELEVATOR_STOWED_HEIGHT = Inches.of(0.0);
-    public static final double SHOULDER_MAX_VELOCITY_DEG_PER_SEC = 100.0;
+    public static final Distance ELEVATOR_INTAKE_HEIGHT = Meters.of(0);
+    public static final Distance ELEVATOR_L1_HEIGHT = Meters.of(0.0);
+    public static final Distance ELEVATOR_L2_HEIGHT = Meters.of(0.0);
+    public static final Distance ELEVATOR_L3_HEIGHT = Meters.of(0.0);
+    public static final Distance ELEVATOR_L4_HEIGHT = Meters.of(0.5);
+    public static final Distance ELEVATOR_STOWED_HEIGHT = Meters.of(0.0);
 
   public static final Distance ELEVATOR_INITIAL_HEIGHT = Meters.of(0.0);
   public static final Distance ELEVATOR_MAX_HEIGHT = Meters.of(0.666);
@@ -180,4 +181,8 @@ public static final double LOWER_INTAKE_BAR_SPEED = 0.5;
   
   }
 
+  public static final class GripperConstants {
+    public static final double LIGHT_SENSOR_THRESHOLD = 0.55; // 0.55 volts
+    public static final double GRIPPER_INTAKE_SPEED = 0.3;
+  }
 }
