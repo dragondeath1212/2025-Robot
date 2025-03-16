@@ -178,6 +178,7 @@ public class Arm extends SubsystemBase {
         if (Constants.ArmConstants.WRIST_MOTOR_IS_INVERTED) {
             voltage = -1 * voltage;
         }
+        System.out.println("Setting WRIST voltage to " + voltage);
         m_wristMotor.setVoltage(voltage);
     }
 
