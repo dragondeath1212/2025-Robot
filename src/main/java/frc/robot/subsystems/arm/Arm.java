@@ -242,8 +242,8 @@ public class Arm extends SubsystemBase {
 
         if (m_shoulderMotor.getVoltage() != voltage)
         {
-            System.out.println("setting shoulder voltage to " + voltage);
-            System.out.println("calculated voltage before adding is " + voltage + ", at setpoint: " + shoulderAtSetpoint);
+            //System.out.println("setting shoulder voltage to " + voltage);
+            //System.out.println("calculated voltage before adding is " + voltage + ", at setpoint: " + shoulderAtSetpoint);
 
             //voltage = voltage + Math.abs(shoulderFeedforwardVoltage) * Math.signum(voltage);  //TODO disable feed forward for now until we get things stable
 
