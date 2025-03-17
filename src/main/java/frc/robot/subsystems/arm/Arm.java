@@ -66,7 +66,8 @@ public class Arm extends SubsystemBase {
     private double shoulderFeedforwardVoltage = 0.0;
     private double shoulderAccumulatedError = 0.0;
     private double m_shoulderErrorDerivative = 0.0;
-    private final PIDController wristController, shoulderController;
+    private final PIDController wristController;
+    private final PIDController shoulderController;
 
     public Arm(CANdi armCANDi) {
 
@@ -183,10 +184,7 @@ public class Arm extends SubsystemBase {
         if (Constants.ArmConstants.WRIST_MOTOR_IS_INVERTED) {
             voltage = -1 * voltage;
         }
-        if (voltage != m_wristMotor.getVoltage())
-        {
-            System.out.println("Setting WRIST voltage to " + voltage + "; pos is " + position.in(Rotations) + ", setpoint is " + wristSetpoint.in(Rotations));
-        }
+ 
         m_wristMotor.setVoltage(voltage);
     }
 
@@ -266,7 +264,7 @@ public class Arm extends SubsystemBase {
         rawWristVelocityPublisher.set(m_wristEncoder.getVelocity().in(RotationsPerSecond));
         rawWristSetpointPublisher.set(wristSetpoint.in(Rotations));
         rawWristErrorPublisher.set(wristError.in(Rotations));
-        rawWristVoltagePublisher.set(m_wristMotor.getVoltage());
+        rawWristVoltagePublisher.set(m_wristMotor.getLastSetVoltage());
         shoulderErrorAccumulation.set(shoulderAccumulatedError);
     }
 

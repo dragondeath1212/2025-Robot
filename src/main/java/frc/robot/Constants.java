@@ -124,9 +124,9 @@ public static final double LOWER_INTAKE_BAR_SPEED = 0.5;
 
     
 
-    public static final double WRIST_P = 6;//26.0;
-    public static final double WRIST_I = 0;
-    public static final double WRIST_D = 0;
+    public static final double WRIST_P = 8;//26.0;
+    public static final double WRIST_I = 1.0;
+    public static final double WRIST_D = 0.5;
     public static final double WRIST_FF = 0;
     public static final double WRIST_IZ = 10.0;
 
