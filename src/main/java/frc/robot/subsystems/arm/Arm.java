@@ -165,7 +165,12 @@ public class Arm extends SubsystemBase {
 
     public void setWristPosition(Angle setpoint) {
         Angle position = getWristPosition();
-        this.wristSetpoint = setpoint;
+
+        if (wristSetpoint != setpoint)
+        {
+            System.out.println("Changing wrist setpoint to " + setpoint.in(Rotations));
+            this.wristSetpoint = setpoint;
+        }
         this.wristError = position.minus(setpoint);
 
         
@@ -178,7 +183,10 @@ public class Arm extends SubsystemBase {
         if (Constants.ArmConstants.WRIST_MOTOR_IS_INVERTED) {
             voltage = -1 * voltage;
         }
-        System.out.println("Setting WRIST voltage to " + voltage);
+        if (voltage != m_wristMotor.getVoltage())
+        {
+            System.out.println("Setting WRIST voltage to " + voltage + "; pos is " + position.in(Rotations) + ", setpoint is " + wristSetpoint.in(Rotations));
+        }
         m_wristMotor.setVoltage(voltage);
     }
 
