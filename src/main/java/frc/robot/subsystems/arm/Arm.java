@@ -194,39 +194,53 @@ public class Arm extends SubsystemBase {
     public void setShoulderPosition(Angle setpoint) {
         Angle position = getShoulderPosition();
         shoulderFeedforwardVoltage = shoulderFeedforward.calculate((position).in(Radians) + Math.PI / 2, getShoulderVelocity().in(RadiansPerSecond));
-        this.shoulderSetpoint = setpoint; 
         this.shoulderError = position.minus(setpoint);  //TODO should we just use shoulderController.getError()?
 
-        System.out.println("Setting shoulder position setpoint " + setpoint + ", shoulder feed forward voltage: " + shoulderFeedforwardVoltage + ", current shoulder position is " + getShoulderPosition().in(Rotations));
+        if (setpoint != this.shoulderSetpoint)
+        {
+            this.shoulderSetpoint = setpoint; 
+        
+            System.out.println("Setting shoulder position setpoint " + setpoint + ", shoulder feed forward voltage: " + shoulderFeedforwardVoltage + ", current shoulder position is " + getShoulderPosition().in(Rotations));
+        }
 
         
+        
+        m_shoulderErrorDerivative = shoulderController.getErrorDerivative();
+        shoulderAccumulatedError = shoulderController.getAccumulatedError();
+        shoulderController.getError();
+        double voltage = shoulderController.calculate(getShoulderPosition().in(Rotations), setpoint.in(Rotations));
+
+
         if (shoulderController.atSetpoint()) {
             shoulderAtSetpoint = true;
         } else {
             shoulderAtSetpoint = false;
         }
-        m_shoulderErrorDerivative = shoulderController.getErrorDerivative();
-        shoulderAccumulatedError = shoulderController.getAccumulatedError();
-        shoulderController.getError();
-        double voltage = shoulderController.calculate(getShoulderPosition().in(Rotations), setpoint.in(Rotations));
-        System.out.println("calculated voltage before adding is " + voltage + ", at setpoint: " + shoulderAtSetpoint);
-
-        //voltage = voltage + Math.abs(shoulderFeedforwardVoltage) * Math.signum(voltage);  //TODO disable feed forward for now until we get things stable
 
         if (Constants.ArmConstants.SHOULDER_MOTOR_IS_INVERTED) {
             voltage = -1 * voltage;
         }
+
         if (getShoulderPosition().in(Rotations) < 0.05 && getShoulderPosition().in(Rotations) > -0.4) {
             if (!shoulderAtSetpoint) {
-                System.out.println("setting shoulder voltage to " + voltage);
-                m_shoulderMotor.setVoltage(voltage);
+                //leave voltage alone
             } else {
-                System.out.println("setting shoulder voltage to 0");
-                m_shoulderMotor.setVoltage(0.0);
+                voltage = 0;
             }
         } else {
-            System.out.println("setting shoulder voltage to 0");
-            m_shoulderMotor.setVoltage(0.0);
+            voltage = 0;
+        }
+
+
+        if (m_shoulderMotor.getVoltage() != voltage)
+        {
+            System.out.println("setting shoulder voltage to " + voltage);
+            System.out.println("calculated voltage before adding is " + voltage + ", at setpoint: " + shoulderAtSetpoint);
+
+            //voltage = voltage + Math.abs(shoulderFeedforwardVoltage) * Math.signum(voltage);  //TODO disable feed forward for now until we get things stable
+
+            
+            m_shoulderMotor.setVoltage(voltage);
         }
         
     }
