@@ -7,7 +7,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
-import frc.robot.utils.PoseConversion;
 
 public class DriveToTarget extends Command {
     private final SwerveSubsystem m_swerveSubsystem;
@@ -32,8 +31,8 @@ public class DriveToTarget extends Command {
             return;
         }
         
-        var targetPose = PoseConversion.convertPose3dToPose2d(pose3d.get())
-            .transformBy(new Transform2d(Meter.of(-0.5), Meter.of(0.25), Rotation2d.kZero));
+        var targetPose = pose3d.get().toPose2d()
+            .transformBy(new Transform2d(Meter.of(0.5), Meter.of(-0.25), Rotation2d.k180deg));
 
         m_driveToPoseCommand = m_swerveSubsystem.driveToPose(targetPose);
 
