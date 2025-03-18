@@ -1,27 +1,38 @@
 package frc.robot.commands.Drive;
 
+import org.photonvision.PhotonUtils;
+
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.IntegerPublisher;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import frc.robot.subsystems.swervedrive.Vision;
 
 public class AlignToTarget extends Command {
     private final SwerveSubsystem m_swerveSubsystem;
-    private final PIDController m_yawController = new PIDController(0.05, 0, 0.01);
-    private final PIDController m_strafeController = new PIDController(0.01, 0, 0);
+    private final PIDController m_rotationController = new PIDController(0.05, 0.005, 0);
+    private final PIDController m_strafeController = new PIDController(0.01, 0, 0.001);
+    private final PIDController m_rangeController = new PIDController(2, 0, 0);
 
-    private final DoublePublisher m_yawPublisher = NetworkTableInstance.getDefault()
+    private final DoublePublisher m_rotationOffsetPublisher = NetworkTableInstance.getDefault()
         .getTable("SmartDashboard")
-        .getDoubleTopic("vision/align/yaw")
+        .getDoubleTopic("vision/align/rotationOffset")
         .publish();
 
     private final DoublePublisher m_horizontalOffsetPublisher = NetworkTableInstance.getDefault()
         .getTable("SmartDashboard")
         .getDoubleTopic("vision/align/horizontalOffset")
+        .publish();
+
+    private final DoublePublisher m_rangePublisher = NetworkTableInstance.getDefault()
+        .getTable("SmartDashboard")
+        .getDoubleTopic("vision/align/range")
         .publish();
 
     private final IntegerPublisher m_targetPublisher = NetworkTableInstance.getDefault()
@@ -35,13 +46,17 @@ public class AlignToTarget extends Command {
 
     @Override
     public void initialize() {
-        m_yawController.reset();
-        m_yawController.setSetpoint(0);
-        m_yawController.setTolerance(0.2);
+        m_rotationController.reset();
+        m_rotationController.setSetpoint(0);
+        m_rotationController.setTolerance(0.5);
 
         m_strafeController.reset();
         m_strafeController.setSetpoint(0);
-        m_strafeController.setTolerance(1);
+        m_strafeController.setTolerance(0.5);
+
+        m_rangeController.reset();
+        m_rangeController.setSetpoint(VisionConstants.reefAlignmentTransform.getX());
+        m_rangeController.setTolerance(0.02);
     }
 
     @Override
@@ -51,19 +66,46 @@ public class AlignToTarget extends Command {
             return;
         }
 
+        var targetHeight = m_swerveSubsystem
+            .getNearestScoringPosition()
+            .pose
+            .getZ();
+
+        var cameraPitch = Vision.Cameras.CENTER_CAM.robotToCamTransform
+            .getRotation()
+            .getY();
+
+        var cameraHeight = Vision.Cameras.CENTER_CAM.robotToCamTransform
+            .getTranslation()
+            .getZ();
+
         var centerOfTarget = (target.detectedCorners.get(1).x - target.detectedCorners.get(0).x) / 2 + target.getDetectedCorners().get(0).x;
         var centerOfCamera = VisionConstants.cameraWidth / 2;
         var horizontalOffset = centerOfTarget - centerOfCamera;
 
-        m_yawPublisher.set(target.yaw);
+        var transform = target.getBestCameraToTarget();
+        var rotationOffset = -transform.getRotation()
+            .toRotation2d()
+            .rotateBy(Rotation2d.k180deg)
+            .getDegrees();
+
+        var range = PhotonUtils.calculateDistanceToTargetMeters(
+            cameraHeight, // Measured with a tape measure, or in CAD.
+            targetHeight,
+            -cameraPitch,
+            Units.degreesToRadians(target.getPitch()));
+
         m_targetPublisher.set(target.fiducialId);
+        m_rotationOffsetPublisher.set(rotationOffset);
         m_horizontalOffsetPublisher.set(horizontalOffset);
+        m_rangePublisher.set(range);
 
         var strafeVelocity = m_strafeController.calculate(horizontalOffset);
-        var rotationVelocity = m_yawController.calculate(target.yaw);
+        var rotationVelocity = m_rotationController.calculate(rotationOffset);
+        var rangeVelocity = m_rangeController.calculate(range);
 
         m_swerveSubsystem.drive(
-            new Translation2d(0, strafeVelocity),
+            new Translation2d(-rangeVelocity, strafeVelocity),
             rotationVelocity,
             false
         );
@@ -71,6 +113,8 @@ public class AlignToTarget extends Command {
 
     @Override
     public boolean isFinished() {
-        return m_strafeController.atSetpoint() && m_yawController.atSetpoint();
+        return m_strafeController.atSetpoint() &&
+            m_rotationController.atSetpoint() &&
+            m_rangeController.atSetpoint();
     }
 }
