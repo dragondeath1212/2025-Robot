@@ -203,10 +203,11 @@ public class RobotContainer
       //operatorXbox.x().onTrue(new MoveWrist(arm, Rotations.of(0.112)).repeatedly());
       //operatorXbox.b().onTrue(new MoveWrist(arm, Rotations.of(0.002)).repeatedly());
       //operatorXbox.y().onTrue(new RunGripper(m_GripperSubsystem, 0.3 ).repeatedly());
-      operatorXbox.leftBumper().onTrue(new RunGripper(m_GripperSubsystem, 0.1).repeatedly());
-      operatorXbox.rightBumper().onTrue(new RunGripper(m_GripperSubsystem, 1).repeatedly());
-      operatorXbox.leftBumper().onFalse(new RunGripper(m_GripperSubsystem, 0.0).repeatedly());
-      operatorXbox.rightBumper().onFalse(new RunGripper(m_GripperSubsystem, 0.0).repeatedly());
+      m_GripperSubsystem.setDefaultCommand(new RunGripper(m_GripperSubsystem, operatorXbox));
+      //operatorXbox.leftBumper().onTrue(new RunGripper(m_GripperSubsystem, 0.1).repeatedly());
+      //operatorXbox.rightBumper().onTrue(new RunGripper(m_GripperSubsystem, 1).repeatedly());
+      //operatorXbox.leftBumper().onFalse(new RunGripper(m_GripperSubsystem, 0.0).repeatedly());
+      //operatorXbox.rightBumper().onFalse(new RunGripper(m_GripperSubsystem, 0.0).repeatedly());
       //operatorXbox.a().onTrue(new SetToLevelOne(m_elevator, arm));
       //operatorXbox.x().onTrue(new SetToLevelTwo(m_elevator, arm));
       //operatorXbox.b().onTrue(new SetToLevelThree(m_elevator, arm));
