@@ -87,11 +87,11 @@ public static final double LOWER_INTAKE_BAR_SPEED = 0.5;
 
   public static final class ArmConstants
   {
-    public static final Angle ARM_INTAKE_ANGLES[] = {Rotations.of(0.039), Rotations.of(0.122)};
+    public static final Angle ARM_INTAKE_ANGLES[] = {Rotations.of(0.040), Rotations.of(0.122)};
     public static final Angle ARM_L1_ANGLES[] = {Rotations.of(-0.171), Rotations.of(-0.238)};
-    public static final Angle ARM_L2_ANGLES[] = {Rotations.of(-0.235), Rotations.of(-0.110)};
-    public static final Angle ARM_L3_ANGLES[] = {Rotations.of(-0.374), Rotations.of(0.002)};
-    public static final Angle ARM_L4_ANGLES[] = {Rotations.of(-0.421), Rotations.of(0.096)};
+    public static final Angle ARM_L2_ANGLES[] = {Rotations.of(-0.060), Rotations.of(0.204)};
+    public static final Angle ARM_L3_ANGLES[] = {Rotations.of(-0.445), Rotations.of(0.133)};
+    public static final Angle ARM_L4_ANGLES[] = {Rotations.of(-0.445), Rotations.of(0.133)};
     public static final Angle ARM_STOWED_ANGLES[] = {Rotations.of(0.03), Rotations.of(0.112)};
 
     public static final int SHOULDER_ENCODER_SIGNAL = 1;
@@ -108,8 +108,8 @@ public static final double LOWER_INTAKE_BAR_SPEED = 0.5;
 
     public static final double WRIST_MAX_ROTATION = 0.650;
 
-    public static final double SHOULDER_P = 10;//20.0;
-    public static final double SHOULDER_I = 0.6;
+    public static final double SHOULDER_P = 12;//20.0;
+    public static final double SHOULDER_I = 5.0;
     public static final double SHOULDER_D = 0;
     public static final double SHOULDER_FF = 0;
     public static final double SHOULDER_IZ = 0.15;
@@ -124,9 +124,9 @@ public static final double LOWER_INTAKE_BAR_SPEED = 0.5;
 
     
 
-    public static final double WRIST_P = 6;//26.0;
-    public static final double WRIST_I = 0;
-    public static final double WRIST_D = 0;
+    public static final double WRIST_P = 8;//26.0;
+    public static final double WRIST_I = 1.0;
+    public static final double WRIST_D = 0.5;
     public static final double WRIST_FF = 0;
     public static final double WRIST_IZ = 10.0;
 
@@ -150,9 +150,9 @@ public static final double LOWER_INTAKE_BAR_SPEED = 0.5;
 
     public static final Distance ELEVATOR_INTAKE_HEIGHT = Meters.of(0);
     public static final Distance ELEVATOR_L1_HEIGHT = Meters.of(0.0);
-    public static final Distance ELEVATOR_L2_HEIGHT = Meters.of(0.0);
+    public static final Distance ELEVATOR_L2_HEIGHT = Meters.of(0.459);
     public static final Distance ELEVATOR_L3_HEIGHT = Meters.of(0.0);
-    public static final Distance ELEVATOR_L4_HEIGHT = Meters.of(0.5);
+    public static final Distance ELEVATOR_L4_HEIGHT = Meters.of(0.632);
     public static final Distance ELEVATOR_STOWED_HEIGHT = Meters.of(0.0);
 
   public static final Distance ELEVATOR_INITIAL_HEIGHT = Meters.of(0.0);
