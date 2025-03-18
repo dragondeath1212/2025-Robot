@@ -88,7 +88,7 @@ public static final double LOWER_INTAKE_BAR_SPEED = 0.5;
   public static final class ArmConstants
   {
     public static final Angle ARM_INTAKE_ANGLES[] = {Rotations.of(0.040), Rotations.of(0.122)};
-    public static final Angle ARM_L1_ANGLES[] = {Rotations.of(-0.171), Rotations.of(-0.238)};
+    public static final Angle ARM_L1_ANGLES[] = {Rotations.of(-0.056), Rotations.of(-0.005)};
     public static final Angle ARM_L2_ANGLES[] = {Rotations.of(-0.060), Rotations.of(0.204)};
     public static final Angle ARM_L3_ANGLES[] = {Rotations.of(-0.445), Rotations.of(0.133)};
     public static final Angle ARM_L4_ANGLES[] = {Rotations.of(-0.445), Rotations.of(0.133)};

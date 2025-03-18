@@ -24,8 +24,8 @@ public class SetToLevelOne extends Command {
     @Override
     public void execute() {
         m_elevatorSubsystem.setElevatorPosition(ElevatorConstants.ELEVATOR_L1_HEIGHT);
-        //m_arm.setShoulderPosition(ArmConstants.ARM_L1_ANGLES[0]);
-        //m_arm.setWristPosition(ArmConstants.ARM_L1_ANGLES[1]);
+        m_arm.setShoulderPosition(ArmConstants.ARM_L1_ANGLES[0]);
+        m_arm.setWristPosition(ArmConstants.ARM_L1_ANGLES[1]);
     }
 
     @Override

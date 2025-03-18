@@ -23,8 +23,8 @@ public class SetToLevelFour extends Command {
     @Override
     public void execute() {
         m_elevatorSubsystem.setElevatorPosition(ElevatorConstants.ELEVATOR_L4_HEIGHT);
-        //m_arm.setShoulderPosition(ArmConstants.ARM_L4_ANGLES[0]);
-        //m_arm.setWristPosition(ArmConstants.ARM_L4_ANGLES[1]);
+        m_arm.setShoulderPosition(ArmConstants.ARM_L4_ANGLES[0]);
+        m_arm.setWristPosition(ArmConstants.ARM_L4_ANGLES[1]);
     }
 
     @Override
