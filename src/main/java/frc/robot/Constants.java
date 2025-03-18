@@ -161,9 +161,9 @@ public static final double LOWER_INTAKE_BAR_SPEED = 0.5;
   public static final boolean ELEVATOR_ENCODER_IS_INVERTED = true;
   public static final double ELEVATOR_ABSOLUTE_SENSOR_DISCONTINUITY_POINT = 0.95;
   public static final double ELEVATOR_ABSOLUTE_SENSOR_OFFSET = 0.225;
-  public static final double ELEVATOR_P = 24;
-  public static final double ELEVATOR_I = 3;
-  public static final double ELEVATOR_D = 0;
+  public static final double ELEVATOR_P = 12;
+  public static final double ELEVATOR_I = 2.0;
+  public static final double ELEVATOR_D = 0.1;
   public static final double ELEVATOR_FF = 0;
   public static final double ELEVATOR_IZ = 0.1;
 

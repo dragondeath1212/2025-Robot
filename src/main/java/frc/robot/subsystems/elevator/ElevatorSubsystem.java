@@ -66,6 +66,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final DoublePublisher rawElevatorVoltage;
     public boolean atSetpoint = false;
 
+    PIDController m_pidController;
+        
+
 
     public ElevatorSubsystem(CANdi elevatorCANdi) {
     
@@ -83,6 +86,11 @@ public class ElevatorSubsystem extends SubsystemBase {
                                             ElevatorConstants.ELEVATOR_FF,
                                             ElevatorConstants.ELEVATOR_IZ
                                             );
+
+        m_pidController = new PIDController(ElevatorConstants.ELEVATOR_P, ElevatorConstants.ELEVATOR_I, ElevatorConstants.ELEVATOR_D);                                    
+        m_pidController.setTolerance(0.005);
+        m_pidController.setIZone(ElevatorConstants.ELEVATOR_IZ);
+
 
         m_elevatorMotor.setVoltageCompensation(Constants.NOMINAL_VOLTAGE);
         m_elevatorMotor.setCurrentLimit(ArmConstants.SHOULDER_MOTOR_CURRENT_LIMIT);
@@ -106,6 +114,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         rawElevatorErrorPublisher = NetworkTableInstance.getDefault().getTable("SmartDashboard").getDoubleTopic("elevator/Error").publish();
         rawElevatorVoltage = NetworkTableInstance.getDefault().getTable("SmartDashboard").getDoubleTopic("elevator/Voltage").publish();
 
+
     }
 
     public Distance getElevatorPosition() {
@@ -117,23 +126,24 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void setElevatorPosition(Distance setpoint) {
-        PIDController pidController = new PIDController(ElevatorConstants.ELEVATOR_P, ElevatorConstants.ELEVATOR_I, ElevatorConstants.ELEVATOR_D);
         Distance position = getElevatorPosition();
         this.elevatorSetpoint = setpoint;
         this.elevatorError = position.minus(setpoint);
 
-        pidController.setTolerance(0.005);
-        pidController.setIZone(ElevatorConstants.ELEVATOR_IZ);
-        if (pidController.atSetpoint()) {
+        
+        if (m_pidController.atSetpoint()) {
             atSetpoint = true;
         } else {
             atSetpoint = false;
         }
-        double voltage = pidController.calculate(getElevatorPosition().in(Meters), setpoint.in(Meters)) + 0.3;
+        double voltage = m_pidController.calculate(getElevatorPosition().in(Meters), setpoint.in(Meters)) + 0.3;
         if (Constants.ElevatorConstants.ELEVATOR_MOTOR_IS_INVERTED) {
             voltage = -1 * voltage;
         }
-        if (getElevatorPosition().in(Meters) > 0.01 & getElevatorPosition().in(Meters) < ElevatorConstants.ELEVATOR_MAX_HEIGHT.in(Meters) - 0.01) {
+
+        //System.out.println("Elevator voltage to set = " + voltage + ", elevator pos in meters: " + getElevatorPosition().in(Meters));
+
+        if (getElevatorPosition().in(Meters) < (ElevatorConstants.ELEVATOR_MAX_HEIGHT.in(Meters) - 0.01)) {
             m_elevatorMotor.setVoltage(voltage);
         }
         else {
