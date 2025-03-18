@@ -233,6 +233,17 @@ public class Vision {
     }
   }
 
+  public PhotonTrackedTarget getBestTarget() {
+    for (var camera : Cameras.values()) {
+      var result = camera.getBestResult();
+      if (result.isPresent()) {
+        return result.get().getBestTarget();
+      }
+    }
+
+    return null;
+  }
+
   /**
    * Generates the estimated robot pose. Returns empty if:
    * <ul>

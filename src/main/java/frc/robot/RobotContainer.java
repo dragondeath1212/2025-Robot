@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -35,6 +36,7 @@ import frc.robot.commands.Drive.NudgeBack;
 import frc.robot.commands.Drive.NudgeForward;
 import frc.robot.commands.Drive.NudgeLeft;
 import frc.robot.commands.Drive.NudgeRight;
+import frc.robot.commands.Drive.AlignToTarget;
 import frc.robot.commands.Drive.RotateClockwise;
 import frc.robot.commands.Drive.RotateCounterClockwise;
 import frc.robot.commands.Drive.Stop;
@@ -183,9 +185,16 @@ public class RobotContainer {
 
     drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
 
-    driverXbox.a().onTrue(new DriveToNearestScoringPosition(drivebase));
+    driverXbox.a().onTrue(
+      new SequentialCommandGroup(
+        new DriveToNearestScoringPosition(drivebase),
+        new AlignToTarget(drivebase)
+      )
+    );
 
     driverXbox.b().onTrue(new Stop(drivebase));
+
+    driverXbox.y().whileTrue(new RepeatCommand(new AlignToTarget(drivebase)));
 
     driverXbox.rightBumper().onTrue(new DriveToRightLoader(drivebase));
 
