@@ -67,7 +67,7 @@ public class RobotContainer
 
   private final CANdi armCANdi = new CANdi(34);
   private final CANdi elevatorCANdi = new CANdi(35);
-  private final Arm arm = new Arm(armCANdi);
+  private final Arm m_arm = new Arm(armCANdi);
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
    */
@@ -195,10 +195,17 @@ public class RobotContainer
       operatorXbox.a().onTrue(new MoveShoulder(arm, ArmConstants.ARM_L1_ANGLES[0]).repeatedly());
       operatorXbox.x().onTrue(new MoveShoulder(arm, ArmConstants.ARM_L2_ANGLES[0]).repeatedly());
       operatorXbox.y().onTrue(new MoveShoulder(arm, ArmConstants.ARM_L3_ANGLES[0]).repeatedly());*/
-      operatorXbox.b().onTrue(new MoveShoulderAndWrist(arm, ArmConstants.ARM_INTAKE_ANGLES[0], ArmConstants.ARM_INTAKE_ANGLES[1]).repeatedly());
-      operatorXbox.a().onTrue(new MoveShoulderAndWrist(arm, ArmConstants.ARM_L1_ANGLES[0], ArmConstants.ARM_L1_ANGLES[1]).repeatedly());
-      operatorXbox.x().onTrue(new MoveShoulderAndWrist(arm, ArmConstants.ARM_L2_ANGLES[0], ArmConstants.ARM_L2_ANGLES[1]).repeatedly());
-      operatorXbox.y().onTrue(new MoveShoulderAndWrist(arm, ArmConstants.ARM_L3_ANGLES[0], ArmConstants.ARM_L3_ANGLES[1]).repeatedly());
+      //operatorXbox.b().onTrue(new MoveShoulderAndWrist(m_arm, ArmConstants.ARM_INTAKE_ANGLES[0], ArmConstants.ARM_INTAKE_ANGLES[1]).repeatedly());
+      //operatorXbox.a().onTrue(new MoveShoulderAndWrist(m_arm, ArmConstants.ARM_L1_ANGLES[0], ArmConstants.ARM_L1_ANGLES[1]).repeatedly());
+      //operatorXbox.x().onTrue(new MoveShoulderAndWrist(m_arm, ArmConstants.ARM_L2_ANGLES[0], ArmConstants.ARM_L2_ANGLES[1]).repeatedly());
+      //operatorXbox.y().onTrue(new MoveShoulderAndWrist(m_arm, ArmConstants.ARM_L3_ANGLES[0], ArmConstants.ARM_L3_ANGLES[1]).repeatedly());
+
+      operatorXbox.x().onTrue(new SetToLevelOne(m_elevator, m_arm).repeatedly());
+      operatorXbox.a().onTrue(new SetToLevelTwo(m_elevator, m_arm).repeatedly());
+      operatorXbox.b().onTrue(new SetToLevelThree(m_elevator, m_arm).repeatedly());
+      operatorXbox.y().onTrue(new SetToLevelFour(m_elevator, m_arm).repeatedly());
+
+      operatorXbox.rightStick().onTrue(new IntakeGamepiece(m_elevator, m_arm, m_GripperSubsystem).repeatedly());
       
       //operatorXbox.x().onTrue(new MoveWrist(arm, Rotations.of(0.112)).repeatedly());
       //operatorXbox.b().onTrue(new MoveWrist(arm, Rotations.of(0.002)).repeatedly());
