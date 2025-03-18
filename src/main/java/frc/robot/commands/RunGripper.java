@@ -3,7 +3,8 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.gripper.GripperSubsystem;
-
+import frc.robot.Constants;
+import frc.robot.Constants.GripperConstants;
 
 
 public class RunGripper extends Command {
@@ -28,15 +29,17 @@ public class RunGripper extends Command {
 
     @Override
     public void execute() {
+        //System.out.println(m_controller.getLeftTriggerAxis());
         //m_GripperSubsystem.setIntakeSpeed(setpoint);
 
         if (m_controller.getLeftTriggerAxis() >= 0.05 && m_controller.getRightTriggerAxis() < 0.05)
-        {
-            m_GripperSubsystem.setIntakeSpeed(Math.pow(m_controller.getLeftTriggerAxis(),10.0));
+        { 
+            m_GripperSubsystem.setIntakeSpeed(GripperConstants.GRIPPER_VOLTAGE_COEFFICIENT * m_controller.getLeftTriggerAxis());
         }
+        
         else if (m_controller.getLeftTriggerAxis() < 0.05 && m_controller.getRightTriggerAxis() >= 0.05)
         {
-            m_GripperSubsystem.setIntakeSpeed(Math.pow(m_controller.getRightTriggerAxis(), 10.0) * -1);
+            m_GripperSubsystem.setIntakeSpeed((GripperConstants.GRIPPER_VOLTAGE_COEFFICIENT * m_controller.getRightTriggerAxis()) * -1);
         }
         else
         {

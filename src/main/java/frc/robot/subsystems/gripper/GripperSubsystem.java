@@ -41,7 +41,7 @@ public class GripperSubsystem extends SubsystemBase {
         }
 
         public void setIntakeSpeed(double intakeSpeed) {
-            System.out.println("Setting intake speed to " + intakeSpeed + ", which is " + (intakeSpeed * 12) + " volts");
+            //System.out.println("Setting intake speed to " + intakeSpeed + ", which is " + (intakeSpeed * 12) + " volts");
             m_feederMotor.setVoltage(intakeSpeed * 12.0);
         }
 
