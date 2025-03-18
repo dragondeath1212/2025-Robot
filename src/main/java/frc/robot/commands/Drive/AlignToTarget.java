@@ -37,7 +37,7 @@ public class AlignToTarget extends Command {
     public void initialize() {
         m_yawController.reset();
         m_yawController.setSetpoint(0);
-        m_yawController.setSetpoint(0.2);
+        m_yawController.setTolerance(0.2);
 
         m_strafeController.reset();
         m_strafeController.setSetpoint(0);
@@ -51,9 +51,8 @@ public class AlignToTarget extends Command {
             return;
         }
 
-        var cameraPixelWidth = VisionConstants.cameraWidth;
         var centerOfTarget = (target.detectedCorners.get(1).x - target.detectedCorners.get(0).x) / 2 + target.getDetectedCorners().get(0).x;
-        var centerOfCamera = cameraPixelWidth / 2;
+        var centerOfCamera = VisionConstants.cameraWidth / 2;
         var horizontalOffset = centerOfTarget - centerOfCamera;
 
         m_yawPublisher.set(target.yaw);

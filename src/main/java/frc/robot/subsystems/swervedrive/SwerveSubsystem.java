@@ -754,15 +754,4 @@ public class SwerveSubsystem extends SubsystemBase {
   public Optional<Pose3d> getTagPose(AprilTag tag) {
     return aprilTagFieldLayout.getTagPose(tag.ID);
   }
-
-  public PhotonTrackedTarget getTrackedTarget(int id) {
-    for (var camera : Cameras.values()) {
-      var target = vision.getTargetFromId(id, camera);
-      if (target != null) {
-        return target;
-      }
-    }
-    
-    return null;
-  }
 }
