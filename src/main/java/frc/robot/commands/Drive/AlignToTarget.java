@@ -6,6 +6,7 @@ import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.IntegerPublisher;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
 public class AlignToTarget extends Command {
@@ -36,10 +37,11 @@ public class AlignToTarget extends Command {
     public void initialize() {
         m_yawController.reset();
         m_yawController.setSetpoint(0);
+        m_yawController.setSetpoint(0.2);
 
         m_strafeController.reset();
         m_strafeController.setSetpoint(0);
-        m_strafeController.setTolerance(0.5);
+        m_strafeController.setTolerance(1);
     }
 
     @Override
@@ -49,7 +51,7 @@ public class AlignToTarget extends Command {
             return;
         }
 
-        var cameraPixelWidth = 960; // TODO: is this configured somewhere? camera resolution appears to be 960x720
+        var cameraPixelWidth = VisionConstants.cameraWidth;
         var centerOfTarget = (target.detectedCorners.get(1).x - target.detectedCorners.get(0).x) / 2 + target.getDetectedCorners().get(0).x;
         var centerOfCamera = cameraPixelWidth / 2;
         var horizontalOffset = centerOfTarget - centerOfCamera;

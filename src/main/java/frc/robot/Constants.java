@@ -4,13 +4,13 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 import swervelib.math.Matter;
 import static edu.wpi.first.units.Units.*;
-
-import java.security.PublicKey;
 
 import edu.wpi.first.units.measure.*;
 
@@ -184,5 +184,13 @@ public static final double LOWER_INTAKE_BAR_SPEED = 0.5;
   public static final class GripperConstants {
     public static final double LIGHT_SENSOR_THRESHOLD = 0.55; // 0.55 volts
     public static final double GRIPPER_INTAKE_SPEED = 0.3;
+  }
+
+  public static final class VisionConstants {
+    public static final int cameraWidth = 960;
+    public static final int cameraHeight = 720;
+
+    public static final Transform2d reefAlignmentTransform = new Transform2d(Meter.of(0.5), Meter.of(-0.25), Rotation2d.k180deg);
+    public static final Transform2d loaderAlignmentTransform = new Transform2d(Meter.of(0.5), Meter.of(-0.25), Rotation2d.kZero);
   }
 }

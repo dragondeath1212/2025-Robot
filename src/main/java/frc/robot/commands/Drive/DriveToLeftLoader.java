@@ -1,11 +1,8 @@
 package frc.robot.commands.Drive;
 
-import static edu.wpi.first.units.Units.Meter;
-
 import edu.wpi.first.apriltag.AprilTag;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
 public class DriveToLeftLoader extends Command {
@@ -32,7 +29,7 @@ public class DriveToLeftLoader extends Command {
         }
         
         var targetPose = pose3d.get().toPose2d()
-            .transformBy(new Transform2d(Meter.of(0.5), Meter.of(-0.25), Rotation2d.kZero));
+            .transformBy(VisionConstants.loaderAlignmentTransform);
 
         m_driveToPoseCommand = m_swerveSubsystem.driveToPose(targetPose);
 
