@@ -14,10 +14,12 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.Joystick.ButtonType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -26,7 +28,15 @@ import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.gripper.GripperSubsystem;
 import frc.robot.commands.ClimbComands.ClimbCommand;
 import frc.robot.commands.ClimbComands.StopClimbing;
-import frc.robot.commands.Drive.DriveToTarget;
+import frc.robot.commands.Drive.DriveToLeftLoader;
+import frc.robot.commands.Drive.DriveToNearestScoringPosition;
+import frc.robot.commands.Drive.DriveToRightLoader;
+import frc.robot.commands.Drive.NudgeBack;
+import frc.robot.commands.Drive.NudgeForward;
+import frc.robot.commands.Drive.NudgeLeft;
+import frc.robot.commands.Drive.NudgeRight;
+import frc.robot.commands.Drive.RotateClockwise;
+import frc.robot.commands.Drive.RotateCounterClockwise;
 import frc.robot.commands.Drive.Stop;
 import frc.robot.commands.IntakeGamepiece;
 import frc.robot.commands.MoveElevator;
@@ -173,9 +183,21 @@ public class RobotContainer {
 
     drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
 
-    driverXbox.a().onTrue(new DriveToTarget(drivebase));
+    driverXbox.a().onTrue(new DriveToNearestScoringPosition(drivebase));
 
     driverXbox.b().onTrue(new Stop(drivebase));
+
+    driverXbox.rightBumper().onTrue(new DriveToRightLoader(drivebase));
+
+    driverXbox.leftBumper().onTrue(new DriveToLeftLoader(drivebase));
+
+    driverXbox.povLeft().onTrue(new NudgeLeft(drivebase));
+    driverXbox.povRight().onTrue(new NudgeRight(drivebase));
+    driverXbox.povUp().onTrue(new NudgeForward(drivebase));
+    driverXbox.povDown().onTrue(new NudgeBack(drivebase));
+
+    driverXbox.rightTrigger().whileTrue(new RotateClockwise(drivebase));
+    driverXbox.leftTrigger().whileTrue(new RotateCounterClockwise(drivebase));
     
     if (Robot.isSimulation()) {
       driverXbox.start().onTrue(Commands.runOnce(() -> drivebase.resetOdometry(new Pose2d(3, 3, new Rotation2d()))));

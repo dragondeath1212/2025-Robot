@@ -22,10 +22,11 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTablesJNI;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import frc.robot.Robot;
 import java.awt.Desktop;
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -151,29 +152,35 @@ public class Vision {
       }
     }
 
-  }  
+  }
 
-  private final List<Integer> reefIds = Arrays.asList(
-    6,
-    7,
-    8,
-    9,
-    10,
-    11,
-    17,
-    18,
-    19,
-    20,
-    21,
-    22);
+  private final List<Integer> redScoringPositionIds = Arrays.asList(
+      6,
+      7,
+      8,
+      9,
+      10,
+      11);
 
-  public AprilTag getNearestReef() {
+  private final List<Integer> blueScoringPositionIds = Arrays.asList(
+      17,
+      18,
+      19,
+      20,
+      21,
+      22);
+
+  public AprilTag getNearestScoringPosition() {
     var tags = fieldLayout.getTags();
+    var nearestDistance = Double.MAX_VALUE;
     AprilTag nearestTag = null;
-    double nearestDistance = Double.MAX_VALUE;
+    var scoringPositions = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red
+      ? redScoringPositionIds
+      : blueScoringPositionIds;
+
 
     for (var tag : tags) {
-      if (!reefIds.contains(tag.ID)) {
+      if (!scoringPositions.contains(tag.ID)) {
         continue;
       }
 
@@ -185,6 +192,45 @@ public class Vision {
     }
 
     return nearestTag;
+  }
+
+  private int blueRightLoaderTagId = 12;
+  private int blueLeftLoaderTagId = 13;
+  private int redRightLoaderTagId = 2;
+  private int redLeftLoaderTagId = 1;
+
+  public AprilTag getRightLoaderPosition() {
+    var alliance = DriverStation.getAlliance();
+    if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
+      return fieldLayout.getTags()
+          .stream()
+          .filter(tag -> tag.ID == redRightLoaderTagId)
+          .findFirst()
+          .get();
+    } else {
+      return fieldLayout.getTags()
+          .stream()
+          .filter(tag -> tag.ID == blueRightLoaderTagId)
+          .findFirst()
+          .get();
+    }
+  }
+
+  public AprilTag getLeftLoaderPosition() {
+    var alliance = DriverStation.getAlliance();
+    if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
+      return fieldLayout.getTags()
+          .stream()
+          .filter(tag -> tag.ID == redLeftLoaderTagId)
+          .findFirst()
+          .get();
+    } else {
+      return fieldLayout.getTags()
+          .stream()
+          .filter(tag -> tag.ID == blueLeftLoaderTagId)
+          .findFirst()
+          .get();
+    }
   }
 
   /**
@@ -347,20 +393,20 @@ public class Vision {
      * Left Camera
      */
     // LEFT_CAM("left",
-    //     new Rotation3d(0, Math.toRadians(-24.094), Math.toRadians(30)),
-    //     new Translation3d(Units.inchesToMeters(12.056),
-    //         Units.inchesToMeters(10.981),
-    //         Units.inchesToMeters(8.44)),
-    //     VecBuilder.fill(4, 4, 8), VecBuilder.fill(0.5, 0.5, 1)),
+    // new Rotation3d(0, Math.toRadians(-24.094), Math.toRadians(30)),
+    // new Translation3d(Units.inchesToMeters(12.056),
+    // Units.inchesToMeters(10.981),
+    // Units.inchesToMeters(8.44)),
+    // VecBuilder.fill(4, 4, 8), VecBuilder.fill(0.5, 0.5, 1)),
     // /**
-    //  * Right Camera
-    //  */
+    // * Right Camera
+    // */
     // RIGHT_CAM("right",
-    //     new Rotation3d(0, Math.toRadians(-24.094), Math.toRadians(-30)),
-    //     new Translation3d(Units.inchesToMeters(12.056),
-    //         Units.inchesToMeters(-10.981),
-    //         Units.inchesToMeters(8.44)),
-    //     VecBuilder.fill(4, 4, 8), VecBuilder.fill(0.5, 0.5, 1)),
+    // new Rotation3d(0, Math.toRadians(-24.094), Math.toRadians(-30)),
+    // new Translation3d(Units.inchesToMeters(12.056),
+    // Units.inchesToMeters(-10.981),
+    // Units.inchesToMeters(8.44)),
+    // VecBuilder.fill(4, 4, 8), VecBuilder.fill(0.5, 0.5, 1)),
     /**
      * Center Camera
      */

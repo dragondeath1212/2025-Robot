@@ -8,19 +8,19 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
-public class DriveToTarget extends Command {
+public class DriveToNearestScoringPosition extends Command {
     private final SwerveSubsystem m_swerveSubsystem;
     private AprilTag m_target;
     private Command m_driveToPoseCommand;
 
-    public DriveToTarget(SwerveSubsystem swerveSubsystem) {
+    public DriveToNearestScoringPosition(SwerveSubsystem swerveSubsystem) {
         m_swerveSubsystem = swerveSubsystem;
         addRequirements(m_swerveSubsystem);
     }
 
     @Override
     public void initialize() {
-        m_target = m_swerveSubsystem.getNearestReef();
+        m_target = m_swerveSubsystem.getNearestScoringPosition();
 
         if (m_target == null) {
             return;
