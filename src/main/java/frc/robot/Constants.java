@@ -73,6 +73,8 @@ public static final double LOWER_INTAKE_BAR_SPEED = 0.5;
 
     // Hold time on motor brakes when disabled
     public static final double WHEEL_LOCK_TIME = 10; // seconds
+    public static final double DRIVEBASE_WIDTH = Units.inchesToMeters(29);
+    public static final double DRIVEBASE_LENGTH = Units.inchesToMeters(29);
   }
 
   public static class OperatorConstants
@@ -189,8 +191,5 @@ public static final double LOWER_INTAKE_BAR_SPEED = 0.5;
   public static final class VisionConstants {
     public static final int cameraWidth = 960;
     public static final int cameraHeight = 720;
-
-    public static final Transform2d reefAlignmentTransform = new Transform2d(Meter.of(1), Meter.of(-0.25), Rotation2d.k180deg);
-    public static final Transform2d loaderAlignmentTransform = new Transform2d(Meter.of(1), Meter.of(-0.25), Rotation2d.kZero);
   }
 }

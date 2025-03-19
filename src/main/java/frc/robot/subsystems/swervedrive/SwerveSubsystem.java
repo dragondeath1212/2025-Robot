@@ -745,8 +745,8 @@ public class SwerveSubsystem extends SubsystemBase {
     return vision.getLeftLoaderPosition();
   }
 
-  public PhotonTrackedTarget getBestTarget() {
-    return vision.getBestTarget();
+  public PhotonTrackedTarget getBestScoringTarget() {
+    return vision.getBestScoringTarget();
   }
 
   public Optional<Pose3d> getTagPose(AprilTag tag) {

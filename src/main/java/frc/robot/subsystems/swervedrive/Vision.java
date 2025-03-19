@@ -19,7 +19,9 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTablesJNI;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -51,6 +53,9 @@ import swervelib.telemetry.SwerveDriveTelemetry;
  * https://gitlab.com/ironclad_code/ironclad-2024/-/blob/master/src/main/java/frc/robot/vision/Vision.java?ref_type=heads
  */
 public class Vision {
+  StructPublisher<Pose2d> posePublisher = NetworkTableInstance.getDefault()
+      .getStructTopic("SmartDashboard/vision/simulatedPose", Pose2d.struct)
+      .publish();
 
   /**
    * April Tag Field Layout of the year.
@@ -141,6 +146,7 @@ public class Vision {
        * simulator when updating the vision simulation during the simulation.
        */
       visionSim.update(swerveDrive.getSimulationDriveTrainPose().get());
+      posePublisher.set(swerveDrive.getSimulationDriveTrainPose().get());
     }
     for (Cameras camera : Cameras.values()) {
       Optional<EstimatedRobotPose> poseEst = getEstimatedGlobalPose(camera);
@@ -170,14 +176,17 @@ public class Vision {
       21,
       22);
 
+  public List<Integer> getScoringTargets() {
+    return DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red
+        ? redScoringPositionIds
+        : blueScoringPositionIds;
+  }
+
   public AprilTag getNearestScoringPosition() {
     var tags = fieldLayout.getTags();
     var nearestDistance = Double.MAX_VALUE;
     AprilTag nearestTag = null;
-    var scoringPositions = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red
-      ? redScoringPositionIds
-      : blueScoringPositionIds;
-
+    var scoringPositions = getScoringTargets();
 
     for (var tag : tags) {
       if (!scoringPositions.contains(tag.ID)) {
@@ -233,11 +242,16 @@ public class Vision {
     }
   }
 
-  public PhotonTrackedTarget getBestTarget() {
+  public PhotonTrackedTarget getBestScoringTarget() {
+    var scoringTargets = getScoringTargets();
+
     for (var camera : Cameras.values()) {
       var result = camera.getBestResult();
       if (result.isPresent()) {
-        return result.get().getBestTarget();
+        var bestTarget = result.get().getBestTarget();
+        if (scoringTargets.stream().anyMatch(scoringTarget -> bestTarget.fiducialId == scoringTarget)) {
+          return bestTarget;
+        }
       }
     }
 
@@ -422,10 +436,12 @@ public class Vision {
      * Center Camera
      */
     CENTER_CAM("center",
-        new Rotation3d(0, Units.degreesToRadians(18), 0),
-        new Translation3d(Units.inchesToMeters(-4.628),
-            Units.inchesToMeters(-10.687),
-            Units.inchesToMeters(16.129)),
+        new Rotation3d(0, Units.degreesToRadians(-18), 0),
+        new Translation3d(
+            Units.inchesToMeters(10),
+            Units.inchesToMeters(0),
+            Units.inchesToMeters(8)
+          ),
         VecBuilder.fill(4, 4, 8), VecBuilder.fill(0.5, 0.5, 1));
 
     /**
@@ -552,7 +568,12 @@ public class Vision {
       }
 
       PhotonPipelineResult bestResult = resultsList.get(0);
-      double amiguity = bestResult.getBestTarget().getPoseAmbiguity();
+      var bestTarget = bestResult.getBestTarget();
+      if (bestTarget == null) {
+        return Optional.empty();
+      }
+
+      double amiguity = bestTarget.getPoseAmbiguity();
       double currentAmbiguity = 0;
       for (PhotonPipelineResult result : resultsList) {
         currentAmbiguity = result.getBestTarget().getPoseAmbiguity();

@@ -17,7 +17,7 @@ import frc.robot.subsystems.swervedrive.Vision;
 public class AlignToTarget extends Command {
     private final SwerveSubsystem m_swerveSubsystem;
     private final PIDController m_rotationController = new PIDController(0.05, 0.005, 0);
-    private final PIDController m_strafeController = new PIDController(0.01, 0, 0.001);
+    private final PIDController m_strafeController = new PIDController(0.001, 0, 0);
     private final PIDController m_rangeController = new PIDController(2, 0, 0);
 
     private final DoublePublisher m_rotationOffsetPublisher = NetworkTableInstance.getDefault()
@@ -56,13 +56,15 @@ public class AlignToTarget extends Command {
         m_strafeController.setTolerance(0.5);
 
         m_rangeController.reset();
-        m_rangeController.setSetpoint(VisionConstants.reefAlignmentTransform.getX());
+        m_rangeController.setSetpoint(
+            Units.inchesToMeters(12) // note that this is the distance from the camera to the target, not the front bumper
+        );
         m_rangeController.setTolerance(0.02);
     }
 
     @Override
     public void execute() {
-        var target = m_swerveSubsystem.getBestTarget();
+        var target = m_swerveSubsystem.getBestScoringTarget();
         if (target == null) {
             return;
         }

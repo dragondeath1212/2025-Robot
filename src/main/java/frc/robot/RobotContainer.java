@@ -29,16 +29,15 @@ import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.gripper.GripperSubsystem;
 import frc.robot.commands.ClimbComands.ClimbCommand;
 import frc.robot.commands.ClimbComands.StopClimbing;
-import frc.robot.commands.Drive.DriveToLeftLoader;
+import frc.robot.commands.Drive.DriveToLoader;
 import frc.robot.commands.Drive.DriveToNearestScoringPosition;
-import frc.robot.commands.Drive.DriveToRightLoader;
-import frc.robot.commands.Drive.NudgeBack;
-import frc.robot.commands.Drive.NudgeForward;
-import frc.robot.commands.Drive.NudgeLeft;
-import frc.robot.commands.Drive.NudgeRight;
+import frc.robot.commands.Drive.LoaderPosition;
+import frc.robot.commands.Drive.PositionRobot;
+import frc.robot.commands.Drive.RelativePosition;
 import frc.robot.commands.Drive.AlignToTarget;
-import frc.robot.commands.Drive.RotateClockwise;
-import frc.robot.commands.Drive.RotateCounterClockwise;
+import frc.robot.commands.Drive.RotateRobot;
+import frc.robot.commands.Drive.RotationDirection;
+import frc.robot.commands.Drive.RotateRobot;
 import frc.robot.commands.Drive.Stop;
 import frc.robot.commands.IntakeGamepiece;
 import frc.robot.commands.MoveElevator;
@@ -196,17 +195,16 @@ public class RobotContainer {
 
     driverXbox.y().whileTrue(new RepeatCommand(new AlignToTarget(drivebase)));
 
-    driverXbox.rightBumper().onTrue(new DriveToRightLoader(drivebase));
+    driverXbox.rightBumper().onTrue(new DriveToLoader(LoaderPosition.Right, drivebase));
+    driverXbox.leftBumper().onTrue(new DriveToLoader(LoaderPosition.Left, drivebase));
 
-    driverXbox.leftBumper().onTrue(new DriveToLeftLoader(drivebase));
+    driverXbox.povLeft().whileTrue(new PositionRobot(RelativePosition.Left, drivebase));
+    driverXbox.povRight().whileTrue(new PositionRobot(RelativePosition.Right, drivebase));
+    driverXbox.povUp().whileTrue(new PositionRobot(RelativePosition.Forward, drivebase));
+    driverXbox.povDown().whileTrue(new PositionRobot(RelativePosition.Back, drivebase));
 
-    driverXbox.povLeft().onTrue(new NudgeLeft(drivebase));
-    driverXbox.povRight().onTrue(new NudgeRight(drivebase));
-    driverXbox.povUp().onTrue(new NudgeForward(drivebase));
-    driverXbox.povDown().onTrue(new NudgeBack(drivebase));
-
-    driverXbox.rightTrigger().whileTrue(new RotateClockwise(drivebase));
-    driverXbox.leftTrigger().whileTrue(new RotateCounterClockwise(drivebase));
+    driverXbox.rightTrigger().whileTrue(new RotateRobot(RotationDirection.Clockwise, drivebase));
+    driverXbox.leftTrigger().whileTrue(new RotateRobot(RotationDirection.CounterClockwise, drivebase));
     
     if (Robot.isSimulation()) {
       driverXbox.start().onTrue(Commands.runOnce(() -> drivebase.resetOdometry(new Pose2d(3, 3, new Rotation2d()))));
@@ -253,8 +251,19 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+    return new SequentialCommandGroup(
+      new DriveToNearestScoringPosition(drivebase),
+      new AlignToTarget(drivebase),
+      new WaitCommand(Seconds.of(3)),
+      new DriveToLoader(LoaderPosition.Right, drivebase),
+      new WaitCommand(Seconds.of(3)),
+      new DriveToNearestScoringPosition(drivebase),
+      new AlignToTarget(drivebase),
+      new WaitCommand(Seconds.of(3)),
+      new DriveToLoader(LoaderPosition.Right, drivebase)
+    );
     // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("Left Side L");
+    // return drivebase.getAutonomousCommand("Left Side L");
     // return drivebase.getAutonomousCommand("Center L1");
     // return drivebase.getAutonomousCommand("Right Side L1");
     // return drivebase.getAutonomousCommand("Do Nothing");
