@@ -197,6 +197,14 @@ public class Arm extends SubsystemBase {
         return RotationsPerSecond.of(m_shoulderEncoder.getVelocity().in(RotationsPerSecond) * ArmConstants.SHOULDER_CONVERSION_FACTOR);
     }
 
+    public void stopAllMotionAndClearPIDInfo()
+    {
+        shoulderController.reset();
+        wristController.reset();
+        m_shoulderMotor.setVoltage(0);
+        m_wristMotor.setVoltage(0);
+    }
+
     public void setShoulderPosition(Angle setpoint) {
         Angle position = getShoulderPosition();
         shoulderFeedforwardVoltage = shoulderFeedforward.calculate((position).in(Radians) + Math.PI / 2, getShoulderVelocity().in(RadiansPerSecond));

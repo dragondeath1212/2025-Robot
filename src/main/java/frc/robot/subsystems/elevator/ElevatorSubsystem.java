@@ -125,6 +125,12 @@ public class ElevatorSubsystem extends SubsystemBase {
         return MetersPerSecond.of(m_elevatorEncoder.getVelocity().in(RotationsPerSecond) * ElevatorConstants.ELEVATOR_CONVERSION_FACTOR.in(Meters));
     }
 
+    public void stopAllMotionAndClearPIDInfo()
+    {
+        m_pidController.reset();
+        m_elevatorMotor.setVoltage(0);
+    }
+
     public void setElevatorPosition(Distance setpoint) {
         Distance position = getElevatorPosition();
         this.elevatorSetpoint = setpoint;

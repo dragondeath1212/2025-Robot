@@ -184,5 +184,6 @@ public static final double LOWER_INTAKE_BAR_SPEED = 0.5;
   public static final class GripperConstants {
     public static final double LIGHT_SENSOR_THRESHOLD = 0.55; // 0.55 volts
     public static final double GRIPPER_VOLTAGE_COEFFICIENT = 0.5484375;
+    public static final double GRIPPER_INTAKE_SPEED = 0.5;
   }
 }
