@@ -131,6 +131,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         m_elevatorMotor.setVoltage(0);
     }
 
+    public boolean atSetPoint() { return m_pidController.atSetpoint(); }
+
     public void setElevatorPosition(Distance setpoint) {
         Distance position = getElevatorPosition();
         this.elevatorSetpoint = setpoint;

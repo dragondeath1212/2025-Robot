@@ -188,6 +188,9 @@ public class Arm extends SubsystemBase {
         m_wristMotor.setVoltage(voltage);
     }
 
+    public boolean wristAtSetPoint() { return wristController.atSetpoint(); }
+    public boolean shoulderAtSetPoint() { return shoulderController.atSetpoint(); }
+
     public Angle getShoulderPosition() {
         double position = m_shoulderEncoder.getPosition().in(Rotations) * ArmConstants.SHOULDER_CONVERSION_FACTOR;
         return Rotations.of(position);
