@@ -733,8 +733,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
   }
 
-  public AprilTag getNearestScoringPosition() {
-    return vision.getNearestScoringPosition();
+  public AprilTag getNearestReefPosition() {
+    return vision.getNearestReefPosition();
   }
 
   public AprilTag getRightLoaderPosition() {
@@ -745,8 +745,8 @@ public class SwerveSubsystem extends SubsystemBase {
     return vision.getLeftLoaderPosition();
   }
 
-  public PhotonTrackedTarget getBestScoringTarget() {
-    return vision.getBestScoringTarget();
+  public PhotonTrackedTarget getBestReefTarget() {
+    return vision.getBestReefTarget();
   }
 
   public Optional<Pose3d> getTagPose(AprilTag tag) {

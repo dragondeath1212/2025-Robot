@@ -14,7 +14,9 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.Joystick.ButtonType;
+import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -30,13 +32,14 @@ import frc.robot.subsystems.gripper.GripperSubsystem;
 import frc.robot.commands.ClimbComands.ClimbCommand;
 import frc.robot.commands.ClimbComands.StopClimbing;
 import frc.robot.commands.Drive.DriveToLoader;
-import frc.robot.commands.Drive.DriveToNearestScoringPosition;
+import frc.robot.commands.Drive.DriveToReefPosition;
 import frc.robot.commands.Drive.LoaderPosition;
 import frc.robot.commands.Drive.PositionRobot;
 import frc.robot.commands.Drive.RelativePosition;
 import frc.robot.commands.Drive.AlignToTarget;
 import frc.robot.commands.Drive.RotateRobot;
 import frc.robot.commands.Drive.RotationDirection;
+import frc.robot.commands.Drive.ReefPosition;
 import frc.robot.commands.Drive.RotateRobot;
 import frc.robot.commands.Drive.Stop;
 import frc.robot.commands.IntakeGamepiece;
@@ -89,6 +92,7 @@ public class RobotContainer {
       () -> driverXbox.getLeftY() * -1,
       () -> driverXbox.getLeftX() * -1)
       .withControllerRotationAxis(driverXbox::getRightX)
+      .scaleRotation(0.001)
       .deadband(OperatorConstants.DEADBAND)
       .scaleTranslation(0.8)
       .allianceRelativeControl(true);
@@ -183,17 +187,19 @@ public class RobotContainer {
         driveDirectAngle);
 
     drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
-
+    
+    setupRightStickAuton();
+    
     driverXbox.a().onTrue(
       new SequentialCommandGroup(
-        new DriveToNearestScoringPosition(drivebase),
-        new AlignToTarget(drivebase)
+        new DriveToReefPosition(ReefPosition.Nearest, drivebase),
+        new AlignToTarget(driverXbox, drivebase)
       )
     );
 
     driverXbox.b().onTrue(new Stop(drivebase));
 
-    driverXbox.y().whileTrue(new RepeatCommand(new AlignToTarget(drivebase)));
+    driverXbox.y().whileTrue(new RepeatCommand(new AlignToTarget(driverXbox, drivebase)));
 
     driverXbox.rightBumper().onTrue(new DriveToLoader(LoaderPosition.Right, drivebase));
     driverXbox.leftBumper().onTrue(new DriveToLoader(LoaderPosition.Left, drivebase));
@@ -252,13 +258,13 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return new SequentialCommandGroup(
-      new DriveToNearestScoringPosition(drivebase),
-      new AlignToTarget(drivebase),
+      new DriveToReefPosition(ReefPosition._2oClock, drivebase),
+      new AlignToTarget(driverXbox, drivebase),
       new WaitCommand(Seconds.of(3)),
       new DriveToLoader(LoaderPosition.Right, drivebase),
       new WaitCommand(Seconds.of(3)),
-      new DriveToNearestScoringPosition(drivebase),
-      new AlignToTarget(drivebase),
+      new DriveToReefPosition(ReefPosition._4oClock, drivebase),
+      new AlignToTarget(driverXbox, drivebase),
       new WaitCommand(Seconds.of(3)),
       new DriveToLoader(LoaderPosition.Right, drivebase)
     );
@@ -272,5 +278,70 @@ public class RobotContainer {
 
   public void setMotorBrake(boolean brake) {
     drivebase.setMotorBrake(brake);
+  }
+
+  private void setupRightStickAuton() {
+    // 12 o'clock (up)
+    driverXbox.axisLessThan(Axis.kRightY.value, -0.95)
+      .onTrue(
+        new SequentialCommandGroup(
+          new DriveToReefPosition(ReefPosition._12oClock, drivebase),
+          new AlignToTarget(driverXbox, drivebase)
+        )
+      );
+
+    // 2 o'clock (right + up)
+    driverXbox
+      .axisGreaterThan(Axis.kRightX.value, 0.5)
+      .and(driverXbox.axisLessThan(Axis.kRightY.value, -0.5))
+      .onTrue(
+        new SequentialCommandGroup(
+          new DriveToReefPosition(ReefPosition._2oClock, drivebase),
+          new AlignToTarget(driverXbox, drivebase)
+        )
+      );
+
+    // 4 o'clock (right + down)
+    driverXbox
+      .axisGreaterThan(Axis.kRightX.value, 0.5)
+      .and(driverXbox.axisGreaterThan(Axis.kRightY.value, 0.5))
+      .onTrue(
+        new SequentialCommandGroup(
+          new DriveToReefPosition(ReefPosition._4oClock, drivebase),
+          new AlignToTarget(driverXbox, drivebase)
+        )
+      );
+
+    // 6 o'clock (down)
+    driverXbox
+      .axisGreaterThan(Axis.kRightY.value, 0.95)
+      .onTrue(
+        new SequentialCommandGroup(
+          new DriveToReefPosition(ReefPosition._6oClock, drivebase),
+          new AlignToTarget(driverXbox, drivebase)
+        )
+      );
+      
+    // 8 o'clock (left + down)
+    driverXbox
+      .axisLessThan(Axis.kRightX.value, -0.5)
+      .and(driverXbox.axisGreaterThan(Axis.kRightY.value, 0.5))
+      .onTrue(
+        new SequentialCommandGroup(
+          new DriveToReefPosition(ReefPosition._8oClock, drivebase),
+          new AlignToTarget(driverXbox, drivebase)
+        )
+      );
+
+    // 10 o'clock (left + up)
+    driverXbox
+      .axisLessThan(Axis.kRightX.value, -0.5)
+      .and(driverXbox.axisLessThan(Axis.kRightY.value, -0.5))
+      .onTrue(
+        new SequentialCommandGroup(
+          new DriveToReefPosition(ReefPosition._10oClock, drivebase),
+          new AlignToTarget(driverXbox, drivebase)
+        )
+      );
   }
 }

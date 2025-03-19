@@ -46,24 +46,25 @@
 
 ### Drive Controls ###
 - **Left Stick** - field oriented robot movement
-  - *Partially implemented*
-  - Should verify that the orientation is such that when standing at the driver station, up is towards the opposing alliance, down is towards our alliance, left/right are relative to the driver.
-- **Right Stick** - field oriented robot rotation
-  - *Needs rework*
-  - Currently left on the stick rotates the robot left, right rotates the robot right.  I think it would be nice
-  to have this field oriented as well, so that pushing a direction on the stick rotates the robot to face in that direction (e.g. up on the stick, robot turns to face opposing alliance, down on the stick, robot turns to face the driver).
+- **Right Stick** - auto drive to a specific reef position
+  - Use path planner to driver the robot to a specific reef position, and rotate the bot to
+  face the april tag at that position.
+  - From the driver's perspective, imagine the reef is a clock.  Push the stick up (12 o'clock), and the robot
+  will autonomously drive to the reef position nearest to the center of the field.  Push the stick down (6 o'clock)
+  and the robot will autonomously drive to the reef position closest to our alliances side of the field.
 - **Left Trigger/Right trigger** - robot oriented rotation
   - left trigger rotates the robot counterclockwise, right trigger rotates the robot clockwise
 - **D-Pad** - fine grained robot oriented movement
   - Up on the d-pad moves the robot forward, down backward, etc.
-- **A button** - auto drive to nearest scoring position
-  - *Partially implemented*
-  - Use the path planner to drive the robot to the nearest reef scoring position, and rotate the bot to
+- **A button** - auto drive to nearest reef position
+  - Use the path planner to drive the robot to the nearest reef position, and rotate the bot to
   face the april tag at that position.
-  - Currently it is always taking you to the nearest scoring position.  Can we use the switches on the drive station to control which locations have already been scored, and then filter those out from the "nearest target" calculation?
 - **B button** - stop the robot
   - Stops the robot, interrupting any running commands
 - **X button** - unused
+- **Y button** - align robot to reef
+  - Using the front camera, find the best april tag for a reef position, and use it to align the robot
+  - PID loops attempt to align the rotation of the bot, set the range, and set the horizontal position
 - **Left Bumper** - auto drive to left loading station
   - Auto generate a path to take the robot to the left loading station (drivers left hand side), rotated so that the bot is ready to be loaded
   - "alliance aware", meaning left and right depends on which side of the field you are one.

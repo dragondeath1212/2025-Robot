@@ -9,12 +9,15 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.IntegerPublisher;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.subsystems.swervedrive.Vision;
 
 public class AlignToTarget extends Command {
+    private final CommandXboxController m_controller;
     private final SwerveSubsystem m_swerveSubsystem;
     private final PIDController m_rotationController = new PIDController(0.05, 0.005, 0);
     private final PIDController m_strafeController = new PIDController(0.005, 0, 0);
@@ -40,7 +43,8 @@ public class AlignToTarget extends Command {
         .getIntegerTopic("vision/align/target")
         .publish();
 
-    public AlignToTarget(SwerveSubsystem swerveSubsystem) {
+    public AlignToTarget(CommandXboxController controller, SwerveSubsystem swerveSubsystem) {
+        m_controller = controller;
         m_swerveSubsystem = swerveSubsystem;
         addRequirements(swerveSubsystem);
     }
@@ -64,13 +68,19 @@ public class AlignToTarget extends Command {
 
     @Override
     public void execute() {
-        var target = m_swerveSubsystem.getBestScoringTarget();
+        var target = m_swerveSubsystem.getBestReefTarget();
         if (target == null) {
             return;
         }
 
+        if (!m_strafeController.atSetpoint() || !m_rotationController.atSetpoint() || !m_rangeController.atSetpoint()) {
+            m_controller.getHID().setRumble(RumbleType.kBothRumble, 1);
+        } else {
+            m_controller.getHID().setRumble(RumbleType.kBothRumble, 0);
+        }
+
         var targetHeight = m_swerveSubsystem
-            .getNearestScoringPosition()
+            .getNearestReefPosition()
             .pose
             .getZ();
 
@@ -112,7 +122,12 @@ public class AlignToTarget extends Command {
             rotationVelocity,
             false
         );
-    }    
+    }
+    
+    @Override
+    public void end(boolean interrupted) {
+        m_controller.getHID().setRumble(RumbleType.kBothRumble, 0);
+    }
 
     @Override
     public boolean isFinished() {

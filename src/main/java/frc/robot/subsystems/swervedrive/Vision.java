@@ -160,7 +160,7 @@ public class Vision {
 
   }
 
-  private final List<Integer> redScoringPositionIds = Arrays.asList(
+  private final List<Integer> redReefTagIds = Arrays.asList(
       6,
       7,
       8,
@@ -168,7 +168,7 @@ public class Vision {
       10,
       11);
 
-  private final List<Integer> blueScoringPositionIds = Arrays.asList(
+  private final List<Integer> blueReefTagIds = Arrays.asList(
       17,
       18,
       19,
@@ -176,20 +176,20 @@ public class Vision {
       21,
       22);
 
-  public List<Integer> getScoringTargets() {
+  public List<Integer> getReefTagIds() {
     return DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red
-        ? redScoringPositionIds
-        : blueScoringPositionIds;
+        ? redReefTagIds
+        : blueReefTagIds;
   }
 
-  public AprilTag getNearestScoringPosition() {
+  public AprilTag getNearestReefPosition() {
     var tags = fieldLayout.getTags();
     var nearestDistance = Double.MAX_VALUE;
     AprilTag nearestTag = null;
-    var scoringPositions = getScoringTargets();
+    var reefTagIds = getReefTagIds();
 
     for (var tag : tags) {
-      if (!scoringPositions.contains(tag.ID)) {
+      if (!reefTagIds.contains(tag.ID)) {
         continue;
       }
 
@@ -242,14 +242,14 @@ public class Vision {
     }
   }
 
-  public PhotonTrackedTarget getBestScoringTarget() {
-    var scoringTargets = getScoringTargets();
+  public PhotonTrackedTarget getBestReefTarget() {
+    var reefTagIds = getReefTagIds();
 
     for (var camera : Cameras.values()) {
       var result = camera.getBestResult();
       if (result.isPresent()) {
         var bestTarget = result.get().getBestTarget();
-        if (scoringTargets.stream().anyMatch(scoringTarget -> bestTarget.fiducialId == scoringTarget)) {
+        if (reefTagIds.stream().anyMatch(reefTagId -> bestTarget.fiducialId == reefTagId)) {
           return bestTarget;
         }
       }
