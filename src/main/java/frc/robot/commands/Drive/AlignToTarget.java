@@ -74,7 +74,7 @@ public class AlignToTarget extends Command {
         }
 
         if (!m_strafeController.atSetpoint() || !m_rotationController.atSetpoint() || !m_rangeController.atSetpoint()) {
-            m_controller.getHID().setRumble(RumbleType.kBothRumble, 1);
+            m_controller.getHID().setRumble(RumbleType.kBothRumble, 0.1);
         } else {
             m_controller.getHID().setRumble(RumbleType.kBothRumble, 0);
         }

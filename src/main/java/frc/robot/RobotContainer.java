@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.gripper.GripperSubsystem;
@@ -47,6 +48,7 @@ import frc.robot.commands.MoveElevator;
 import frc.robot.commands.MoveWrist;
 import frc.robot.commands.MoveShoulder;
 import frc.robot.commands.RunGripper;
+import frc.robot.commands.MoveShoulderAndWrist;
 import frc.robot.commands.SetToLevelOne;
 import frc.robot.commands.SetToLevelTwo;
 import frc.robot.commands.SetToLevelThree;
@@ -83,7 +85,7 @@ public class RobotContainer {
 
   private final CANdi armCANdi = new CANdi(34);
   private final CANdi elevatorCANdi = new CANdi(35);
-  private final Arm arm = new Arm(armCANdi);
+  private final Arm m_arm = new Arm(armCANdi);
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled
    * by angular velocity.
@@ -223,25 +225,39 @@ public class RobotContainer {
       driverXbox.back().whileTrue(drivebase.centerModulesCommand());
       driverXbox.leftBumper();
       driverXbox.rightBumper().onTrue(Commands.none());
+    } else 
+    {
+      //drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
+      //operatorXbox.y().onTrue(new MoveShoulder(arm, Rotations.of(-0.171)).repeatedly().andThen(new MoveWrist(arm, Rotations.of(0.112)).repeatedly()));
+      
+      /*operatorXbox.b().onTrue(new MoveShoulder(arm, ArmConstants.ARM_INTAKE_ANGLES[0]).repeatedly());
+      operatorXbox.a().onTrue(new MoveShoulder(arm, ArmConstants.ARM_L1_ANGLES[0]).repeatedly());
+      operatorXbox.x().onTrue(new MoveShoulder(arm, ArmConstants.ARM_L2_ANGLES[0]).repeatedly());
+      operatorXbox.y().onTrue(new MoveShoulder(arm, ArmConstants.ARM_L3_ANGLES[0]).repeatedly());*/
+      //operatorXbox.b().onTrue(new MoveShoulderAndWrist(m_arm, ArmConstants.ARM_INTAKE_ANGLES[0], ArmConstants.ARM_INTAKE_ANGLES[1]).repeatedly());
+      //operatorXbox.a().onTrue(new MoveShoulderAndWrist(m_arm, ArmConstants.ARM_L1_ANGLES[0], ArmConstants.ARM_L1_ANGLES[1]).repeatedly());
+      //operatorXbox.x().onTrue(new MoveShoulderAndWrist(m_arm, ArmConstants.ARM_L2_ANGLES[0], ArmConstants.ARM_L2_ANGLES[1]).repeatedly());
+      //operatorXbox.y().onTrue(new MoveShoulderAndWrist(m_arm, ArmConstants.ARM_L3_ANGLES[0], ArmConstants.ARM_L3_ANGLES[1]).repeatedly());
 
-    } else {
-      operatorXbox.y().onTrue(new MoveShoulder(arm, Rotations.of(-0.171)).repeatedly()
-          .andThen(new MoveWrist(arm, Rotations.of(0.112)).repeatedly()));
-      operatorXbox.a().onTrue(new MoveShoulder(arm, Rotations.of(0.044)).repeatedly());
-      // operatorXbox.x().onTrue(new MoveWrist(arm,
-      // Rotations.of(0.112)).repeatedly());
-      // operatorXbox.b().onTrue(new MoveWrist(arm,
-      // Rotations.of(0.002)).repeatedly());
-      // operatorXbox.y().onTrue(new RunGripper(m_GripperSubsystem, 0.3
-      // ).repeatedly());
-      operatorXbox.leftBumper().onTrue(new RunGripper(m_GripperSubsystem, 0.1).repeatedly());
-      operatorXbox.rightBumper().onTrue(new RunGripper(m_GripperSubsystem, 1).repeatedly());
-      operatorXbox.leftBumper().onFalse(new RunGripper(m_GripperSubsystem, 0.0).repeatedly());
-      operatorXbox.rightBumper().onFalse(new RunGripper(m_GripperSubsystem, 0.0).repeatedly());
-      // operatorXbox.a().onTrue(new SetToLevelOne(m_elevator, arm));
-      // operatorXbox.x().onTrue(new SetToLevelTwo(m_elevator, arm));
-      // operatorXbox.b().onTrue(new SetToLevelThree(m_elevator, arm));
-      // operatorXbox.y().onTrue(new SetToLevelFour(m_elevator, arm));
+      operatorXbox.x().onTrue(new SetToLevelOne(m_elevator, m_arm).repeatedly());
+      operatorXbox.a().onTrue(new SetToLevelTwo(m_elevator, m_arm).repeatedly());
+      operatorXbox.b().onTrue(new SetToLevelThree(m_elevator, m_arm).repeatedly());
+      operatorXbox.y().onTrue(new SetToLevelFour(m_elevator, m_arm).repeatedly());
+
+      operatorXbox.rightStick().onTrue(new IntakeGamepiece(m_elevator, m_arm, m_GripperSubsystem).repeatedly());
+      
+      //operatorXbox.x().onTrue(new MoveWrist(arm, Rotations.of(0.112)).repeatedly());
+      //operatorXbox.b().onTrue(new MoveWrist(arm, Rotations.of(0.002)).repeatedly());
+      //operatorXbox.y().onTrue(new RunGripper(m_GripperSubsystem, 0.3 ).repeatedly());
+      m_GripperSubsystem.setDefaultCommand(new RunGripper(m_GripperSubsystem, operatorXbox));
+      //operatorXbox.leftBumper().onTrue(new RunGripper(m_GripperSubsystem, 0.1).repeatedly());
+      //operatorXbox.rightBumper().onTrue(new RunGripper(m_GripperSubsystem, 1).repeatedly());
+      //operatorXbox.leftBumper().onFalse(new RunGripper(m_GripperSubsystem, 0.0).repeatedly());
+      //operatorXbox.rightBumper().onFalse(new RunGripper(m_GripperSubsystem, 0.0).repeatedly());
+      //operatorXbox.a().onTrue(new SetToLevelOne(m_elevator, arm));
+      //operatorXbox.x().onTrue(new SetToLevelTwo(m_elevator, arm));
+      //operatorXbox.b().onTrue(new SetToLevelThree(m_elevator, arm));
+      //operatorXbox.y().onTrue(new SetToLevelFour(m_elevator, arm));
 
       driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());

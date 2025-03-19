@@ -21,7 +21,8 @@ public class IntakeGamepiece extends Command {
         m_elevatorSubsystem = elevatorSubsystem;
         m_arm = arm;
         m_gripperSubsystem = gripperSubsystem;
-        addRequirements(m_elevatorSubsystem, m_arm, m_gripperSubsystem);
+        //addRequirements(m_elevatorSubsystem, m_arm, m_gripperSubsystem);
+        addRequirements(m_elevatorSubsystem, m_arm);
     }
     @Override
     public void initialize() {
@@ -32,13 +33,15 @@ public class IntakeGamepiece extends Command {
         m_elevatorSubsystem.setElevatorPosition(ElevatorConstants.ELEVATOR_INITIAL_HEIGHT);
         m_arm.setShoulderPosition(ArmConstants.ARM_INTAKE_ANGLES[0]);
         m_arm.setWristPosition(ArmConstants.ARM_INTAKE_ANGLES[1]);
-        m_gripperSubsystem.setIntakeSpeed(GripperConstants.GRIPPER_INTAKE_SPEED);
+
+        
+        /*m_gripperSubsystem.setIntakeSpeed(GripperConstants.GRIPPER_INTAKE_SPEED);
         if (m_gripperSubsystem.lightSensorTripped()) {
             m_gripperSubsystem.setIntakeSpeed(0.0);
         }
         if (m_elevatorSubsystem.atSetpoint) {
             finished = true;
-        }
+        }*/
     }
 
     @Override
