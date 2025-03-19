@@ -190,7 +190,7 @@ public static final double LOWER_INTAKE_BAR_SPEED = 0.5;
     public static final int cameraWidth = 960;
     public static final int cameraHeight = 720;
 
-    public static final Transform2d reefAlignmentTransform = new Transform2d(Meter.of(0.5), Meter.of(-0.25), Rotation2d.k180deg);
-    public static final Transform2d loaderAlignmentTransform = new Transform2d(Meter.of(0.5), Meter.of(-0.25), Rotation2d.kZero);
+    public static final Transform2d reefAlignmentTransform = new Transform2d(Meter.of(1), Meter.of(-0.25), Rotation2d.k180deg);
+    public static final Transform2d loaderAlignmentTransform = new Transform2d(Meter.of(1), Meter.of(-0.25), Rotation2d.kZero);
   }
 }

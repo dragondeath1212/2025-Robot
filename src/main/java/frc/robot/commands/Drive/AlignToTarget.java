@@ -42,6 +42,7 @@ public class AlignToTarget extends Command {
 
     public AlignToTarget(SwerveSubsystem swerveSubsystem) {
         m_swerveSubsystem = swerveSubsystem;
+        addRequirements(swerveSubsystem);
     }
 
     @Override
