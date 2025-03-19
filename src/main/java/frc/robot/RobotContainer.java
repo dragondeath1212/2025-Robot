@@ -43,6 +43,7 @@ import frc.robot.commands.Drive.RotationDirection;
 import frc.robot.commands.Drive.ReefPosition;
 import frc.robot.commands.Drive.RotateRobot;
 import frc.robot.commands.Drive.Stop;
+import frc.robot.commands.Drive.TargetAlignment;
 import frc.robot.commands.IntakeGamepiece;
 import frc.robot.commands.MoveElevator;
 import frc.robot.commands.MoveWrist;
@@ -195,13 +196,17 @@ public class RobotContainer {
     driverXbox.a().onTrue(
       new SequentialCommandGroup(
         new DriveToReefPosition(ReefPosition.Nearest, drivebase),
-        new AlignToTarget(driverXbox, drivebase)
+        new AlignToTarget(TargetAlignment.Center, driverXbox, drivebase)
       )
     );
 
     driverXbox.b().onTrue(new Stop(drivebase));
 
-    driverXbox.y().whileTrue(new RepeatCommand(new AlignToTarget(driverXbox, drivebase)));
+    driverXbox.x()
+      .onTrue(new AlignToTarget(TargetAlignment.Left, driverXbox, drivebase));
+
+    driverXbox.y()
+      .onTrue(new AlignToTarget(TargetAlignment.Right, driverXbox, drivebase));
 
     driverXbox.rightBumper().onTrue(new DriveToLoader(LoaderPosition.Right, drivebase));
     driverXbox.leftBumper().onTrue(new DriveToLoader(LoaderPosition.Left, drivebase));
@@ -211,8 +216,11 @@ public class RobotContainer {
     driverXbox.povUp().whileTrue(new PositionRobot(RelativePosition.Forward, drivebase));
     driverXbox.povDown().whileTrue(new PositionRobot(RelativePosition.Back, drivebase));
 
-    driverXbox.rightTrigger().whileTrue(new RotateRobot(RotationDirection.Clockwise, drivebase));
-    driverXbox.leftTrigger().whileTrue(new RotateRobot(RotationDirection.CounterClockwise, drivebase));
+    driverXbox.rightTrigger()
+      .whileTrue(new RotateRobot(RotationDirection.Clockwise, drivebase));
+
+    driverXbox.leftTrigger()
+      .whileTrue(new RotateRobot(RotationDirection.CounterClockwise, drivebase));
     
     if (Robot.isSimulation()) {
       driverXbox.start().onTrue(Commands.runOnce(() -> drivebase.resetOdometry(new Pose2d(3, 3, new Rotation2d()))));
@@ -275,14 +283,20 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return new SequentialCommandGroup(
       new DriveToReefPosition(ReefPosition._2oClock, drivebase),
-      new AlignToTarget(driverXbox, drivebase),
+      new AlignToTarget(TargetAlignment.Right, driverXbox, drivebase),
       new WaitCommand(Seconds.of(3)),
       new DriveToLoader(LoaderPosition.Right, drivebase),
+      new WaitCommand(Seconds.of(1)),
+      new DriveToReefPosition(ReefPosition._2oClock, drivebase),
+      new AlignToTarget(TargetAlignment.Left, driverXbox, drivebase),
       new WaitCommand(Seconds.of(3)),
+      new DriveToLoader(LoaderPosition.Right, drivebase),
+      new WaitCommand(Seconds.of(1)),
       new DriveToReefPosition(ReefPosition._4oClock, drivebase),
-      new AlignToTarget(driverXbox, drivebase),
+      new AlignToTarget(TargetAlignment.Right, driverXbox, drivebase),
       new WaitCommand(Seconds.of(3)),
       new DriveToLoader(LoaderPosition.Right, drivebase)
+
     );
     // An example command will be run in autonomous
     // return drivebase.getAutonomousCommand("Left Side L");
@@ -302,7 +316,7 @@ public class RobotContainer {
       .onTrue(
         new SequentialCommandGroup(
           new DriveToReefPosition(ReefPosition._12oClock, drivebase),
-          new AlignToTarget(driverXbox, drivebase)
+          new AlignToTarget(TargetAlignment.Center, driverXbox, drivebase)
         )
       );
 
@@ -313,7 +327,7 @@ public class RobotContainer {
       .onTrue(
         new SequentialCommandGroup(
           new DriveToReefPosition(ReefPosition._2oClock, drivebase),
-          new AlignToTarget(driverXbox, drivebase)
+          new AlignToTarget(TargetAlignment.Center, driverXbox, drivebase)
         )
       );
 
@@ -324,7 +338,7 @@ public class RobotContainer {
       .onTrue(
         new SequentialCommandGroup(
           new DriveToReefPosition(ReefPosition._4oClock, drivebase),
-          new AlignToTarget(driverXbox, drivebase)
+          new AlignToTarget(TargetAlignment.Center, driverXbox, drivebase)
         )
       );
 
@@ -334,7 +348,7 @@ public class RobotContainer {
       .onTrue(
         new SequentialCommandGroup(
           new DriveToReefPosition(ReefPosition._6oClock, drivebase),
-          new AlignToTarget(driverXbox, drivebase)
+          new AlignToTarget(TargetAlignment.Center, driverXbox, drivebase)
         )
       );
       
@@ -345,7 +359,7 @@ public class RobotContainer {
       .onTrue(
         new SequentialCommandGroup(
           new DriveToReefPosition(ReefPosition._8oClock, drivebase),
-          new AlignToTarget(driverXbox, drivebase)
+          new AlignToTarget(TargetAlignment.Center, driverXbox, drivebase)
         )
       );
 
@@ -356,7 +370,7 @@ public class RobotContainer {
       .onTrue(
         new SequentialCommandGroup(
           new DriveToReefPosition(ReefPosition._10oClock, drivebase),
-          new AlignToTarget(driverXbox, drivebase)
+          new AlignToTarget(TargetAlignment.Center, driverXbox, drivebase)
         )
       );
   }

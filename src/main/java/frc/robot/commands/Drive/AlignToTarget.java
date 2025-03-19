@@ -17,10 +17,11 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.subsystems.swervedrive.Vision;
 
 public class AlignToTarget extends Command {
+    private final TargetAlignment m_alignment;
     private final CommandXboxController m_controller;
     private final SwerveSubsystem m_swerveSubsystem;
     private final PIDController m_rotationController = new PIDController(0.05, 0.005, 0);
-    private final PIDController m_strafeController = new PIDController(0.005, 0, 0);
+    private final PIDController m_strafeController = new PIDController(0.002, 0.0001, 0);
     private final PIDController m_rangeController = new PIDController(2, 0, 0);
 
     private final DoublePublisher m_rotationOffsetPublisher = NetworkTableInstance.getDefault()
@@ -43,7 +44,8 @@ public class AlignToTarget extends Command {
         .getIntegerTopic("vision/align/target")
         .publish();
 
-    public AlignToTarget(CommandXboxController controller, SwerveSubsystem swerveSubsystem) {
+    public AlignToTarget(TargetAlignment alignment, CommandXboxController controller, SwerveSubsystem swerveSubsystem) {
+        m_alignment = alignment;
         m_controller = controller;
         m_swerveSubsystem = swerveSubsystem;
         addRequirements(swerveSubsystem);
@@ -56,7 +58,13 @@ public class AlignToTarget extends Command {
         m_rotationController.setTolerance(0.5);
 
         m_strafeController.reset();
-        m_strafeController.setSetpoint(0);
+        m_strafeController.setSetpoint(
+            m_alignment == TargetAlignment.Left
+                ? 200
+                : m_alignment == TargetAlignment.Right
+                ? -200
+                : 0
+        );
         m_strafeController.setTolerance(0.5);
 
         m_rangeController.reset();
