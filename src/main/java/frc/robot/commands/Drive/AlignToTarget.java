@@ -17,7 +17,7 @@ import frc.robot.subsystems.swervedrive.Vision;
 public class AlignToTarget extends Command {
     private final SwerveSubsystem m_swerveSubsystem;
     private final PIDController m_rotationController = new PIDController(0.05, 0.005, 0);
-    private final PIDController m_strafeController = new PIDController(0.001, 0, 0);
+    private final PIDController m_strafeController = new PIDController(0.005, 0, 0);
     private final PIDController m_rangeController = new PIDController(2, 0, 0);
 
     private final DoublePublisher m_rotationOffsetPublisher = NetworkTableInstance.getDefault()
