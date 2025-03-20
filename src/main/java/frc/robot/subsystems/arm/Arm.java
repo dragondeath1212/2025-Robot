@@ -238,7 +238,7 @@ public class Arm extends SubsystemBase {
             voltage = -1 * voltage;
         }
 
-        if (getShoulderPosition().in(Rotations) < 0.05 && getShoulderPosition().in(Rotations) > -0.46) {
+        if (getShoulderPosition().in(Rotations) < 0.05 && getShoulderPosition().in(Rotations) > -0.475) {
             if (!shoulderAtSetpoint) {
                 //leave voltage alone
             } else {
