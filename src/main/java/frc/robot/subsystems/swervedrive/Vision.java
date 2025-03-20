@@ -176,10 +176,17 @@ public class Vision {
       21,
       22);
 
+  private final List<Integer> allReefTagIds = new ArrayList<Integer>() {{
+    addAll(redReefTagIds);
+    addAll(blueReefTagIds);
+  }};
+
   public List<Integer> getReefTagIds() {
-    return DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red
-        ? redReefTagIds
-        : blueReefTagIds;
+    return DriverStation.getAlliance().isEmpty()
+      ? allReefTagIds
+      : DriverStation.getAlliance().get() == Alliance.Red
+      ? redReefTagIds
+      : blueReefTagIds;
   }
 
   public AprilTag getNearestReefPosition() {
@@ -435,12 +442,12 @@ public class Vision {
     /**
      * Center Camera
      */
-    CENTER_CAM("center",
-        new Rotation3d(0, Units.degreesToRadians(-18), 0),
+    CENTER_CAM("Arducam_0001",
+        new Rotation3d(0, Units.degreesToRadians(-20), 0),
         new Translation3d(
             Units.inchesToMeters(10),
             Units.inchesToMeters(0),
-            Units.inchesToMeters(8)
+            Units.inchesToMeters(7.25)
           ),
         VecBuilder.fill(4, 4, 8), VecBuilder.fill(0.5, 0.5, 1));
 

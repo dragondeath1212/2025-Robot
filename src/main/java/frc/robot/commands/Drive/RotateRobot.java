@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
 public class RotateRobot extends Command {
-    private static final double MAGNITUDE = 1;
+    private static final double MAGNITUDE = 0.5;
     private final RotationDirection m_direction;
     private final SwerveSubsystem m_swerveSubsystem;
 

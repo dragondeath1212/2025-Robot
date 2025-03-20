@@ -295,6 +295,10 @@ public class RobotContainer {
       new DriveToReefPosition(ReefPosition._4oClock, drivebase),
       new AlignToTarget(TargetAlignment.Right, driverXbox, drivebase),
       new WaitCommand(Seconds.of(3)),
+      new DriveToLoader(LoaderPosition.Right, drivebase),
+      new DriveToReefPosition(ReefPosition._4oClock, drivebase),
+      new AlignToTarget(TargetAlignment.Left, driverXbox, drivebase),
+      new WaitCommand(Seconds.of(3)),
       new DriveToLoader(LoaderPosition.Right, drivebase)
 
     );

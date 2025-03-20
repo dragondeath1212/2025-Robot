@@ -21,7 +21,7 @@ public class AlignToTarget extends Command {
     private final CommandXboxController m_controller;
     private final SwerveSubsystem m_swerveSubsystem;
     private final PIDController m_rotationController = new PIDController(0.05, 0.005, 0);
-    private final PIDController m_strafeController = new PIDController(0.002, 0.0001, 0);
+    private final PIDController m_strafeController = new PIDController(0.003, 0, 0);
     private final PIDController m_rangeController = new PIDController(2, 0, 0);
 
     private final DoublePublisher m_rotationOffsetPublisher = NetworkTableInstance.getDefault()
@@ -69,7 +69,7 @@ public class AlignToTarget extends Command {
 
         m_rangeController.reset();
         m_rangeController.setSetpoint(
-            Units.inchesToMeters(12) // note that this is the distance from the camera to the target, not the front bumper
+            Units.inchesToMeters(18) // note that this is the distance from the camera to the target, not the front bumper
         );
         m_rangeController.setTolerance(0.02);
     }
@@ -111,7 +111,7 @@ public class AlignToTarget extends Command {
             .getDegrees();
 
         var range = PhotonUtils.calculateDistanceToTargetMeters(
-            cameraHeight, // Measured with a tape measure, or in CAD.
+            cameraHeight,
             targetHeight,
             -cameraPitch,
             Units.degreesToRadians(target.getPitch()));
