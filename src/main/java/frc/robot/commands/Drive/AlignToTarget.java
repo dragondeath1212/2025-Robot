@@ -24,6 +24,9 @@ public class AlignToTarget extends Command {
     private final PIDController m_rangeController = new PIDController(2, 0, 0);
     private final double MAX_VELOCITY = MetersPerSecond.of(1).magnitude();
     private final double MAX_ANGULAR_VELOCITY = Units.degreesToRadians(20);
+    
+    // note that this is the distance from the camera to the target, not the front bumper
+    private final double IDEAL_RANGE = Units.inchesToMeters(24);
 
     private final DoublePublisher m_rotationOffsetPublisher = NetworkTableInstance.getDefault()
         .getTable("SmartDashboard")
@@ -77,10 +80,7 @@ public class AlignToTarget extends Command {
         // setup range controller
         m_rangeController.reset();
 
-        // note that this is the distance from the camera to the target, not the front bumper
-        m_rangeController.setSetpoint(
-            Units.inchesToMeters(24)
-        );
+        m_rangeController.setSetpoint(IDEAL_RANGE);
 
         m_rangeController.setTolerance(
             Units.inchesToMeters(1)
@@ -139,6 +139,12 @@ public class AlignToTarget extends Command {
             new Translation2d(0, 0),
             0, false
         );
+
+        if (interrupted) {
+            return;
+        }
+
+        // TODO Since this command completed, I think we can update odometry here, we should be fairly precisely positioned
     }
 
     @Override

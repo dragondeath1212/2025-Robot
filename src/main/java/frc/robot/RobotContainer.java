@@ -38,6 +38,7 @@ import frc.robot.commands.Drive.LoaderPosition;
 import frc.robot.commands.Drive.PositionRobot;
 import frc.robot.commands.Drive.RelativePosition;
 import frc.robot.commands.Drive.AlignToTarget;
+import frc.robot.commands.Drive.BumpReef;
 import frc.robot.commands.Drive.RotateRobot;
 import frc.robot.commands.Drive.RotationDirection;
 import frc.robot.commands.Drive.ReefPosition;
@@ -203,10 +204,20 @@ public class RobotContainer {
     driverXbox.b().onTrue(new Stop(drivebase));
 
     driverXbox.x()
-      .onTrue(new AlignToTarget(TargetAlignment.Left, driverXbox, drivebase));
+      .onTrue(
+        new SequentialCommandGroup(  
+          new AlignToTarget(TargetAlignment.Left, driverXbox, drivebase),
+          new BumpReef(drivebase)
+        )
+      );
 
     driverXbox.y()
-      .onTrue(new AlignToTarget(TargetAlignment.Right, driverXbox, drivebase));
+      .onTrue(
+        new SequentialCommandGroup(  
+          new AlignToTarget(TargetAlignment.Right, driverXbox, drivebase),
+          new BumpReef(drivebase)
+        )
+      );
 
     driverXbox.rightBumper().onTrue(new DriveToLoader(LoaderPosition.Right, drivebase));
     driverXbox.leftBumper().onTrue(new DriveToLoader(LoaderPosition.Left, drivebase));
