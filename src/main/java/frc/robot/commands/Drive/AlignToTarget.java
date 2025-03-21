@@ -1,5 +1,8 @@
 package frc.robot.commands.Drive;
 
+import static edu.wpi.first.units.Units.MetersPerSecond;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -11,15 +14,16 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
-import frc.robot.subsystems.swervedrive.Vision.Cameras;
 
 public class AlignToTarget extends Command {
     private final TargetAlignment m_alignment;
     private final CommandXboxController m_controller;
     private final SwerveSubsystem m_swerveSubsystem;
-    private final PIDController m_rotationController = new PIDController(0.02, 0.005, 0);
-    private final PIDController m_strafeController = new PIDController(1, 0.05, 0);
-    private final PIDController m_rangeController = new PIDController(1, 0.05, 0);
+    private final PIDController m_rotationController = new PIDController(0.1, 0, 0);
+    private final PIDController m_strafeController = new PIDController(2, 0, 0);
+    private final PIDController m_rangeController = new PIDController(2, 0, 0);
+    private final double MAX_VELOCITY = MetersPerSecond.of(1).magnitude();
+    private final double MAX_ANGULAR_VELOCITY = Units.degreesToRadians(20);
 
     private final DoublePublisher m_rotationOffsetPublisher = NetworkTableInstance.getDefault()
         .getTable("SmartDashboard")
@@ -50,10 +54,12 @@ public class AlignToTarget extends Command {
 
     @Override
     public void initialize() {
+        // setup rotation controller
         m_rotationController.reset();
         m_rotationController.setSetpoint(0);
-        m_rotationController.setTolerance(0.5);
+        m_rotationController.setTolerance(Units.degreesToRadians(2));
 
+        // setup strafe controller
         m_strafeController.reset();
 
         m_strafeController.setSetpoint(
@@ -65,56 +71,59 @@ public class AlignToTarget extends Command {
         );
 
         m_strafeController.setTolerance(
-            Units.inchesToMeters(1)
+            Units.inchesToMeters(0.5)
         );
 
+        // setup range controller
         m_rangeController.reset();
 
+        // note that this is the distance from the camera to the target, not the front bumper
         m_rangeController.setSetpoint(
-            Units.inchesToMeters(24) // note that this is the distance from the camera to the target, not the front bumper
+            Units.inchesToMeters(24)
         );
 
         m_rangeController.setTolerance(
             Units.inchesToMeters(1)
         );
+
+        m_controller.getHID().setRumble(RumbleType.kBothRumble, 0.1);
     }
 
     @Override
     public void execute() {
         var target = m_swerveSubsystem.getBestReefTargetForAlignment();
         if (target == null) {
-            return;
-        }
-        m_targetPublisher.set(target.fiducialId);
-
-        if (!m_strafeController.atSetpoint() || !m_rotationController.atSetpoint() || !m_rangeController.atSetpoint()) {
-            m_controller.getHID().setRumble(RumbleType.kBothRumble, 0.1);
-        } else {
-            m_controller.getHID().setRumble(RumbleType.kBothRumble, 0);
-        }
-
-        var result = Cameras.CENTER_CAM.getBestResult();
-        if (result.isEmpty()) {
+            m_targetPublisher.set(0);
             return;
         }
 
         var transform = target.getBestCameraToTarget();
-
         var currentRange = transform.getTranslation().getX();
         var currentOffset = transform.getTranslation().getY();
-
         var rotationOffset = -transform.getRotation()
             .toRotation2d()
             .rotateBy(Rotation2d.k180deg)
             .getDegrees();
 
+        m_targetPublisher.set(target.fiducialId);
         m_rotationOffsetPublisher.set(rotationOffset);
         m_horizontalOffsetPublisher.set(currentOffset);
         m_rangePublisher.set(currentRange);
 
-        var strafeVelocity = m_strafeController.calculate(currentOffset);
-        var rotationVelocity = m_rotationController.calculate(rotationOffset);
-        var rangeVelocity = m_rangeController.calculate(currentRange);
+        var strafeVelocity = MathUtil.clamp(
+            m_strafeController.calculate(currentOffset),
+            -MAX_VELOCITY,
+            MAX_VELOCITY);
+
+        var rangeVelocity = MathUtil.clamp(
+            m_rangeController.calculate(currentRange),
+            -MAX_VELOCITY,
+            MAX_VELOCITY);
+
+        var rotationVelocity = MathUtil.clamp(
+            m_rotationController.calculate(rotationOffset),
+            -MAX_ANGULAR_VELOCITY,
+            MAX_ANGULAR_VELOCITY);
 
         m_swerveSubsystem.drive(
             new Translation2d(-rangeVelocity, -strafeVelocity),
@@ -126,6 +135,10 @@ public class AlignToTarget extends Command {
     @Override
     public void end(boolean interrupted) {
         m_controller.getHID().setRumble(RumbleType.kBothRumble, 0);
+        m_swerveSubsystem.drive(
+            new Translation2d(0, 0),
+            0, false
+        );
     }
 
     @Override

@@ -253,7 +253,7 @@ public class Vision {
     var reefTagIds = getReefTagIds();
     var result = Cameras.CENTER_CAM.getBestResult();
 
-    if (result.isPresent()) {
+    if (result.isPresent() && result.get().hasTargets()) {
       var bestTarget = result.get().getBestTarget();
       if (reefTagIds.stream().anyMatch(reefTagId -> bestTarget.fiducialId == reefTagId)) {
         return bestTarget;
