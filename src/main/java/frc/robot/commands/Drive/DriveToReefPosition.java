@@ -39,7 +39,7 @@ public class DriveToReefPosition extends Command {
             return;
         }
 
-        var pose3d = m_swerveSubsystem.getTagPose(target.get());
+        var pose3d = m_swerveSubsystem.getTagPose(target.get().ID);
         if (pose3d.isEmpty()) {
             return;
         }
@@ -54,7 +54,7 @@ public class DriveToReefPosition extends Command {
 
     @Override
     public void execute() {
-        m_driveToPoseCommand.execute();
+        //m_driveToPoseCommand.execute();
     }
 
     @Override

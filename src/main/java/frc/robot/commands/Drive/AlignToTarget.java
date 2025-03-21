@@ -1,7 +1,5 @@
 package frc.robot.commands.Drive;
 
-import org.photonvision.PhotonUtils;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -12,17 +10,16 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
-import frc.robot.subsystems.swervedrive.Vision;
+import frc.robot.subsystems.swervedrive.Vision.Cameras;
 
 public class AlignToTarget extends Command {
     private final TargetAlignment m_alignment;
     private final CommandXboxController m_controller;
     private final SwerveSubsystem m_swerveSubsystem;
-    private final PIDController m_rotationController = new PIDController(0.05, 0.005, 0);
-    private final PIDController m_strafeController = new PIDController(0.003, 0, 0);
-    private final PIDController m_rangeController = new PIDController(2, 0, 0);
+    private final PIDController m_rotationController = new PIDController(0.02, 0.005, 0);
+    private final PIDController m_strafeController = new PIDController(1, 0.05, 0);
+    private final PIDController m_rangeController = new PIDController(1, 0.05, 0);
 
     private final DoublePublisher m_rotationOffsetPublisher = NetworkTableInstance.getDefault()
         .getTable("SmartDashboard")
@@ -58,28 +55,37 @@ public class AlignToTarget extends Command {
         m_rotationController.setTolerance(0.5);
 
         m_strafeController.reset();
+
         m_strafeController.setSetpoint(
             m_alignment == TargetAlignment.Left
-                ? 200
+                ? Units.inchesToMeters(-7.5)
                 : m_alignment == TargetAlignment.Right
-                ? -200
+                ? Units.inchesToMeters(7.5)
                 : 0
         );
-        m_strafeController.setTolerance(0.5);
+
+        m_strafeController.setTolerance(
+            Units.inchesToMeters(1)
+        );
 
         m_rangeController.reset();
+
         m_rangeController.setSetpoint(
-            Units.inchesToMeters(18) // note that this is the distance from the camera to the target, not the front bumper
+            Units.inchesToMeters(24) // note that this is the distance from the camera to the target, not the front bumper
         );
-        m_rangeController.setTolerance(0.02);
+
+        m_rangeController.setTolerance(
+            Units.inchesToMeters(1)
+        );
     }
 
     @Override
     public void execute() {
-        var target = m_swerveSubsystem.getBestReefTarget();
+        var target = m_swerveSubsystem.getBestReefTargetForAlignment();
         if (target == null) {
             return;
         }
+        m_targetPublisher.set(target.fiducialId);
 
         if (!m_strafeController.atSetpoint() || !m_rotationController.atSetpoint() || !m_rangeController.atSetpoint()) {
             m_controller.getHID().setRumble(RumbleType.kBothRumble, 0.1);
@@ -87,46 +93,31 @@ public class AlignToTarget extends Command {
             m_controller.getHID().setRumble(RumbleType.kBothRumble, 0);
         }
 
-        var targetHeight = m_swerveSubsystem
-            .getNearestReefPosition()
-            .pose
-            .getZ();
-
-        var cameraPitch = Vision.Cameras.CENTER_CAM.robotToCamTransform
-            .getRotation()
-            .getY();
-
-        var cameraHeight = Vision.Cameras.CENTER_CAM.robotToCamTransform
-            .getTranslation()
-            .getZ();
-
-        var centerOfTarget = (target.detectedCorners.get(1).x - target.detectedCorners.get(0).x) / 2 + target.getDetectedCorners().get(0).x;
-        var centerOfCamera = VisionConstants.cameraWidth / 2;
-        var horizontalOffset = centerOfTarget - centerOfCamera;
+        var result = Cameras.CENTER_CAM.getBestResult();
+        if (result.isEmpty()) {
+            return;
+        }
 
         var transform = target.getBestCameraToTarget();
+
+        var currentRange = transform.getTranslation().getX();
+        var currentOffset = transform.getTranslation().getY();
+
         var rotationOffset = -transform.getRotation()
             .toRotation2d()
             .rotateBy(Rotation2d.k180deg)
             .getDegrees();
 
-        var range = PhotonUtils.calculateDistanceToTargetMeters(
-            cameraHeight,
-            targetHeight,
-            -cameraPitch,
-            Units.degreesToRadians(target.getPitch()));
-
-        m_targetPublisher.set(target.fiducialId);
         m_rotationOffsetPublisher.set(rotationOffset);
-        m_horizontalOffsetPublisher.set(horizontalOffset);
-        m_rangePublisher.set(range);
+        m_horizontalOffsetPublisher.set(currentOffset);
+        m_rangePublisher.set(currentRange);
 
-        var strafeVelocity = m_strafeController.calculate(horizontalOffset);
+        var strafeVelocity = m_strafeController.calculate(currentOffset);
         var rotationVelocity = m_rotationController.calculate(rotationOffset);
-        var rangeVelocity = m_rangeController.calculate(range);
+        var rangeVelocity = m_rangeController.calculate(currentRange);
 
         m_swerveSubsystem.drive(
-            new Translation2d(-rangeVelocity, strafeVelocity),
+            new Translation2d(-rangeVelocity, -strafeVelocity),
             rotationVelocity,
             false
         );

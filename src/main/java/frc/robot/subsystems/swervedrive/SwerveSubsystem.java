@@ -745,11 +745,11 @@ public class SwerveSubsystem extends SubsystemBase {
     return vision.getLeftLoaderPosition();
   }
 
-  public PhotonTrackedTarget getBestReefTarget() {
-    return vision.getBestReefTarget();
+  public PhotonTrackedTarget getBestReefTargetForAlignment() {
+    return vision.getBestReefTargetForAlignment();
   }
 
-  public Optional<Pose3d> getTagPose(AprilTag tag) {
-    return aprilTagFieldLayout.getTagPose(tag.ID);
+  public Optional<Pose3d> getTagPose(Integer id) {
+    return aprilTagFieldLayout.getTagPose(id);
   }
 }

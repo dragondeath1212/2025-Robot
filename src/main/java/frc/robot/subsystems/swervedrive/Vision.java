@@ -249,16 +249,14 @@ public class Vision {
     }
   }
 
-  public PhotonTrackedTarget getBestReefTarget() {
+  public PhotonTrackedTarget getBestReefTargetForAlignment() {
     var reefTagIds = getReefTagIds();
+    var result = Cameras.CENTER_CAM.getBestResult();
 
-    for (var camera : Cameras.values()) {
-      var result = camera.getBestResult();
-      if (result.isPresent()) {
-        var bestTarget = result.get().getBestTarget();
-        if (reefTagIds.stream().anyMatch(reefTagId -> bestTarget.fiducialId == reefTagId)) {
-          return bestTarget;
-        }
+    if (result.isPresent()) {
+      var bestTarget = result.get().getBestTarget();
+      if (reefTagIds.stream().anyMatch(reefTagId -> bestTarget.fiducialId == reefTagId)) {
+        return bestTarget;
       }
     }
 
@@ -445,7 +443,7 @@ public class Vision {
     CENTER_CAM("Arducam_0001",
         new Rotation3d(0, Units.degreesToRadians(-20), 0),
         new Translation3d(
-            Units.inchesToMeters(10),
+            Units.inchesToMeters(9),
             Units.inchesToMeters(0),
             Units.inchesToMeters(7.25)
           ),

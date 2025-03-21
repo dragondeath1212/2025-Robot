@@ -195,7 +195,7 @@ public class RobotContainer {
     
     driverXbox.a().onTrue(
       new SequentialCommandGroup(
-        new DriveToReefPosition(ReefPosition.Nearest, drivebase),
+        //new DriveToReefPosition(ReefPosition.Nearest, drivebase),
         new AlignToTarget(TargetAlignment.Center, driverXbox, drivebase)
       )
     );
