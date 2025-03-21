@@ -92,12 +92,12 @@ public class AlignToTarget extends Command {
     @Override
     public void execute() {
         var target = m_swerveSubsystem.getBestReefTargetForAlignment();
-        if (target == null) {
+        if (target.isEmpty()) {
             m_targetPublisher.set(0);
             return;
         }
 
-        var transform = target.getBestCameraToTarget();
+        var transform = target.get().getBestCameraToTarget();
         var currentRange = transform.getTranslation().getX();
         var currentOffset = transform.getTranslation().getY();
         var rotationOffset = -transform.getRotation()
@@ -105,7 +105,7 @@ public class AlignToTarget extends Command {
             .rotateBy(Rotation2d.k180deg)
             .getDegrees();
 
-        m_targetPublisher.set(target.fiducialId);
+        m_targetPublisher.set(target.get().fiducialId);
         m_rotationOffsetPublisher.set(rotationOffset);
         m_horizontalOffsetPublisher.set(currentOffset);
         m_rangePublisher.set(currentRange);
@@ -143,8 +143,6 @@ public class AlignToTarget extends Command {
         if (interrupted) {
             return;
         }
-
-        // TODO Since this command completed, I think we can update odometry here, we should be fairly precisely positioned
     }
 
     @Override

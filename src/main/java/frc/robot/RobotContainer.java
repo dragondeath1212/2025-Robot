@@ -196,7 +196,7 @@ public class RobotContainer {
     
     driverXbox.a().onTrue(
       new SequentialCommandGroup(
-        //new DriveToReefPosition(ReefPosition.Nearest, drivebase),
+        new DriveToReefPosition(ReefPosition.Nearest, drivebase),
         new AlignToTarget(TargetAlignment.Center, driverXbox, drivebase)
       )
     );
@@ -294,25 +294,17 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return new SequentialCommandGroup(
-      new DriveToReefPosition(ReefPosition._2oClock, drivebase),
+      new DriveToReefPosition(ReefPosition._12oClock, drivebase),
       new AlignToTarget(TargetAlignment.Right, driverXbox, drivebase),
+      new BumpReef(drivebase),
       new WaitCommand(Seconds.of(3)),
       new DriveToLoader(LoaderPosition.Right, drivebase),
       new WaitCommand(Seconds.of(1)),
-      new DriveToReefPosition(ReefPosition._2oClock, drivebase),
+      new DriveToReefPosition(ReefPosition._12oClock, drivebase),
       new AlignToTarget(TargetAlignment.Left, driverXbox, drivebase),
-      new WaitCommand(Seconds.of(3)),
-      new DriveToLoader(LoaderPosition.Right, drivebase),
-      new WaitCommand(Seconds.of(1)),
-      new DriveToReefPosition(ReefPosition._4oClock, drivebase),
-      new AlignToTarget(TargetAlignment.Right, driverXbox, drivebase),
-      new WaitCommand(Seconds.of(3)),
-      new DriveToLoader(LoaderPosition.Right, drivebase),
-      new DriveToReefPosition(ReefPosition._4oClock, drivebase),
-      new AlignToTarget(TargetAlignment.Left, driverXbox, drivebase),
+      new BumpReef(drivebase),
       new WaitCommand(Seconds.of(3)),
       new DriveToLoader(LoaderPosition.Right, drivebase)
-
     );
     // An example command will be run in autonomous
     // return drivebase.getAutonomousCommand("Left Side L");

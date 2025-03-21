@@ -21,7 +21,6 @@ import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
 
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -31,6 +30,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.LinearAcceleration;
+import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -41,6 +42,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.swervedrive.Vision.Cameras;
 import java.io.File;
 import java.io.IOException;
+import java.lang.StackWalker.Option;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
@@ -70,11 +72,11 @@ public class SwerveSubsystem extends SubsystemBase {
   /**
    * AprilTag field layout.
    */
-  private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+  private final AprilTagFieldLayout aprilTagFieldLayout = Vision.fieldLayout;
   /**
    * Enable vision odometry updates while driving.
    */
-  private final boolean visionDriveTest = true; // TODO probably should revert this
+  private final boolean visionDriveTest = true; // TODO should this ever be off?
   /**
    * PhotonVision class to keep an accurate odometry.
    */
@@ -264,11 +266,11 @@ public class SwerveSubsystem extends SubsystemBase {
    * @param pose Target {@link Pose2d} to go to.
    * @return PathFinding command
    */
-  public Command driveToPose(Pose2d pose) {
+  public Command driveToPose(Pose2d pose, LinearVelocity velocity, LinearAcceleration acceleration) {
     // Create the constraints to use while pathfinding
     PathConstraints constraints = new PathConstraints(
-        MetersPerSecond.of(1).magnitude(), //swerveDrive.getMaximumChassisVelocity(),
-        MetersPerSecondPerSecond.of(1).magnitude(), // 4.0,
+        velocity.in(MetersPerSecond),
+        acceleration.in(MetersPerSecondPerSecond),
         swerveDrive.getMaximumChassisAngularVelocity(),
         Units.degreesToRadians(720)
       );
@@ -737,19 +739,19 @@ public class SwerveSubsystem extends SubsystemBase {
 
   }
 
-  public AprilTag getNearestReefPosition() {
+  public Optional<AprilTag> getNearestReefPosition() {
     return vision.getNearestReefPosition();
   }
 
-  public AprilTag getRightLoaderPosition() {
+  public Optional<AprilTag> getRightLoaderPosition() {
     return vision.getRightLoaderPosition();
   }
 
-  public AprilTag getLeftLoaderPosition() {
+  public Optional<AprilTag> getLeftLoaderPosition() {
     return vision.getLeftLoaderPosition();
   }
 
-  public PhotonTrackedTarget getBestReefTargetForAlignment() {
+  public Optional<PhotonTrackedTarget> getBestReefTargetForAlignment() {
     return vision.getBestReefTargetForAlignment();
   }
 

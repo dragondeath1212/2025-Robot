@@ -4,14 +4,14 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 import swervelib.math.Matter;
 import static edu.wpi.first.units.Units.*;
-
+import java.util.List;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.units.measure.*;
 
 /**
@@ -198,5 +198,18 @@ public static final double LOWER_INTAKE_BAR_SPEED = 0.5;
   public static final class VisionConstants {
     public static final int cameraWidth = 960;
     public static final int cameraHeight = 720;
+    public static final LinearVelocity AUTO_DRIVE_VELOCITY = MetersPerSecond.of(1);
+    public static final LinearAcceleration AUTO_DRIVE_ACCELERATION = MetersPerSecondPerSecond.of(1);
   }
+
+  public static final AprilTagFieldLayout TestField = new AprilTagFieldLayout(
+    List.of(
+      AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField)
+        .getTags()
+        .stream()
+        .filter(tag -> tag.ID == 10)
+        .findFirst()
+        .get()
+    ), 17.548, 8.052
+  );
 }

@@ -21,11 +21,11 @@ public class BumpReef extends Command {
     @Override
     public void initialize() {
         var target = m_swerveSubsystem.getBestReefTargetForAlignment();
-        if (target == null) {
+        if (target.isEmpty()) {
             return;
         }
 
-        var targetTransform = target.getBestCameraToTarget();
+        var targetTransform = target.get().getBestCameraToTarget();
         var robotPose = m_swerveSubsystem.getPose();
         var driveDistance = targetTransform.getX() - CAMERA_TO_BUMPER;
 

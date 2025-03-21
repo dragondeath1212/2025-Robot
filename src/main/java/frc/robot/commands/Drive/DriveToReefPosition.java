@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.subsystems.swervedrive.Vision;
 
@@ -47,18 +48,26 @@ public class DriveToReefPosition extends Command {
         var targetPose = pose3d.get().toPose2d()
             .transformBy(ALIGNMENT_TRANSFORM);
 
-        m_driveToPoseCommand = m_swerveSubsystem.driveToPose(targetPose);
+        m_driveToPoseCommand = m_swerveSubsystem.driveToPose(targetPose, VisionConstants.AUTO_DRIVE_VELOCITY, VisionConstants.AUTO_DRIVE_ACCELERATION);
 
         m_driveToPoseCommand.initialize();
     }
 
     @Override
     public void execute() {
-        //m_driveToPoseCommand.execute();
+        if (m_driveToPoseCommand == null) {
+            return;
+        }
+
+        m_driveToPoseCommand.execute();
     }
 
     @Override
     public void end(boolean interrupted) {
+        if (m_driveToPoseCommand == null) {
+            return;
+        }
+
         m_driveToPoseCommand.end(interrupted);
         m_driveToPoseCommand = null;
     }
@@ -74,12 +83,7 @@ public class DriveToReefPosition extends Command {
 
     private Optional<AprilTag> getTarget() {
         if (m_reefPosition == ReefPosition.Nearest) {
-            var nearest = m_swerveSubsystem.getNearestReefPosition();
-            if (nearest == null) {
-                return Optional.empty();
-            } else {
-                return Optional.of(nearest);
-            }
+            return m_swerveSubsystem.getNearestReefPosition();
         }
 
         var alliance = DriverStation.getAlliance().orElse(Alliance.Red);

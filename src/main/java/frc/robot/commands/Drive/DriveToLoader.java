@@ -2,10 +2,10 @@ package frc.robot.commands.Drive;
 
 import static edu.wpi.first.units.Units.Meters;
 
-import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
 public class DriveToLoader extends Command {
@@ -18,7 +18,6 @@ public class DriveToLoader extends Command {
 
     private final LoaderPosition m_loaderPosition;
     private final SwerveSubsystem m_swerveSubsystem;
-    private AprilTag m_target;
     private Command m_driveToPoseCommand;
 
     public DriveToLoader(LoaderPosition loaderPosition, SwerveSubsystem swerveSubsystem) {
@@ -29,15 +28,15 @@ public class DriveToLoader extends Command {
 
     @Override
     public void initialize() {
-        m_target = m_loaderPosition == LoaderPosition.Left
+        var target = m_loaderPosition == LoaderPosition.Left
             ? m_swerveSubsystem.getLeftLoaderPosition()
             : m_swerveSubsystem.getRightLoaderPosition();
 
-        if (m_target == null) {
+        if (target.isEmpty()) {
             return;
         }
 
-        var pose3d = m_swerveSubsystem.getTagPose(m_target.ID);
+        var pose3d = m_swerveSubsystem.getTagPose(target.get().ID);
         if (pose3d.isEmpty()) {
             return;
         }
@@ -45,21 +44,23 @@ public class DriveToLoader extends Command {
         var targetPose = pose3d.get().toPose2d()
             .transformBy(ALIGNMENT_TRANSFORM);
 
-        m_driveToPoseCommand = m_swerveSubsystem.driveToPose(targetPose);
+        m_driveToPoseCommand = m_swerveSubsystem.driveToPose(targetPose, VisionConstants.AUTO_DRIVE_VELOCITY, VisionConstants.AUTO_DRIVE_ACCELERATION);
 
         m_driveToPoseCommand.initialize();
     }
 
     @Override
     public void execute() {
-        //m_driveToPoseCommand.execute();
+        m_driveToPoseCommand.execute();
     }
 
     @Override
     public void end(boolean interrupted) {
-        m_driveToPoseCommand.end(interrupted);
+        if (m_driveToPoseCommand == null) {
+            return;
+        }
 
-        m_target = null;
+        m_driveToPoseCommand.end(interrupted);
         m_driveToPoseCommand = null;
     }
 

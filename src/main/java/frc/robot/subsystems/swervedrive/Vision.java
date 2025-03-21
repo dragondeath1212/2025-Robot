@@ -189,10 +189,10 @@ public class Vision {
       : blueReefTagIds;
   }
 
-  public AprilTag getNearestReefPosition() {
+  public Optional<AprilTag> getNearestReefPosition() {
     var tags = fieldLayout.getTags();
     var nearestDistance = Double.MAX_VALUE;
-    AprilTag nearestTag = null;
+    Optional<AprilTag> nearestTag = Optional.empty();
     var reefTagIds = getReefTagIds();
 
     for (var tag : tags) {
@@ -203,7 +203,7 @@ public class Vision {
       var distance = getDistanceFromAprilTag(tag.ID);
       if (distance < nearestDistance) {
         nearestDistance = distance;
-        nearestTag = tag;
+        nearestTag = Optional.of(tag);
       }
     }
 
@@ -215,52 +215,48 @@ public class Vision {
   private int redRightLoaderTagId = 2;
   private int redLeftLoaderTagId = 1;
 
-  public AprilTag getRightLoaderPosition() {
+  public Optional<AprilTag> getRightLoaderPosition() {
     var alliance = DriverStation.getAlliance();
     if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
       return fieldLayout.getTags()
           .stream()
           .filter(tag -> tag.ID == redRightLoaderTagId)
-          .findFirst()
-          .get();
+          .findFirst();
     } else {
       return fieldLayout.getTags()
           .stream()
           .filter(tag -> tag.ID == blueRightLoaderTagId)
-          .findFirst()
-          .get();
+          .findFirst();
     }
   }
 
-  public AprilTag getLeftLoaderPosition() {
+  public Optional<AprilTag> getLeftLoaderPosition() {
     var alliance = DriverStation.getAlliance();
     if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
       return fieldLayout.getTags()
           .stream()
           .filter(tag -> tag.ID == redLeftLoaderTagId)
-          .findFirst()
-          .get();
+          .findFirst();
     } else {
       return fieldLayout.getTags()
           .stream()
           .filter(tag -> tag.ID == blueLeftLoaderTagId)
-          .findFirst()
-          .get();
+          .findFirst();
     }
   }
 
-  public PhotonTrackedTarget getBestReefTargetForAlignment() {
+  public Optional<PhotonTrackedTarget> getBestReefTargetForAlignment() {
     var reefTagIds = getReefTagIds();
     var result = Cameras.CENTER_CAM.getBestResult();
 
     if (result.isPresent() && result.get().hasTargets()) {
       var bestTarget = result.get().getBestTarget();
       if (reefTagIds.stream().anyMatch(reefTagId -> bestTarget.fiducialId == reefTagId)) {
-        return bestTarget;
+        return Optional.of(bestTarget);
       }
     }
 
-    return null;
+    return Optional.empty();
   }
 
   /**
