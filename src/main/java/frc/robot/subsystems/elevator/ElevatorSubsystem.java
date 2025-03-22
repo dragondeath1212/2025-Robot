@@ -131,7 +131,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         m_setpointProgrammed = false;
     }
 
-    public boolean atSetPoint() { return m_pidController.atSetpoint(); }
+    public boolean atSetpoint() { return m_pidController.atSetpoint(); }
 
     public boolean isSetPointProgrammed() { return m_setpointProgrammed; }
 
