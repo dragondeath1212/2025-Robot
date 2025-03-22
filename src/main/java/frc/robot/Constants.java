@@ -193,6 +193,7 @@ public static final double LOWER_INTAKE_BAR_SPEED = 0.5;
     public static final double GRIPPER_VOLTAGE_COEFFICIENT = 0.5484375;
     public static final double GRIPPER_INTAKE_SPEED = 0.5;
     public static final double TRIGGER_DEADZONE = 0.05;
+    public static final double GRIPPER_RELEASE_SPEED = 1;
   }
 
   public static final class VisionConstants {

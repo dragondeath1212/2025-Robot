@@ -19,9 +19,9 @@ public class AlignToTarget extends Command {
     private final TargetAlignment m_alignment;
     private final CommandXboxController m_controller;
     private final SwerveSubsystem m_swerveSubsystem;
-    private final PIDController m_rotationController = new PIDController(0.1, 0, 0);
-    private final PIDController m_strafeController = new PIDController(2, 0, 0);
-    private final PIDController m_rangeController = new PIDController(2, 0, 0);
+    private final PIDController m_rotationController = new PIDController(0.2, 0, 0);
+    private final PIDController m_strafeController = new PIDController(2.5, 0, 0);
+    private final PIDController m_rangeController = new PIDController(2.5, 0, 0);
     private final double MAX_VELOCITY = MetersPerSecond.of(1).magnitude();
     private final double MAX_ANGULAR_VELOCITY = Units.degreesToRadians(45);
     
@@ -60,7 +60,7 @@ public class AlignToTarget extends Command {
         // setup rotation controller
         m_rotationController.reset();
         m_rotationController.setSetpoint(0);
-        m_rotationController.setTolerance(Units.degreesToRadians(2));
+        m_rotationController.setTolerance(Units.degreesToRadians(10));
 
         // setup strafe controller
         m_strafeController.reset();

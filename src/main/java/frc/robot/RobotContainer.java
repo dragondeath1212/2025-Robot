@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -37,6 +38,7 @@ import frc.robot.commands.Drive.DriveToReefPosition;
 import frc.robot.commands.Drive.LoaderPosition;
 import frc.robot.commands.Drive.PositionRobot;
 import frc.robot.commands.Drive.RelativePosition;
+import frc.robot.commands.Drive.ReverseReef;
 import frc.robot.commands.Drive.AlignToTarget;
 import frc.robot.commands.Drive.BumpReef;
 import frc.robot.commands.Drive.RotateRobot;
@@ -45,6 +47,7 @@ import frc.robot.commands.Drive.ReefPosition;
 import frc.robot.commands.Drive.RotateRobot;
 import frc.robot.commands.Drive.Stop;
 import frc.robot.commands.Drive.TargetAlignment;
+import frc.robot.commands.ReleaseGamepiece;
 import frc.robot.commands.IntakeGamepiece;
 import frc.robot.commands.MoveElevator;
 import frc.robot.commands.MoveWrist;
@@ -63,7 +66,7 @@ import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.units.measure.*;
 import java.io.File;
 import swervelib.SwerveInputStream;
-
+import frc.robot.commands.Drive.ReverseReef;
 import frc.robot.subsystems.climb.ClimbSubsystem;
 
 /**
@@ -293,15 +296,21 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new SequentialCommandGroup(
-      new DriveToReefPosition(ReefPosition._6oClock, drivebase),
-      // TODO replace wait command with command to position arm
-      new WaitCommand(Seconds.of(3)),
-      new AlignToTarget(TargetAlignment.Right, driverXbox, drivebase),
-      new BumpReef(drivebase),
-      // TODO replace wait command with command to eject coral, then back up and drop the arm
-      new WaitCommand(Seconds.of(3))
-    );
+
+    return new ParallelCommandGroup(
+      new SetToLevelOne(m_elevator, m_arm),
+      new SequentialCommandGroup(
+  
+        new WaitCommand(2),
+        
+        
+        new AlignToTarget(TargetAlignment.Center, driverXbox, drivebase),
+        new BumpReef(drivebase),
+        new ReleaseGamepiece(m_GripperSubsystem),
+        new ReverseReef(drivebase)
+        
+
+    ));
     // An example command will be run in autonomous
     // return drivebase.getAutonomousCommand("Left Side L");
     // return drivebase.getAutonomousCommand("Center L1");
