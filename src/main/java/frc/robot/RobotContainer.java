@@ -294,17 +294,13 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return new SequentialCommandGroup(
-      new DriveToReefPosition(ReefPosition._12oClock, drivebase),
+      new DriveToReefPosition(ReefPosition._6oClock, drivebase),
+      // TODO replace wait command with command to position arm
+      new WaitCommand(Seconds.of(3)),
       new AlignToTarget(TargetAlignment.Right, driverXbox, drivebase),
       new BumpReef(drivebase),
-      new WaitCommand(Seconds.of(3)),
-      new DriveToLoader(LoaderPosition.Right, drivebase),
-      new WaitCommand(Seconds.of(1)),
-      new DriveToReefPosition(ReefPosition._12oClock, drivebase),
-      new AlignToTarget(TargetAlignment.Left, driverXbox, drivebase),
-      new BumpReef(drivebase),
-      new WaitCommand(Seconds.of(3)),
-      new DriveToLoader(LoaderPosition.Right, drivebase)
+      // TODO replace wait command with command to eject coral, then back up and drop the arm
+      new WaitCommand(Seconds.of(3))
     );
     // An example command will be run in autonomous
     // return drivebase.getAutonomousCommand("Left Side L");
