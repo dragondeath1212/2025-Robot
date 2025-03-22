@@ -61,10 +61,8 @@
   face the april tag at that position.
 - **B button** - stop the robot
   - Stops the robot, interrupting any running commands
-- **X button** - unused
-- **Y button** - align robot to reef
-  - Using the front camera, find the best april tag for a reef position, and use it to align the robot
-  - PID loops attempt to align the rotation of the bot, set the range, and set the horizontal position
+- **X button** - align robot to left scoring position
+- **Y button** - align robot to right scoring position
 - **Left Bumper** - auto drive to left loading station
   - Auto generate a path to take the robot to the left loading station (drivers left hand side), rotated so that the bot is ready to be loaded
   - "alliance aware", meaning left and right depends on which side of the field you are one.

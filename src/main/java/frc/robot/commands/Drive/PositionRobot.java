@@ -1,11 +1,14 @@
 package frc.robot.commands.Drive;
 
+import static edu.wpi.first.units.Units.MetersPerSecond;
+
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
 public class PositionRobot extends Command {
-    private static final double MAGNITUDE = 0.25;
+    private static final LinearVelocity POSITION_VELOCITY = MetersPerSecond.of(0.25);
     private final RelativePosition m_direction;
     private final SwerveSubsystem m_swerveSubsystem;
 
@@ -18,15 +21,15 @@ public class PositionRobot extends Command {
     @Override
     public void execute() {
         var x = m_direction == RelativePosition.Forward
-            ? MAGNITUDE
+            ? POSITION_VELOCITY.in(MetersPerSecond)
             : m_direction == RelativePosition.Back
-            ? -MAGNITUDE
+            ? -POSITION_VELOCITY.in(MetersPerSecond)
             : 0;
         
         var y = m_direction == RelativePosition.Right
-            ? -MAGNITUDE
+            ? -POSITION_VELOCITY.in(MetersPerSecond)
             : m_direction == RelativePosition.Left
-            ? MAGNITUDE
+            ? POSITION_VELOCITY.in(MetersPerSecond)
             : 0;
 
         m_swerveSubsystem.drive(

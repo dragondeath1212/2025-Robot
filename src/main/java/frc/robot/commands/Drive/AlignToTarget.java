@@ -23,7 +23,7 @@ public class AlignToTarget extends Command {
     private final PIDController m_strafeController = new PIDController(2, 0, 0);
     private final PIDController m_rangeController = new PIDController(2, 0, 0);
     private final double MAX_VELOCITY = MetersPerSecond.of(1).magnitude();
-    private final double MAX_ANGULAR_VELOCITY = Units.degreesToRadians(20);
+    private final double MAX_ANGULAR_VELOCITY = Units.degreesToRadians(45);
     
     // note that this is the distance from the camera to the target, not the front bumper
     private final double IDEAL_RANGE = Units.inchesToMeters(24);
@@ -100,7 +100,7 @@ public class AlignToTarget extends Command {
         var transform = target.get().getBestCameraToTarget();
         var currentRange = transform.getTranslation().getX();
         var currentOffset = transform.getTranslation().getY();
-        var rotationOffset = -transform.getRotation()
+        var rotationOffset = transform.getRotation()
             .toRotation2d()
             .rotateBy(Rotation2d.k180deg)
             .getDegrees();
@@ -127,7 +127,7 @@ public class AlignToTarget extends Command {
 
         m_swerveSubsystem.drive(
             new Translation2d(-rangeVelocity, -strafeVelocity),
-            rotationVelocity,
+            -rotationVelocity,
             false
         );
     }

@@ -1,15 +1,19 @@
 package frc.robot.commands.Drive;
 
+import static edu.wpi.first.units.Units.MetersPerSecond;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
 public class BumpReef extends Command {
     private final double CAMERA_TO_BUMPER = Units.inchesToMeters(9);
+    private final LinearVelocity BUMP_VELOCITY = MetersPerSecond.of(0.25);
     private final SwerveSubsystem m_swerveSubsystem;
     private Pose2d m_bumpPose;
 
@@ -48,7 +52,7 @@ public class BumpReef extends Command {
         }
 
         m_swerveSubsystem.drive(
-            new Translation2d(0.25, 0),
+            new Translation2d(BUMP_VELOCITY.in(MetersPerSecond), 0),
             0, false
         );
     }

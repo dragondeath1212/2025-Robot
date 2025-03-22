@@ -1,11 +1,14 @@
 package frc.robot.commands.Drive;
 
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
 public class RotateRobot extends Command {
-    private static final double MAGNITUDE = 0.25;
+    private static final AngularVelocity ANGULAR_VELOCITY = RadiansPerSecond.of(0.5);
     private final RotationDirection m_direction;
     private final SwerveSubsystem m_swerveSubsystem;
 
@@ -18,13 +21,10 @@ public class RotateRobot extends Command {
     @Override
     public void execute() {
         var rotation = m_direction == RotationDirection.Clockwise
-            ? -MAGNITUDE
-            : MAGNITUDE;
+            ? -ANGULAR_VELOCITY.in(RadiansPerSecond)
+            : ANGULAR_VELOCITY.in(RadiansPerSecond);
 
-        m_swerveSubsystem.drive(
-            new Translation2d(0, 0),
-            rotation, false
-        );
+        m_swerveSubsystem.drive(Translation2d.kZero, rotation, false);
     }
 
     @Override
