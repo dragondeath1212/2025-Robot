@@ -35,6 +35,7 @@ public class SetToLevelFour extends Command {
         m_elevatorSubsystem.stopAllMotionAndClearPIDInfo();
         m_OKToMove = false;
         m_gripperSubsystem.invertGripper();
+        m_finished = false;
     }
 
     @Override

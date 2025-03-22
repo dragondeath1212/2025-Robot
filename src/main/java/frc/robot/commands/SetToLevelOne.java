@@ -32,6 +32,7 @@ public class SetToLevelOne extends Command {
         m_arm.stopAllMotionAndClearPIDInfo();
         m_elevatorSubsystem.stopAllMotionAndClearPIDInfo();
         m_OKToMove = false;
+        m_finished = false;
     }
 
     @Override
