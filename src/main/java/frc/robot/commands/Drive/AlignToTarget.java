@@ -67,9 +67,9 @@ public class AlignToTarget extends Command {
 
         m_strafeController.setSetpoint(
             m_alignment == TargetAlignment.Left
-                ? Units.inchesToMeters(-7.5)
+                ? Units.inchesToMeters(-6.5)
                 : m_alignment == TargetAlignment.Right
-                ? Units.inchesToMeters(7.5)
+                ? Units.inchesToMeters(6.5)
                 : 0
         );
 
