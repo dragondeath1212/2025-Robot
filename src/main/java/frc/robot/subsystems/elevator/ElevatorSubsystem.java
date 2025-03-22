@@ -108,11 +108,11 @@ public class ElevatorSubsystem extends SubsystemBase {
         // dividing by 60 to convert meters per minute to meters per second
         // elevatorEncoder.setVelocityConversionFactor(Double.parseDouble(ElevatorConstants.METERS_PER_REVOLUTION));
 
-        rawElevatorPositionPublisher = NetworkTableInstance.getDefault().getTable("SmartDashboard").getDoubleTopic("elevator/Raw Absolute Encoder Position").publish();
-        rawElevatorVelocityPublisher = NetworkTableInstance.getDefault().getTable("SmartDashboard").getDoubleTopic("elevator/Raw Absolute Encoder Velocity").publish();
-        rawElevatorSetpointPublisher = NetworkTableInstance.getDefault().getTable("SmartDashboard").getDoubleTopic("elevator/Setpoint").publish();
-        rawElevatorErrorPublisher = NetworkTableInstance.getDefault().getTable("SmartDashboard").getDoubleTopic("elevator/Error").publish();
-        rawElevatorVoltage = NetworkTableInstance.getDefault().getTable("SmartDashboard").getDoubleTopic("elevator/Voltage").publish();
+        rawElevatorPositionPublisher = NetworkTableInstance.getDefault().getTable("AdvantageKit").getDoubleTopic("elevator/Raw Absolute Encoder Position").publish();
+        rawElevatorVelocityPublisher = NetworkTableInstance.getDefault().getTable("AdvantageKit").getDoubleTopic("elevator/Raw Absolute Encoder Velocity").publish();
+        rawElevatorSetpointPublisher = NetworkTableInstance.getDefault().getTable("AdvantageKit").getDoubleTopic("elevator/Setpoint").publish();
+        rawElevatorErrorPublisher = NetworkTableInstance.getDefault().getTable("AdvantageKit").getDoubleTopic("elevator/Error").publish();
+        rawElevatorVoltage = NetworkTableInstance.getDefault().getTable("AdvantageKit").getDoubleTopic("elevator/Voltage").publish();
 
 
     }
