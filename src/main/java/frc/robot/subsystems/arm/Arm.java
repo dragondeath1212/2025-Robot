@@ -147,7 +147,7 @@ public class Arm extends SubsystemBase {
         shoulderFeedforwardVoltage = shoulderFeedforward.calculate((getShoulderPosition()).in(Radians), getShoulderVelocity().in(RadiansPerSecond));
         
         wristController = new PIDController(ArmConstants.WRIST_P, ArmConstants.WRIST_I, ArmConstants.WRIST_D);
-        wristController.setTolerance(0.005);
+        wristController.setTolerance(8.0/360);
         wristController.setIZone(ArmConstants.WRIST_IZ);
         shoulderController = new PIDController(ArmConstants.SHOULDER_P, ArmConstants.SHOULDER_I, ArmConstants.SHOULDER_D);
         shoulderController.setTolerance(0.005);
