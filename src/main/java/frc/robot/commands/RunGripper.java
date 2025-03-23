@@ -26,7 +26,7 @@ public class RunGripper extends Command {
 
         if ((m_controller.getLeftTriggerAxis() >= GripperConstants.TRIGGER_DEADZONE) &&
                 (m_controller.getRightTriggerAxis() < GripperConstants.TRIGGER_DEADZONE)) {
-            if (m_controller.getLeftTriggerAxis() == GripperConstants.GRIPPER_MAX_SPEED) {
+            if (m_controller.getLeftTriggerAxis() >= 0.95) {
                 m_GripperSubsystem.setIntakeSpeed(GripperConstants.GRIPPER_MAX_SPEED);
             } else {
 
@@ -36,7 +36,7 @@ public class RunGripper extends Command {
             }
         } else if ((m_controller.getLeftTriggerAxis() < GripperConstants.TRIGGER_DEADZONE) &&
                 (m_controller.getRightTriggerAxis() >= GripperConstants.TRIGGER_DEADZONE)) {
-            if (m_controller.getRightTriggerAxis() == GripperConstants.GRIPPER_MAX_SPEED) {
+            if (m_controller.getRightTriggerAxis() >= 0.95) {
                 m_GripperSubsystem.setIntakeSpeed(GripperConstants.GRIPPER_MAX_SPEED);
             } else {
 
