@@ -31,22 +31,22 @@ public class AlignToTarget extends Command {
     private final double IDEAL_RANGE = Units.inchesToMeters(24);
 
     private final DoublePublisher m_rotationOffsetPublisher = NetworkTableInstance.getDefault()
-        .getTable("SmartDashboard")
+        .getTable("AdvantageKit")
         .getDoubleTopic("vision/align/rotationOffset")
         .publish();
 
     private final DoublePublisher m_horizontalOffsetPublisher = NetworkTableInstance.getDefault()
-        .getTable("SmartDashboard")
+        .getTable("AdvantageKit")
         .getDoubleTopic("vision/align/horizontalOffset")
         .publish();
 
     private final DoublePublisher m_rangePublisher = NetworkTableInstance.getDefault()
-        .getTable("SmartDashboard")
+        .getTable("AdvantageKit")
         .getDoubleTopic("vision/align/range")
         .publish();
 
     private final IntegerPublisher m_targetPublisher = NetworkTableInstance.getDefault()
-        .getTable("SmartDashboard")
+        .getTable("AdvantageKit")
         .getIntegerTopic("vision/align/target")
         .publish();
 

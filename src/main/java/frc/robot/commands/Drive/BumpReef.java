@@ -22,12 +22,12 @@ public class BumpReef extends Command {
     private double m_originalHeading;
 
     private final DoublePublisher m_driftPublisher = NetworkTableInstance.getDefault()
-        .getTable("SmartDashboard")
+        .getTable("AdvantageKit")
         .getDoubleTopic("vision/align/drift")
         .publish();
 
     private final DoublePublisher m_driftCorrectionPublisher = NetworkTableInstance.getDefault()
-        .getTable("SmartDashboard")
+        .getTable("AdvantageKit")
         .getDoubleTopic("vision/align/driftCorrection")
         .publish();
 

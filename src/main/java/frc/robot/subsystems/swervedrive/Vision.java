@@ -54,7 +54,7 @@ import swervelib.telemetry.SwerveDriveTelemetry;
  */
 public class Vision {
   StructPublisher<Pose2d> posePublisher = NetworkTableInstance.getDefault()
-      .getStructTopic("SmartDashboard/vision/simulatedPose", Pose2d.struct)
+      .getStructTopic("AdvantageKit/vision/simulatedPose", Pose2d.struct)
       .publish();
 
   /**

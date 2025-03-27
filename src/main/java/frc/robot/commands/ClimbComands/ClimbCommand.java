@@ -3,6 +3,7 @@ package frc.robot.commands.ClimbComands;
 
 import frc.robot.Constants.*;
 import frc.robot.subsystems.climb.ClimbSubsystem;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -40,8 +41,10 @@ public class ClimbCommand extends Command {
     }
 
     public void execute() {
+       
         if (m_climberActivationInProgress)
         {
+            m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 0.1);
             if (m_climbSubsystem.getClimberPosition().in(Rotations) <= ClimberConstants.READY_ANGLE.in(Rotations) &&
                 (m_safetyActivationCounter > 0)) 
             {
@@ -58,6 +61,7 @@ public class ClimbCommand extends Command {
                 m_climbSubsystem.bypassPIDAndSetSpeedDirectly(0.0);
                 m_climbSubsystem.markClimberActivated();
                 m_climberActivationInProgress = false;
+                m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 0);
             }
 
             // m_climbSubsystem.setClimberPositionAndUpdatePID(ClimberConstants.READY_ANGLE);
@@ -78,6 +82,7 @@ public class ClimbCommand extends Command {
                 {
                     m_climberActivationInProgress = true;
                     System.out.println("Climber Activated");
+                     
                 } else {
                     m_activateClimberCountdown--;
                 }
@@ -151,5 +156,6 @@ public class ClimbCommand extends Command {
 
     public void end() {
         m_climbSubsystem.stopAllMotionAndClearPIDInfo();
+        m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 0);
     }
 }
