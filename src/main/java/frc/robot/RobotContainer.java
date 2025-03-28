@@ -157,6 +157,21 @@ public class RobotContainer {
       Score(ReefPosition._2oClock, ArmLevel.One, TargetAlignment.Center)
     );
 
+    m_chooser.setDefaultOption(
+      "Score 10 o'clock Level 4",
+      Score(ReefPosition._10oClock, ArmLevel.Four, TargetAlignment.Right)
+    );
+
+    m_chooser.setDefaultOption(
+      "Score 12 o'clock Level 4",
+      Score(ReefPosition._12oClock, ArmLevel.Four, TargetAlignment.Right)
+    );
+
+    m_chooser.setDefaultOption(
+      "Score 2 o'clock Level 4",
+      Score(ReefPosition._2oClock, ArmLevel.Four, TargetAlignment.Right)
+    );
+
     SmartDashboard.putData("Auto choices", m_chooser);
   }
 

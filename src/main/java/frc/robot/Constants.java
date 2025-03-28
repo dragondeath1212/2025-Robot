@@ -234,8 +234,8 @@ public static final double LOWER_INTAKE_BAR_SPEED = 0.5;
   public static final class VisionConstants {
     public static final int cameraWidth = 960;
     public static final int cameraHeight = 720;
-    public static final LinearVelocity AUTO_DRIVE_VELOCITY = MetersPerSecond.of(1);
-    public static final LinearAcceleration AUTO_DRIVE_ACCELERATION = MetersPerSecondPerSecond.of(1);
+    public static final LinearVelocity AUTO_DRIVE_VELOCITY = MetersPerSecond.of(2);
+    public static final LinearAcceleration AUTO_DRIVE_ACCELERATION = MetersPerSecondPerSecond.of(2);
   }
 
   public static final AprilTagFieldLayout TestField = new AprilTagFieldLayout(
