@@ -89,7 +89,7 @@ public static final double LOWER_INTAKE_BAR_SPEED = 0.5;
 
   public static final class ArmConstants
   {
-    public static final Angle ARM_INTAKE_ANGLES[] = {Rotations.of(0.040), Rotations.of(0.122)};
+    public static final Angle ARM_INTAKE_ANGLES[] = {Rotations.of(0.040), Rotations.of(0.142)};
     public static final Angle ARM_L1_ANGLES[] = {Rotations.of(-0.056), Rotations.of(-0.065)};
     public static final Angle ARM_L2_ANGLES[] = {Rotations.of(-0.060), Rotations.of(0.204)};
     public static final Angle ARM_L3_ANGLES[] = {Rotations.of(-0.445), Rotations.of(0.133)};
@@ -152,7 +152,7 @@ public static final double LOWER_INTAKE_BAR_SPEED = 0.5;
   }
 
   public static final class ClimberConstants {
-    public static final Angle CLIMB_ANGLE = Rotations.of(-0.260);
+    public static final Angle CLIMB_ANGLE = Rotations.of(-0.212);
     public static final Angle STOW_ANGLE = Rotations.of(-0.148);
     public static final Angle READY_ANGLE = Rotations.of(-0.082);
     public static final Angle MIN_ANGLE = Rotations.of(Math.min(CLIMB_ANGLE.in(Rotations), STOW_ANGLE.in(Rotations)));
@@ -187,7 +187,7 @@ public static final double LOWER_INTAKE_BAR_SPEED = 0.5;
     public static final Distance MINIMUM_SHOULDER_MOVE_SAFE_HEIGHT = Inches.of(10.0); 
     public static final Distance MAXIMUM_SAFE_HEIGHT = Inches.of(27.0);
 
-    public static final Distance ELEVATOR_INTAKE_HEIGHT = Meters.of(0);
+    public static final Distance ELEVATOR_INTAKE_HEIGHT = Meters.of(0.02);
     public static final Distance ELEVATOR_L1_HEIGHT = Meters.of(0.0);
     public static final Distance ELEVATOR_L2_HEIGHT = Meters.of(0.459);
     public static final Distance ELEVATOR_L3_HEIGHT = Meters.of(0.0);
@@ -199,7 +199,7 @@ public static final double LOWER_INTAKE_BAR_SPEED = 0.5;
   public static final boolean ELEVATOR_MOTOR_IS_INVERTED = true;
   public static final boolean ELEVATOR_ENCODER_IS_INVERTED = true;
   public static final double ELEVATOR_ABSOLUTE_SENSOR_DISCONTINUITY_POINT = 0.95;
-  public static final double ELEVATOR_ABSOLUTE_SENSOR_OFFSET = 0.225;
+  public static final double ELEVATOR_ABSOLUTE_SENSOR_OFFSET = 0.243;
   public static final double ELEVATOR_P = 12;
   public static final double ELEVATOR_I = 2.0;
   public static final double ELEVATOR_D = 0.1;

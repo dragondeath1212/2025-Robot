@@ -30,7 +30,7 @@ public class ClimbCommand extends Command {
 
     public void initialize() {
         m_climbSubsystem.stopAllMotionAndClearPIDInfo();
-        m_activateClimberCountdown = 150;
+        m_activateClimberCountdown = 50;
         m_safetyActivationCounter = 200;
         m_climberActivationInProgress = false;
         System.out.println("Initialized climb command");
@@ -44,7 +44,7 @@ public class ClimbCommand extends Command {
        
         if (m_climberActivationInProgress)
         {
-            m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 0.1);
+            m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 0.2);
             if (m_climbSubsystem.getClimberPosition().in(Rotations) <= ClimberConstants.READY_ANGLE.in(Rotations) &&
                 (m_safetyActivationCounter > 0)) 
             {
@@ -87,7 +87,7 @@ public class ClimbCommand extends Command {
                     m_activateClimberCountdown--;
                 }
             } else { //reset count so they have to press the buttons again for the full time period
-                m_activateClimberCountdown = 150;
+                m_activateClimberCountdown = 50;
             }
         }
         else //Climber is activated

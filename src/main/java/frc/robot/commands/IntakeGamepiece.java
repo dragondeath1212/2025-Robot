@@ -46,7 +46,7 @@ public class IntakeGamepiece extends Command {
 
             if (!m_gotPiece) //wait for piece in intake position position
             {
-                m_elevatorSubsystem.setElevatorPosition(ElevatorConstants.ELEVATOR_INITIAL_HEIGHT);
+                m_elevatorSubsystem.setElevatorPosition(ElevatorConstants.ELEVATOR_INTAKE_HEIGHT);
                 m_arm.setShoulderPosition(ArmConstants.ARM_INTAKE_ANGLES[0]);
                 m_arm.setWristPosition(ArmConstants.ARM_INTAKE_ANGLES[1]);
 
