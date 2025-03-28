@@ -453,7 +453,7 @@ public class Vision {
     /**
      * Center Camera
      */
-    CENTER_CAM("Arducam_0001",
+    CENTER_CAM("Arducam_OV9281_USB_Camera",
         new Rotation3d(0, Units.degreesToRadians(-20), 0),
         new Translation3d(
             Units.inchesToMeters(8.629),
