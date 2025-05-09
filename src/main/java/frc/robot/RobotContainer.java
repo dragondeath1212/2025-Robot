@@ -220,8 +220,8 @@ public class RobotContainer {
         )
       );
 
-    driverXbox.rightBumper().onTrue(new DriveToLoader(LoaderPosition.Right, drivebase));
-    driverXbox.leftBumper().onTrue(new DriveToLoader(LoaderPosition.Left, drivebase));
+   // driverXbox.rightBumper().onTrue(new DriveToLoader(LoaderPosition.Right, drivebase));
+   // driverXbox.leftBumper().onTrue(new DriveToLoader(LoaderPosition.Left, drivebase));
 
     driverXbox.rightTrigger()
       .whileTrue(new RotateRobot(RotationDirection.Clockwise, drivebase));
